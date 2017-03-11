@@ -1,0 +1,23 @@
+{
+  "name": "splain",
+  "version": "1.0.0",
+  "description": "small parser to create more interesting language/sentances",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mog13/Splain.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mog13/Splain/issues"
+  },
+  "homepage": "https://github.com/mog13/Splain#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "jasmine": "^2.5.3"
+  }
+}
