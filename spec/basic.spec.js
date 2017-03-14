@@ -98,5 +98,11 @@ describe("when using the parser", () => {
         expect(splain.compile("{example1} to the {example2}")).toBe("hello to the world");
     });
 
+    it("should be able to recursively compile when a template compiels into another template", () => {
+        splain.addTemplate("example1",["{example2}"]);
+        splain.addTemplate("example2",["it works!"]);
+        expect(splain.compile("{example1}")).toBe("it works!");
+    })
+
 
 });
