@@ -185,10 +185,16 @@ class Splain {
 
     compile(input) {
         let groups = this.$findGroups(input);
-        groups.forEach((group) => {
-           let output = this.$compileGroup(group);
-           input = input.replace(group, output);
-        });
+        let iteration = 0;
+        while(groups) {
+            iteration++;
+            groups.forEach((group) => {
+                let output = this.$compileGroup(group);
+                input = input.replace(group, output);
+            });
+            groups = this.$findGroups(input);
+            if (iteration >5 ) throw "reached max stack";
+        }
 
         return input;
     }
