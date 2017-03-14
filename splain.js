@@ -2,7 +2,8 @@ class Splain {
     constructor() {
         this.regex = {
             groupSelector: /\{.+?\}/g,
-            chanceSelector: /\?[0-9]*/
+            chanceSelector: /\?[0-9]*/,
+            quoteChecker: /".+"/
         };
         this.templates = {};
     }
@@ -116,6 +117,11 @@ class Splain {
                     executionArray.splice(i - 1, 2);
                     i -= 2;
                 }
+                else{
+                    //only remove the "?"
+                    executionArray.splice(i , 1);
+                    i -= 1;
+                }
 
             }
         }
@@ -125,13 +131,20 @@ class Splain {
     $processInputs(executionArray) {
         for (let i = 0; i < executionArray.length; i++) {
             if (executionArray[i].type == "input") {
-                if (this.templates[executionArray[i].value] === undefined) {
-                    throw "template " + executionArray[i].value + "doesnt exist";
+                if(this.regex.quoteChecker.test(executionArray[i].value)){
+                    //ignore because it was in quotes (remove outer quotes)
+                    executionArray[i].value = this.$trimGroup(executionArray[i].value);
+                    executionArray[i].type = "output";
                 }
                 else {
-                    let selectedTemplate = this.templates[executionArray[i].value];
-                    executionArray[i].value = selectedTemplate[Math.floor(Math.random() * selectedTemplate.length)];
-                    executionArray[i].type = "output";
+                    if (this.templates[executionArray[i].value] === undefined) {
+                        throw "template " + executionArray[i].value + "doesnt exist";
+                    }
+                    else {
+                        let selectedTemplate = this.templates[executionArray[i].value];
+                        executionArray[i].value = selectedTemplate[Math.floor(Math.random() * selectedTemplate.length)];
+                        executionArray[i].type = "output";
+                    }
                 }
             }
         }
