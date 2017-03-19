@@ -1,8 +1,36 @@
 var splain = new Splain();
 
 var templates = {
-    cars: ["audi", "mercedes", "subaru"],
-    seasons: ["summer", "winter", "autumn", "fall"]
+    "good-adj":[
+        "Amazing",
+        "Awesome",
+        "Blithesome",
+        "Excellent",
+        "Fabulous",
+        "Fantastic",
+        "Favorable",
+        "Fortuitous",
+        "Great",
+        "Incredible",
+        "Ineffable",
+        "Mirthful",
+        "Outstanding",
+        "Perfect",
+        "Propitious",
+        "Remarkable",
+        "Smart",
+        "Spectacular",
+        "Splendid",
+        "Stellar",
+        "Stupendous",
+        "Super",
+        "Ultimate",
+        "Unbelievable",
+        "Wondrous"
+    ],
+    "quant-lg-advb":["really","very","rather","pretty","fairly","too","quite"],
+    "low-difficulty":["easy","simple", "understandable","implementable","aproachable"]
+
 }
 
 var selectedTemplate = "";
@@ -60,5 +88,7 @@ $("#templateContents").on("blur", function() {
   buildCurrentTemplate()
 });
 
+$('#splainCode').val('Splain is {good-adj}, {good-adj} and  {quant-lg-advb?3 low-difficulty}. {"make text more exciting"?} {"use now"|"fork us on github!"}');
 
 generateFromTemplates();
+
