@@ -8,8 +8,8 @@ class Splain {
         this.templates = {};
     }
 
-    addTemplate(templateName, templateValue) {
-        if (this.templates[templateName] === undefined) {
+    addTemplate(templateName, templateValue, forceUnique) {
+        if (!forceUnique || (forceUnique && this.templates[templateName] === undefined)) {
             this.templates[templateName] = templateValue;
         }
         else {
@@ -138,7 +138,7 @@ class Splain {
                 }
                 else {
                     if (this.templates[executionArray[i].value] === undefined) {
-                        throw "template " + executionArray[i].value + "doesnt exist";
+                        throw "template " + executionArray[i].value + " doesn't exist";
                     }
                     else {
                         let selectedTemplate = this.templates[executionArray[i].value];
