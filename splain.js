@@ -31,9 +31,9 @@ class Splain {
     }
 
     $findInputs(input) {
-        input = input.replace(/[\?|](?=([^"]*"[^"]*")*[^"]*$)/g, " ");
-        return (input).split(" ").filter(function (n) {
-            return n != ""
+        input = input.replace(/[\?|](?=([^"]*"[^"]*")*[^"]*$)[0-9]*/g, " ");
+        return (input).split(/(".*?"|[^"\s]+)+(?=\s*|\s*$)/g).filter(function (n) {
+            return n.replace(/\s/g, '').length
         });
     }
 

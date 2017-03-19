@@ -23,13 +23,35 @@ describe("when using the parser", () => {
         expect(inputs.length).toBe(3)
     });
 
+    it("should be able to find inputs in a group", () => {
+        let inputs = splain.$findInputs('"hello"?2 "world"?3');
+        expect(inputs[0]).toBe('"hello"');
+        expect(inputs[1]).toBe('"world"');
+        expect(inputs.length).toBe(2)
+    });
+
+    it("should be able to find inputs when one of them is static and contains space", () =>{
+        let inputs = splain.$findInputs('"this is a test" "it worked" input4');
+        expect(inputs[0]).toBe('"this is a test"');
+        expect(inputs[1]).toBe('"it worked"');
+        expect(inputs[2]).toBe('input4');
+        expect(inputs.length).toBe(3)
+    });
+
     it("should be able to break it up into an array or variables and executions", () => {
        let execArray = splain.$getExecutionArray('input1 input2|"test"?4');
         expect(execArray[0].value).toBe("input1");
         expect(execArray[1].value).toBe("input2");
-        expect(execArray[2].value).toBe("|");
         expect(execArray[3].value).toBe('"test"');
         expect(execArray[4].value).toBe("?4");
+    });
+
+    it("should be able to get the correct execution array", () => {
+        let execArray = splain.$getExecutionArray('"hello"?2 "world"?3');
+        expect(execArray[0].value).toBe('"hello"');
+        expect(execArray[1].value).toBe("?2");
+        expect(execArray[2].value).toBe('"world"');
+        expect(execArray[3].value).toBe("?3");
     });
 
     describe("when dealing with execution arrays", () => {
