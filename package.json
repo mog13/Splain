@@ -27,11 +27,5 @@
     "jest": "^20.0.4",
     "jest-cli": "^20.0.4",
     "webpack": "^3.5.5"
-  },
-  "jest": {
-    "verbose": true,
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    }
   }
 }

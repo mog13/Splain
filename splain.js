@@ -105,8 +105,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Splain = function Splain() {
     _classCallCheck(this, Splain);
 
-    this.dictionarys = {};
-    this.a = 5;
+    this.dictionaries = {};
 };
 
 exports.default = Splain;
