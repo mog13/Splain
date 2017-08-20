@@ -1,11 +1,11 @@
 # Splain
-######small parser to create more interesting language/sentances
+###### small parser to create more interesting language/sentances
 
 [![Build Status](https://travis-ci.org/mog13/Splain.svg?branch=master)](https://travis-ci.org/mog13/Splain)
 
 
 *note this readme is a work in progress and as such is not complete and contains many splling errors*
-##overview/usage
+## overview/usage
 Splain lets you use templates to dynamically change your text each time it is run. by providing Splain with a dictionary of words it can pull from you can quickly and easily build up some convincing behaviour and variety.
 
 A Splain template is marked by surrounding it with double parenthesis `{{}}`. The most simple template would be to just include a link to the dictionary entry to use for example `"hello {{planet}}"`.
@@ -28,23 +28,23 @@ finally you can add literals into the template which will not be swapped with a 
 
 *note: This currently means literals cant contain a ' .....*
 
-##Advanced use
+## Advanced use
 Splain templates can be built up as much as you want. dictionary items can themselves contain templates.
 
 *a lot of advanced usage is so far un tested and undocumented*
 
-##Installation
+## Installation
 include as a script tag: `<script src="./splain.js"/>`
 
 or require in a file `require("./splain")`
 
-##Developing
+## Developing
 pull requests welcome.
 
 `npm install` to install
 
 `npm build` to bundle with webpack;
 
-##Testing
+## Testing
 Testing is done via Jest and Jasmine.
 tests can be run with `npm test` or simply `jest`
