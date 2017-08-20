@@ -100,6 +100,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _dictionary = __webpack_require__(2);
 
 var _dictionary2 = _interopRequireDefault(_dictionary);
@@ -108,16 +110,40 @@ var _defaultDictionaries = __webpack_require__(3);
 
 var _defaultDictionaries2 = _interopRequireDefault(_defaultDictionaries);
 
+var _templateFinder = __webpack_require__(4);
+
+var _templateFinder2 = _interopRequireDefault(_templateFinder);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Splain = function Splain() {
-    _classCallCheck(this, Splain);
+var Splain = function () {
+    function Splain() {
+        _classCallCheck(this, Splain);
 
-    this.dictionary = new _dictionary2.default();
-    this.dictionary.addEntry(_defaultDictionaries2.default);
-};
+        this.dictionary = new _dictionary2.default();
+        this.dictionary.addEntry(_defaultDictionaries2.default);
+    }
+
+    _createClass(Splain, [{
+        key: "process",
+        value: function process(text) {
+            var _this = this;
+
+            var templates = _templateFinder2.default.getTemplates(text);
+            templates.forEach(function (template) {
+                template = _templateFinder2.default.stripTemplate(template);
+                if (_templateFinder2.default.containsTemplate(template)) {
+                    template = _this.process(template);
+                }
+                //run templates
+            });
+        }
+    }]);
+
+    return Splain;
+}();
 
 exports.default = Splain;
 
@@ -213,6 +239,75 @@ exports.default = {
     "slow": ["slow", "creep"]
   }
 };
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var regTemplateMatcher = /{{.*?}}/g;
+
+var _class = function () {
+    function _class() {
+        _classCallCheck(this, _class);
+    }
+
+    _createClass(_class, null, [{
+        key: "getTemplates",
+        value: function getTemplates(text) {
+            var templates = [];
+            while (text.includes("{{") && text.includes("}}")) {
+                var start = text.indexOf("{{"),
+                    nested = 0;
+                //start +2 to skip  initial brackets
+                for (var i = start + 2; i < text.length - 1; i++) {
+                    if (text[i] + text[i + 1] === "{{") {
+                        nested++;
+                    }
+                    if (text[i] + text[i + 1] === "}}") {
+                        if (nested > 0) {
+                            nested--;
+                            i += 1; //skip over the other nested '}'
+                        } else {
+                            templates.push(text.substring(start, i + 2));
+                            text = text.slice(0, start) + text.slice(i + 2);
+                            i = text.length;
+                        }
+                    }
+                }
+            }
+            return templates;
+        }
+    }, {
+        key: "stripTemplate",
+        value: function stripTemplate(template) {
+            var open = template.indexOf("{{"),
+                close = template.lastIndexOf("}}") - 2;
+            if (open > -1) template = template.slice(0, open) + template.slice(open + 2);
+            if (close > -1) template = template.slice(0, close) + template.slice(close + 2);
+            return template;
+        }
+    }, {
+        key: "containsTemplate",
+        value: function containsTemplate(text) {
+            return text.match(regTemplateMatcher);
+        }
+    }]);
+
+    return _class;
+}();
+
+exports.default = _class;
 
 /***/ })
 /******/ ]);

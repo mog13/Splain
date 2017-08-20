@@ -9,7 +9,7 @@
 {input1|input2} input one or input 2
 
 processing order
-Splain will first do any conditionals (|)and then (?)
+Splain will first do any ors (|)and then conditionals(?)
 Then it will compile tokens
 
 
