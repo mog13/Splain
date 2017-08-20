@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("Splain", [], factory);
+	else if(typeof exports === 'object')
+		exports["Splain"] = factory();
+	else
+		root["Splain"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -60,7 +70,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -74,23 +84,62 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _splain = __webpack_require__(1);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Token = function () {
+    function Token(type, data, raw) {
+        _classCallCheck(this, Token);
+
+        this.type = type;
+        this.data = data;
+        this.raw = raw;
+    }
+
+    _createClass(Token, [{
+        key: 'convert',
+        value: function convert(dictionary) {
+            switch (this.type) {
+                case 'splain':
+                    var entry = dictionary.getEntry(this.data, false);
+                    if (entry !== null && Array.isArray(entry)) {
+                        return entry[Math.floor(Math.random() * entry.length)];
+                    }
+                    return null;
+                    break;
+                case 'blank':
+                    return " ";
+                case 'lit':
+                    return this.data;
+                default:
+                    return undefined;
+            }
+        }
+    }]);
+
+    return Token;
+}();
+
+exports.default = Token;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _splain = __webpack_require__(2);
 
 var _splain2 = _interopRequireDefault(_splain);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Splain = new _splain2.default();
-(function (window) {
-    window.Splain = Splain;
-})(window);
-
-exports.default = Splain;
-
-module.exports = Splain;
+module.exports = new _splain2.default();
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -102,17 +151,25 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _dictionary = __webpack_require__(2);
+var _dictionary = __webpack_require__(3);
 
 var _dictionary2 = _interopRequireDefault(_dictionary);
 
-var _defaultDictionaries = __webpack_require__(3);
+var _defaultDictionaries = __webpack_require__(4);
 
 var _defaultDictionaries2 = _interopRequireDefault(_defaultDictionaries);
 
-var _templateFinder = __webpack_require__(4);
+var _templateFinder = __webpack_require__(5);
 
 var _templateFinder2 = _interopRequireDefault(_templateFinder);
+
+var _templateProcessor = __webpack_require__(6);
+
+var _templateProcessor2 = _interopRequireDefault(_templateProcessor);
+
+var _templateExecutor = __webpack_require__(7);
+
+var _templateExecutor2 = _interopRequireDefault(_templateExecutor);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -137,8 +194,12 @@ var Splain = function () {
                 if (_templateFinder2.default.containsTemplate(template)) {
                     template = _this.process(template);
                 }
-                //run templates
+                var compiledTemplate = _templateExecutor2.default.run(_templateProcessor2.default.getTokens(template), _this.dictionary);
+                text = text.replace("{{" + template + "}}", compiledTemplate);
             });
+
+            if (_templateFinder2.default.containsTemplate(text)) this.process(text);
+            return text;
         }
     }]);
 
@@ -148,7 +209,7 @@ var Splain = function () {
 exports.default = Splain;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -220,7 +281,7 @@ var Dictioanry = function () {
 exports.default = Dictioanry;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -241,7 +302,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -309,5 +370,201 @@ var _class = function () {
 
 exports.default = _class;
 
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _splainToken = __webpack_require__(0);
+
+var _splainToken2 = _interopRequireDefault(_splainToken);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var regToken = /[?'"|\s]/;
+
+var _class = function () {
+    function _class() {
+        _classCallCheck(this, _class);
+    }
+
+    _createClass(_class, null, [{
+        key: "getTokens",
+        value: function getTokens(template) {
+            var tokens = [];
+            var n = 100000;
+            while (template) {
+                n--;
+                var nextToken = this.findNextToken(template);
+                tokens.push(nextToken);
+                template = template.slice(nextToken.raw.length);
+                if (n < 0) {
+                    console.warn("couldn't finish processing tokens after 100,000 panicking..");
+                    break;
+                }
+            }
+
+            return tokens;
+        }
+    }, {
+        key: "findNextToken",
+        value: function findNextToken(template) {
+            var n = 1;
+            if (template[0] === "?") {
+                for (; !isNaN(template[n]) && template[n] !== " " && n < template.length; n++) {}
+                return new _splainToken2.default("?", template.substring(1, n), template.substring(0, n));
+            }
+            if (template[0] === "|") {
+                return new _splainToken2.default("|", null, "|");
+            }
+            if (template[0] === " " || template[0] === "\n") {
+                return new _splainToken2.default("blank", null, template[0]);
+            }
+            if (template[0] === "'" || template[0] === '"') {
+                for (; template[n] !== "'" && template[n] !== '"' && n < template.length; n++) {}
+                return new _splainToken2.default("lit", template.substring(1, n), template.substring(0, n + 1));
+            }
+            var nextToken = template.search(regToken);
+            if (nextToken < 0) nextToken = template.length;
+            return new _splainToken2.default("splain", template.substring(0, nextToken), template.substring(0, nextToken));
+        }
+    }]);
+
+    return _class;
+}();
+
+exports.default = _class;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _splainToken = __webpack_require__(0);
+
+var _splainToken2 = _interopRequireDefault(_splainToken);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function () {
+    function _class() {
+        _classCallCheck(this, _class);
+    }
+
+    _createClass(_class, null, [{
+        key: "run",
+        value: function run(tokens, dictionary) {
+            this.executeOrs(tokens);
+            this.executeConditionals(tokens);
+            var retString = "";
+            tokens.forEach(function (token) {
+                retString += token.convert(dictionary);
+            });
+
+            return retString;
+        }
+    }, {
+        key: "executeConditionals",
+        value: function executeConditionals(tokens) {
+            while (this.findFirstTokenOfType("?", tokens) !== null) {
+                var conditionalIndex = this.findFirstTokenOfType("?", tokens);
+                if (conditionalIndex !== null) {
+                    if (this.rand(tokens[conditionalIndex].data) !== 1) {
+                        var target = this.getPreceedingTokenOfType(["lit", "splain"], tokens, conditionalIndex);
+                        tokens.splice(target, conditionalIndex - target + 1);
+                    } else {
+                        tokens.splice(conditionalIndex, 1);
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+    }, {
+        key: "executeOrs",
+        value: function executeOrs(tokens) {
+            while (this.findFirstTokenOfType("|", tokens) !== null) {
+                var indexOfOr = this.findFirstTokenOfType("|", tokens);
+                if (indexOfOr !== null) {
+                    var prec = this.getPreceedingTokenOfType(["lit", "splain"], tokens, indexOfOr),
+                        proc = this.getProceedingTokenOfType(["lit", "splain"], tokens, indexOfOr);
+
+                    if (prec !== null && proc !== null) {
+                        var side = this.rand(2);
+                        if (side === 1) //remove left
+                            {
+                                tokens.splice(prec, indexOfOr - prec + 1);
+                            } else {
+                            if (proc + 1 < tokens.length && tokens[proc + 1].type === "?") proc++;
+                            tokens.splice(indexOfOr, proc - indexOfOr + 1);
+                        }
+                    } else tokens.splice(indexOfOr, 1);
+                } else {
+                    break;
+                }
+            }
+        }
+    }, {
+        key: "findFirstTokenOfType",
+        value: function findFirstTokenOfType(type, tokens) {
+            for (var i = 0; i < tokens.length; i++) {
+                if (tokens[i].type === type) return i;
+            }
+            return null;
+        }
+    }, {
+        key: "getPreceedingTokenOfType",
+        value: function getPreceedingTokenOfType(types, tokens, index) {
+            if (index === 0) return null;
+            for (var i = index - 1; i >= 0; i--) {
+                if (types.indexOf(tokens[i].type) > -1) return i;
+            }
+            return null;
+        }
+    }, {
+        key: "getProceedingTokenOfType",
+        value: function getProceedingTokenOfType(types, tokens, index) {
+            if (index === tokens.length - 1) return null;
+            for (var i = index + 1; i < tokens.length; i++) {
+                if (types.indexOf(tokens[i].type) > -1) return i;
+            }
+            return null;
+        }
+
+        //random number between 1 and n inclusive
+
+    }, {
+        key: "rand",
+        value: function rand(n) {
+            return Math.floor(Math.random() * n) + 1;
+        }
+    }]);
+
+    return _class;
+}();
+
+exports.default = _class;
+
 /***/ })
 /******/ ]);
+});

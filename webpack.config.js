@@ -1,7 +1,10 @@
 module.exports = {
     entry: './lib/index.js',
     output: {
-        filename: 'splain.js'
+        filename: 'splain.js',
+        libraryTarget: 'umd',
+        umdNamedDefine: true,
+        library: "Splain"
     },
     module: {
         rules: [

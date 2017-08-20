@@ -1,4 +1,4 @@
-require("./splain");
+var Splain =  require("./splain");
 
 describe("when i import the splain library", ()=> {
 
@@ -13,6 +13,11 @@ describe("when i import the splain library", ()=> {
     it("should populate default dicitionaries", () => {
        expect(Splain.dictionary.getEntry("weather")).not.toBeNull()
     });
+
+    describe("and i want to compile text through splain",() =>{
+        Splain.dictionary.addEntry({test:["works"]});
+        expect(Splain.process("it {{test}}!")).toBe("it works!");
+    })
 });
 
 
