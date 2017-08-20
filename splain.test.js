@@ -7,7 +7,11 @@ describe("when i import the splain library", ()=> {
     });
 
     it("should by default have a dictionary object", () =>{
-        expect(Splain.dictionaries).toBeDefined();
+        expect(Splain.dictionary).toBeDefined();
+    });
+
+    it("should populate default dicitionaries", () => {
+       expect(Splain.dictionary.getEntry("weather")).not.toBeNull()
     });
 });
 

@@ -100,15 +100,119 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _dictionary = __webpack_require__(2);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+var _defaultDictionaries = __webpack_require__(3);
+
+var _defaultDictionaries2 = _interopRequireDefault(_defaultDictionaries);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Splain = function Splain() {
     _classCallCheck(this, Splain);
 
-    this.dictionaries = {};
+    this.dictionary = new _dictionary2.default();
+    this.dictionary.addEntry(_defaultDictionaries2.default);
 };
 
 exports.default = Splain;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Dictioanry = function () {
+    function Dictioanry() {
+        _classCallCheck(this, Dictioanry);
+
+        this.entries = {};
+    }
+
+    _createClass(Dictioanry, [{
+        key: "addEntry",
+        value: function addEntry(JSONEntry, name) {
+            var _this = this;
+
+            if (name) {
+                this.entries[name] = JSONEntry;
+            } else {
+                Object.keys(JSONEntry).forEach(function (key) {
+                    _this.addEntry(JSONEntry[key], key);
+                });
+            }
+        }
+    }, {
+        key: "getEntry",
+        value: function getEntry(name, explicit) {
+            if ((typeof explicit === "undefined" ? "undefined" : _typeof(explicit)) === ( true ? "undefined" : _typeof(undefined))) explicit = true;
+            if (!name.includes(".")) {
+                return this.entries[name];
+            }
+
+            var path = name.split(".");
+
+            var entry = path.reduce(function (currentStep, nextStep) {
+                if (currentStep === null) return null;
+                var curObj = currentStep[nextStep];
+                if (curObj) {
+                    return curObj;
+                } else {
+                    if (!explicit) return currentStep;else {
+                        return null;
+                    }
+                }
+            }, this.entries);
+            if (explicit && Array.isArray(entry) === false) {
+                console.warn("entry was not found explicitly or was not array, make sure entry is valid or call with explicit off ");
+                return null;
+            }
+
+            return entry;
+        }
+    }]);
+
+    return Dictioanry;
+}();
+
+exports.default = Dictioanry;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  "weather": {
+    "rain": ["drizzling", "showering", "raining", "spitting"],
+    "sun": ["sunny", "warm", "bright"]
+  },
+  "speed": {
+    "fast": ["fast", "upbeat", "quick"],
+    "slow": ["slow", "creep"]
+  }
+};
 
 /***/ })
 /******/ ]);
