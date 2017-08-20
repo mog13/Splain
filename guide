@@ -8,6 +8,10 @@
 
 {input1|input2} input one or input 2
 
+processing order
+Splain will first do any conditionals (|)and then (?)
+Then it will compile tokens
+
 
 splain templates:
 
