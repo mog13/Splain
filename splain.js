@@ -184,6 +184,11 @@ var Splain = function () {
     }
 
     _createClass(Splain, [{
+        key: "addEntry",
+        value: function addEntry(JSON, name) {
+            this.dictionary.addEntry(JSON, name);
+        }
+    }, {
         key: "process",
         value: function process(text) {
             var _this = this;
@@ -198,7 +203,7 @@ var Splain = function () {
                 text = text.replace("{{" + template + "}}", compiledTemplate);
             });
 
-            if (_templateFinder2.default.containsTemplate(text)) this.process(text);
+            if (_templateFinder2.default.containsTemplate(text) !== null) text = this.process(text);
             return text;
         }
     }]);
@@ -422,7 +427,7 @@ var _class = function () {
             var n = 1;
             if (template[0] === "?") {
                 for (; !isNaN(template[n]) && template[n] !== " " && n < template.length; n++) {}
-                return new _splainToken2.default("?", template.substring(1, n), template.substring(0, n));
+                return new _splainToken2.default("?", template.substring(1, n) || "2", template.substring(0, n));
             }
             if (template[0] === "|") {
                 return new _splainToken2.default("|", null, "|");
