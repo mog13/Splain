@@ -69,11 +69,47 @@
 
 "use strict";
 
-//import splain from "";
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _splain = __webpack_require__(1);
+
+var _splain2 = _interopRequireDefault(_splain);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Splain = new _splain2.default();
 (function (window) {
-    window.splain = null;
+    window.Splain = Splain;
 })(window);
+
+exports.default = Splain;
+
+module.exports = Splain;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Splain = function Splain() {
+    _classCallCheck(this, Splain);
+
+    this.dictionarys = {};
+    this.a = 5;
+};
+
+exports.default = Splain;
 
 /***/ })
 /******/ ]);

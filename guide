@@ -7,3 +7,18 @@
 {'input'?n} only compile the preceding input with a chance of 1 in n
 
 {input1|input2} input one or input 2
+
+
+splain templates:
+
+weather: {
+    really-cold:[
+    "freezing",
+    "icy",
+    "sub-zero"
+    ]
+    cold:{
+    "{{weather.really-cold}}",
+    "nippy"
+    }
+}
