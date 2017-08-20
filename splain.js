@@ -72,11 +72,7 @@
 //import splain from "";
 
 (function (window) {
-    window.splain = splain;
-
-    var test = function test(c) {
-        console.log(c);
-    };
+    window.splain = null;
 })(window);
 
 /***/ })
