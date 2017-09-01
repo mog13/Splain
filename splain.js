@@ -190,16 +190,19 @@ var Splain = function () {
         }
     }, {
         key: "process",
-        value: function process(text) {
+        value: function process(text, addQuotes) {
             var _this = this;
 
             var templates = _templateFinder2.default.getTemplates(text);
             templates.forEach(function (template) {
                 template = _templateFinder2.default.stripTemplate(template);
                 if (_templateFinder2.default.containsTemplate(template)) {
-                    template = _this.process(template);
+                    var output = "" + _this.process(template, true);
+                    text = text.replace(template, output);
+                    template = "" + output;
                 }
                 var compiledTemplate = _templateExecutor2.default.run(_templateProcessor2.default.getTokens(template), _this.dictionary);
+                if (addQuotes) compiledTemplate = "'" + compiledTemplate + "'";
                 text = text.replace("{{" + template + "}}", compiledTemplate);
             });
 

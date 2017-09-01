@@ -3,8 +3,8 @@
 
 [![Build Status](https://travis-ci.org/mog13/Splain.svg?branch=master)](https://travis-ci.org/mog13/Splain)
 
-
 *note this readme is a work in progress and as such is not complete and contains many splling errors*
+
 ## overview/usage
 Splain lets you use templates to dynamically change your text each time it is run. by providing Splain with a dictionary of words it can pull from you can quickly and easily build up some convincing behaviour and variety.
 
@@ -25,6 +25,8 @@ similarly you can use the | operator to specify one or the other: `"hello {{plan
 
 finally you can add literals into the template which will not be swapped with a dictionary and rendered as typed (without the quotes) but will behave with other Splain operators
 `"hello {{'world'?2}}"`
+
+see example.js run via `node example.js` to see Splain in action
 
 *note: This currently means literals cant contain a ' .....*
 
