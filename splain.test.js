@@ -1,5 +1,5 @@
-var Splain =  require("./splain");
-
+let Splain =  require("./splain");
+//Note these are just overarching tests to quickly check the compiled library. see /lib for full tests
 describe("when i import the splain library", ()=> {
 
     it("should expose a splain object on the window", () =>{
