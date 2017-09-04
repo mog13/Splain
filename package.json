@@ -1,8 +1,8 @@
 {
   "name": "splain",
   "version": "1.0.0",
-  "description": "small parser to create more interesting language/sentances",
-  "main": "index.js",
+  "description": "small transformer library to create more interesting language/sentances",
+  "main": "splain.js",
   "scripts": {
     "build": "webpack",
     "test": "jest --coverage --collectCoverageFrom=lib/**/*.js --collectCoverageFrom=!lib/**/index.js"
