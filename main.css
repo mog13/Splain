@@ -40,7 +40,7 @@
 .splain-example::after {
     content: "}}";
     font-weight: 200;
-    padding-left: -3px;
+    padding-left: 3px;
 
 }
 
