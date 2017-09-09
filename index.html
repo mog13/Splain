@@ -2,9 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Splain</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="./bootstrap-darkly.css"/>
+    <link rel="stylesheet" href="./main.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Kanit:200,400" rel="stylesheet">
 </head>
 <body>
-<h1>Splain</h1>
+
+
+<div class="container margin-top--l" id="app">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+
+        <div class="col-md-8 mx-auto text-center">
+            <h1 class="title text-success">Splain</h1>
+            <div class="example-container margin-top--l"><p class="text-muted">
+                Splain lets you <splain input="use"></splain> templates to dynamically <splain input="change"></splain>  your <splain input="text"></splain> each
+                time it is run.
+                <br> <splain input="'Even'?"></splain>  with simple templates you can <splain input="quickly 'and' easily"></splain>  build up some convincing
+                behaviour and variety.
+            </p></div>
+        </div>
+
+        <div class="col-md-2">
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+        integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/vue@2.4.2/dist/vue.js"></script>
+<script src="./splain.js"></script>
+<script src="./splainComponent.js"></script>
 </body>
 </html>
