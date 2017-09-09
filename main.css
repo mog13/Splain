@@ -1,0 +1,48 @@
+.margin-top--l{
+    margin-top:2rem;
+}
+
+.title{
+    text-transform: uppercase;
+    font-family: 'Kanit', sans-serif;
+    letter-spacing: 2px;
+    font-size: 4em;
+
+}
+
+.title::before {
+    content: "{{";
+    font-weight: 200;
+    color: rgb(124, 136, 133);
+}
+
+.title::after {
+    content: "}}";
+    font-weight: 200;
+    color: rgb(124, 136, 133);
+}
+
+.splain-example{
+    color: #00bc8c !important;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-weight: 600;
+    cursor: pointer;
+
+}
+.splain-example::before {
+    content: "{{";
+    font-weight: 200;
+    padding-right: 3px;
+}
+
+.splain-example::after {
+    content: "}}";
+    font-weight: 200;
+    padding-left: -3px;
+
+}
+
+.example-container{
+    font-size: 1.5rem;
+}
