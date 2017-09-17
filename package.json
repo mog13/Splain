@@ -1,6 +1,6 @@
 {
   "name": "@mog13/splain",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Small transformer library to create more dynamic and interesting language/sentances",
   "main": "splain.js",
   "scripts": {
