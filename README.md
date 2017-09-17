@@ -28,12 +28,12 @@ Every time the Process function is run the templates will be recompiled giving a
 ```JS
 Splain.addEntry({loadingMessage:["collecting bits", "compiling bytes", "reticulating splines", "calculating normals", "rebooting router"]});
 
-function ShowLoadingMessage() {
+function showLoadingMessage() {
     let loadingMessage = Splain.process("loading: {{loadingMessage}}");
     console.log(loadingMessage);
 }
 
-setTimout(showLoadingMessage,5000);
+setInterval(showLoadingMessage,5000);
 ```
 
 Splain templates can contain many tokens. so for axample `{{token1 token2}}`. Splain dictionaries are just JSON objects and can be layered.
