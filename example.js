@@ -43,10 +43,10 @@ Splain.addEntry({weather:{
     cold:["really {{adj.temp.cold}}","{{adverbs.very adj.temp.cold}}", "arctic", "pretty chilly"],
     rainy:["pouring it down", "drizzly", "raining cats and dogs"],
     comments:{
-        intro:["its going to be", "coming up itl be", "later itl be", "today im predicting itl be", "today will be"],
+        intro:["it's going to be", "coming up it'll be", "later it'll be", "today im predicting it'll be", "today will be"],
         itemReminder:["so pack", "so don't forget", "better bring"],
 
-        warm:["{{weather.comments.itemReminder}} the sunscreen", "so stay hydrated", "good luck", "sounds like its time for a barbecue"],
+        warm:["{{weather.comments.itemReminder}} the sunscreen", "so stay hydrated", "good luck", "sounds like it's time for a barbecue"],
         cold:["{{weather.comments.itemReminder}} {{pronoun}} sweater", "{{weather.comments.itemReminder}} {{pronoun}} hoody", "{{weather.comments.itemReminder}} {{pronoun}} coat", "brrrrr!"],
         rainy:["{{weather.comments.itemReminder}} {{pronoun}} umbrella", "{{weather.comments.itemReminder}} {{pronoun}} jacket", ",no need to water the garden!"]
     },
