@@ -20,7 +20,7 @@ Splain.addEntry({
             easy:["easy","simple","effortless"]
         },
         interesting:["interesting","appealing","delightful","engaging","compelling"],
-        veryInteresting:["{{adverbs.very adj.interesting}}", "{{adj.size.xxl'ly' adj.interesting}}"]
+        veryInteresting:["{{adverbs.very adj.interesting}}", "{{adj.size.xxl`ly` adj.interesting}}"]
     },
     adverbs:{
         speed:{
@@ -31,7 +31,7 @@ Splain.addEntry({
     }
 });
 
-let splainExplination = "{{{{greeting'.' }}?4}}Do you find making dynamic text{{{{ adverbs.very}}?4 adj.difficulty.hard}}? Using splain {{'helps'|'lets you'}} make {{adj.interesting|adj.veryInteresting}} text. Its {{adj.difficulty.easy}}";
+let splainExplination = "{{{{greeting`.`}}?4}}Do you find making dynamic text{{{{ adverbs.very}}?4 adj.difficulty.hard}}? Using splain {{`helps`|`lets you`}} make {{adj.interesting|adj.veryInteresting}} text. Its {{adj.difficulty.easy}}";
 for(let i=0; i <3; i++) {
     console.log(Splain.process(splainExplination));
 }
