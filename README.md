@@ -81,27 +81,25 @@ console.log(weatherReport(30));
 ```
 Splain templates can contain more than just a dictionary reference. 
 
-You can specify a word should be displayed as is by surrounding it with quotes (single or double), this is a literal. You could just place the word outside the template and it would be touched.
+You can specify a word should be displayed as is by surrounding it with backticks (`), this is a literal. You could just place the word outside the template and it would be touched.
 However sometimes you may want to apply some of Splains other features to a literal without it necessarily being translated through a dictionary.
 
 a | token represents an either or so will select either the pro or preceding token. 
 
 ```js
-console.log(Splain.process("hello {{'world'|'internet'}}"))
+console.log(Splain.process("hello {{`world`|`internet`}}"))
 ```
 
 Finally a ? token is a conditional. It provides a 1 in X chance of being rendered. X can be specified by providing the number after the ?.
 If no number is specified it is defaulted to 2.
 
 ```js
-console.log(Splain.process("goodbye!{{'and thanks for all the fish'?42}}"))
+console.log(Splain.process("goodbye!{{`and thanks for all the fish`?42}}"))
 ```
 
 so in the above roughly one in every 42 compiles there will be a hitchhikers guide to the galaxy reference. 
 
 see example.js (run via `node example.js`) for more examples of Splain.
-
-*note: currently sue to how literals work there is some issue with using quotes in words (there is a bug raised around this).....*
 
 ## Advanced use
 Splain templates can be built up as much as you want. dictionary items can themselves contain templates.
