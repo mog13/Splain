@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Splain - Loading</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="./bootstrap-darkly.css"/>
+    <link rel="stylesheet" href="./main.css"/>
+    <link rel="stylesheet" href="./gistOveride.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Kanit:200,400" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="container margin-top--l" id="app">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+
+        <div class="col-md-12 mx-auto ">
+            <h1 class="title text-success text-center"><a href="https://github.com/mog13/splain">Splain</a></h1>
+            <h2 class="text-center">Getting started with Splain - Loading screen</h2>
+
+            <div class="example-container margin-top--l">
+                <p class="text-muted tutorial-text">
+                    Loading is dull…. There&apos;s no two ways about it. Sitting and watching a screen whilst something
+                    loads is tedious for the user. Developers have known this since the dawn of loading screens and
+                    adopted
+                    several different methods to overcome it. One of the most universally adopted is loading screen
+                    messages. These can come in the form of in game hints and tips or quirky little phrases to make you
+                    laugh. These are usually fairly rudimentary, A simple array with a loading message chosen at random.
+                    However if your game or app is popular and used often then it can quickly go from a charming quirk
+                    to
+                    mundane and tedious. Of course the solution is to add more loading messages.
+                </p>
+                <div class="text-center loading">
+                    <div class="loading-container">
+                        <h1 class="loading-text">Loading </h1>
+                    </div>
+                    <i class="fa fa-2x fa-spinner fa-pulse highlight" aria-hidden="true"></i>
+                </div>
+
+                <h2>
+                    Splain overview.
+                </h2>
+                <p class="text-muted tutorial-text">
+                    This is where Splain comes in. Splain is a library for building dynamic strings using templates and
+                    tokens. Instead of specifying each loading message we can make templates to automatically add
+                    variety.
+                    This way we get tens (or even hundreds) of potential loading messages every time we add just one new
+                    token.
+                </p>
+                <p class="text-muted tutorial-text">
+                    In order to understand how our loading screen is going to work we need to understand a little about
+                    howSplain works. Splain lets us introduce tokens <span class="highlight">{{like this}} </span> which
+                    represent a selection from a
+                    corresponding dictionary. The dictionary is just a big tree ot strings Splain can choose from. When
+                    a
+                    string with tokens is then processed a corresponding dictionary item is swapped into its place. So
+                    for
+                    example we could create a entry called loading and add to it:
+                </p>
+
+                <script src="https://gist.github.com/mog13/af692bc2bff0283eb3ca3e91cc741369.js"></script>
+
+                <p class="text-muted tutorial-text">
+
+                </p>
+                <p class="text-muted tutorial-text">
+                    In the code above we define Splain <i>(This is needed if you installed splain via NPM. If you want
+                    to
+                    run
+                    these examples in your dev tools Splain should already be on the page so simply omit the first line
+                    and copy and paste the example into the console)</i>. We then
+                    add to its dictionary an entry called loading messages and include an array of tokens. We then
+                    create a method that processes our template <span class="highlight">{{loading message}}</span> and
+                    outputs it to the console.
+                    Finally we call that function at an interval.
+                </p>
+
+                <p class="text-muted tutorial-text">
+                    So we can see each time splain process is called the message is regenerated picking a new token from
+                    the loading messages dictionary entry. This is all well and good but so far this doesn't achieve
+                    much that a simple array wouldn't. To start to see the power of splain we can notice that the word
+                    loading is common in all these strings so we can update our example as follows:
+                </p>
+
+                <script src="https://gist.github.com/mog13/400da041f59092f269d6d530d7497a4e.js"></script>
+                <p class="text-muted tutorial-text">
+                    Well an improvement but still nothing too fancy. What if we decide to add the message <i>`signing
+                    in`</i>?
+                    Our loading message would then look stupid as it could be processed as <i>`loading signing in`</i>.
+                </p>
+
+                <p class="text-muted tutorial-text">
+                    We can further improve our loading message by understanding two things very important things.
+                    Splains dictionaries are a multi layered JSON type structure.
+                    and secondly the dictionary entries can themselves contain tokens.
+                    These features allow us to easily refactor our example from above:
+                </p>
+                <script src="https://gist.github.com/mog13/de5f68a9cb84cac725dfbaaa76a4f2b1.js"></script>
+
+                <p class="text-muted tutorial-text">
+                    Now we can see that the message is starting to get a bit more clever. We have built up a
+                    relationship with some templates having tokens themselves. So now loading.message will either be
+                    compiled as <i>`signing in`</i> and left like that. Or it will change to <i>`loading <span
+                        class="highlight">{{loading.media}}</span>`</i> which
+                    will then compile that template in turn. This is where we are starting to see some payoff. Up until
+                    now every message we added was only adding one potential message. Now we can add lots with each
+                    addition, for example:
+                </p>
+
+                <script src="https://gist.github.com/mog13/aafdea458a04e746938c937f2dda4ea1.js"></script>
+                <p class="text-muted tutorial-text">
+                    Wow, we’ve only added two messages (compiling and extracting) but we’ve effectively added 8. Now the
+                    eagle eyed among you might be spotting whats coming next:
+                </p>
+
+                <script src="https://gist.github.com/mog13/5b1e43349e6f05b2ad62f0b2f3f0cf8e.js"></script>
+
+                <p class="text-muted tutorial-text">
+                    Much neater, but we can add more! Lets add potential prefix and suffix comments. So for example a
+                    loading message might say `currently loading assets`. The word currently is not necessary to the
+                    sentence but provides variety. We can also do something similar after the message. Now we might not
+                    always want to compile these extras. We could include a bunch of empty strings or add several
+                    versions of the same message without these extra. Fortunately Splain provides an optional operator:
+                    ?. on its own it will exclude the preceding token 50% of the time. You can instead give it a number
+                    to decrease the chance. For example <span class="highlight">{{example?4}}</span> would be a ¼
+                    chance.
+                </p>
+
+                <script src="https://gist.github.com/mog13/5afaf272509cbf1cc43982b1fe1b0c43.js"></script>
+
+
+                <p class="text-muted tutorial-text">
+                    Now we have a system with only one message. That message however comprises of only 14 Strings but
+                    will be compiled in hundreds of different ways now when we add a single entry into the media
+                    dictionary we will be adding 10’s of potential new loading messages keeping it fresh all the time.
+                    Because we’ve extracted out the complexity of the message we are free to add other variants too
+                    allowing us to build up a complex and rich output. I have followed on with this idea and hooked it
+                    into a jquery element to produce the final outcome:
+                </p>
+            </div>
+
+            <p data-height="265" data-theme-id="0" data-slug-hash="Bmbvyo" data-default-tab="result" data-user="mog13"
+               data-embed-version="2" data-pen-title="Splain loading message example" class="codepen">See the Pen <a
+                    href="https://codepen.io/mog13/pen/Bmbvyo/">Splain loading message example</a> by Morgan (<a
+                    href="https://codepen.io/mog13">@mog13</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+            <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+            <p class="text-muted tutorial-text">
+                And there you have it. Thanks for reading. This tutorial and Splain itself is very much still a work in
+                progress. If you spot any errors with either or want to get involved please feel free to join in at the
+                <a href="https://github.com/mog13/splain">Github page</a> :)
+            </p>
+
+        </div>
+
+        <div class="col-md-1">
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+        integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+        crossorigin="anonymous"></script>
+<script src="./splain.js"></script>
+<script>
+    var currentLoading = "loading";
+    Splain.addEntry({
+        loading: {
+            message: [`{{loading.prefix?4loading.content loading.suffix?5}}`],
+            content: [`{{loading.verb loading.media}}`, `{{"signing"|"logging"}} {{"in"|"on"}} {{{{"to" {{loading.hardware|loading.destination}}}}?3}}`, `{{loading.verb loading.hardware}}`],
+            prefix: [`currently `, `please hold `, `skipping `, `attempting `, `rewinding `, `quickly `, `preparing to try `],
+            suffix: [`(this is the tricky part!)`, `...not much longer now`, `and failing`, `don't adjust your monitor`, `this may cause a strange odour`, `please provide manual assistance`,
+                `please do not restart your computer`, `it'll be worth it`],
+            media: [`assets`, `images`, `effects`, `music`, `files`, `bits`, `bytes`, `splines`, `templates`, `libraries`, `mainframes`, `logs`, `resources`, `media`, `sfx`, `shaders`,
+                `recycle bin`, `user data`, `credit card numbers`],
+            verb: [`loading`, `compiling`, `extracting`, `reticulating`, `parsing`, `downloading`, `reshuffling`, `preparing`, `executing`, `re-compiling`, `abstracting`, `modeling`, `upgrading`,
+                `training`, `assessing`, `bundling`, `copying`, `emptying`, "clearing", "checking", "assessing"],
+            hardware: [`CPU`, `GPU`, `network connection`, "network", "RAM", "Motherboard", "OS"],
+            destination: [`the host`, `local host`, `{{"the "?}}{{loading.source ?4}}mainframe`, `{{"the "?}}{{loading.source ?2}}machine`],
+            source: ["user", "host", "client", "server", "remote"]
+        }
+    });
+
+    setInterval(function () {
+        $(".loading-text").fadeOut(1000, function () {
+            currentLoading = Splain.process(`{{loading.message}}`)
+            $(".loading-text").text(currentLoading)
+
+        }).slideDown()
+    }, 5000)
+
+
+</script>
+<script src="https://use.fontawesome.com/fa7e532f7c.js"></script>
+</body>
+</html>

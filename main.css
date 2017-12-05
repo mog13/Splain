@@ -1,13 +1,20 @@
-.margin-top--l{
-    margin-top:2rem;
+.margin-top--l {
+    margin-top: 2rem;
 }
 
-.title{
+.title {
     text-transform: uppercase;
     font-family: 'Kanit', sans-serif;
     letter-spacing: 2px;
     font-size: 4em;
+}
 
+h2 {
+    text-transform: uppercase;
+    font-family: 'Kanit', sans-serif;
+    letter-spacing: 2px;
+    font-size: 1.5em;
+    margin-top: 2rem;
 }
 
 .title::before {
@@ -22,8 +29,7 @@
     color: rgb(124, 136, 133);
 }
 
-
-.splain-example{
+.splain-example {
     color: #00bc8c !important;
     padding-left: 4px;
     padding-right: 4px;
@@ -31,6 +37,7 @@
     cursor: pointer;
 
 }
+
 .splain-example::before {
     content: "{{";
     font-weight: 200;
@@ -44,7 +51,7 @@
 
 }
 
-.example-container{
+.example-container {
     font-size: 1.5rem;
 }
 
@@ -53,18 +60,35 @@
     font-size: 2rem;
 }
 
-hr{
+hr {
     border-color: #00bc8c !important;
 }
 
-.weather-text{
+.weather-text {
     font-size: 1.5rem;
 }
 
-.instructions{
+.instructions {
     margin: 0;
     color: grey;
     opacity: .8;
     font-size: 0.7rem;
     margin-top: -14px;
+}
+
+.tutorial-text {
+    font-size: 1.2rem;
+}
+
+.loading-container {
+    height: 4rem;
+}
+
+.highlight {
+    color: #00bc8c;
+}
+
+.cp_embed_wrapper {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
