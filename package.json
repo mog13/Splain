@@ -5,7 +5,8 @@
   "main": "splain.js",
   "scripts": {
     "build": "webpack",
-    "test": "jest --coverage --collectCoverageFrom=lib/**/*.js --collectCoverageFrom=!lib/**/index.js"
+    "lint-fix": "eslint --fix ./lib",
+    "test": "eslint ./lib && jest --coverage --collectCoverageFrom=lib/**/*.js --collectCoverageFrom=!lib/**/index.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.0",
+    "eslint": "^4.12.1",
     "jasmine": "^2.5.3",
     "jest": "^20.0.4",
     "jest-cli": "^20.0.4",
