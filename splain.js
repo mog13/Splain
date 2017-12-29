@@ -70,118 +70,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _splain = __webpack_require__(1);
-
-var _splain2 = _interopRequireDefault(_splain);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = new _splain2.default();
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _dictionary = __webpack_require__(2);
-
-var _dictionary2 = _interopRequireDefault(_dictionary);
-
-var _splainConfig = __webpack_require__(3);
-
-var _splainConfig2 = _interopRequireDefault(_splainConfig);
-
-var _defaultDictionaries = __webpack_require__(4);
-
-var _defaultDictionaries2 = _interopRequireDefault(_defaultDictionaries);
-
-var _templateFinder = __webpack_require__(5);
-
-var _templateFinder2 = _interopRequireDefault(_templateFinder);
-
-var _templateProcessor = __webpack_require__(6);
-
-var _templateProcessor2 = _interopRequireDefault(_templateProcessor);
-
-var _templateExecutor = __webpack_require__(8);
-
-var _templateExecutor2 = _interopRequireDefault(_templateExecutor);
-
-var _splainContext = __webpack_require__(9);
-
-var _splainContext2 = _interopRequireDefault(_splainContext);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Splain = function () {
-    function Splain() {
-        _classCallCheck(this, Splain);
-
-        this.dictionary = new _dictionary2.default();
-        this.dictionary.addEntry(_defaultDictionaries2.default);
-        this.config = new _splainConfig2.default();
-    }
-
-    _createClass(Splain, [{
-        key: "addEntry",
-        value: function addEntry(JSON, name) {
-            this.dictionary.addEntry(JSON, name);
-        }
-    }, {
-        key: "process",
-        value: function process(text, addQuotes, context) {
-            var _this = this;
-
-            if (!context) {
-                context = new _splainContext2.default(this.dictionary, this.config);
-            }
-            _templateFinder2.default.getTemplates(text, context).map(function (template) {
-                return _templateFinder2.default.stripTemplate(template, context);
-            }).forEach(function (template) {
-                if (_templateFinder2.default.containsTemplate(template, context)) {
-                    var output = "" + _this.process(template, true, context);
-                    text = text.replace(template, output);
-                    template = "" + output;
-                }
-                var compiledTemplate = _templateExecutor2.default.run(_templateProcessor2.default.getTokens(template), context);
-                if (_templateFinder2.default.containsTemplate(compiledTemplate, context)) {
-                    compiledTemplate = _this.process(compiledTemplate, false, context);
-                }
-                if (addQuotes) compiledTemplate = "`" + compiledTemplate + "`";
-                text = text.replace("" + _this.config.templateTokens.opening + template + _this.config.templateTokens.closing, compiledTemplate);
-            });
-
-            return text;
-        }
-    }]);
-
-    return Splain;
-}();
-
-exports.default = Splain;
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -228,9 +121,9 @@ var Dictionary = function () {
         value: function processContexts(entry, context) {
             if (context && context.contexts) {
                 var contextualEntry = entry.filter(function (value) {
-                    return value.hasOwnProperty("context") && context.contexts.findIndex(function (context) {
+                    return value.hasOwnProperty("context") && context.contexts.includes(function (context) {
                         return context === value.context;
-                    }) !== -1;
+                    });
                 });
                 if (contextualEntry.length > 0) {
                     return contextualEntry;
@@ -291,7 +184,7 @@ var Dictionary = function () {
 exports.default = Dictionary;
 
 /***/ }),
-/* 3 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -315,6 +208,7 @@ var SplainConfig = function () {
             closing: "}}"
         };
         this.fixedResolutionToken = "::";
+        this.variableResolutionToken = "##";
     }
 
     _createClass(SplainConfig, [{
@@ -331,6 +225,119 @@ var SplainConfig = function () {
 }();
 
 exports.default = SplainConfig;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _splain = __webpack_require__(3);
+
+var _splain2 = _interopRequireDefault(_splain);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = new _splain2.default();
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dictionary = __webpack_require__(0);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+var _splainConfig = __webpack_require__(1);
+
+var _splainConfig2 = _interopRequireDefault(_splainConfig);
+
+var _defaultDictionaries = __webpack_require__(4);
+
+var _defaultDictionaries2 = _interopRequireDefault(_defaultDictionaries);
+
+var _templateFinder = __webpack_require__(5);
+
+var _templateFinder2 = _interopRequireDefault(_templateFinder);
+
+var _templateProcessor = __webpack_require__(6);
+
+var _templateProcessor2 = _interopRequireDefault(_templateProcessor);
+
+var _templateExecutor = __webpack_require__(8);
+
+var _templateExecutor2 = _interopRequireDefault(_templateExecutor);
+
+var _splainContext = __webpack_require__(9);
+
+var _splainContext2 = _interopRequireDefault(_splainContext);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Splain = function () {
+    function Splain() {
+        _classCallCheck(this, Splain);
+
+        this.dictionary = new _dictionary2.default();
+        this.dictionary.addEntry(_defaultDictionaries2.default);
+        this.config = new _splainConfig2.default();
+    }
+
+    _createClass(Splain, [{
+        key: "addEntry",
+        value: function addEntry(JSON, name) {
+            this.dictionary.addEntry(JSON, name);
+        }
+    }, {
+        key: "process",
+        value: function process(text, variables) {
+            var context = new _splainContext2.default(this.dictionary, this.config);
+            if (variables) {
+                context["variables"] = variables;
+            }
+            return this.runProcess(text, false, context);
+        }
+    }, {
+        key: "runProcess",
+        value: function runProcess(text, addQuotes, context) {
+            var _this = this;
+
+            _templateFinder2.default.getTemplates(text, context).map(function (template) {
+                return _templateFinder2.default.stripTemplate(template, context);
+            }).forEach(function (template) {
+                if (_templateFinder2.default.containsTemplate(template, context)) {
+                    var output = "" + _this.runProcess(template, true, context);
+                    text = text.replace(template, output);
+                    template = "" + output;
+                }
+                var compiledTemplate = _templateExecutor2.default.run(_templateProcessor2.default.getTokens(template, context), context);
+                if (_templateFinder2.default.containsTemplate(compiledTemplate, context)) {
+                    compiledTemplate = _this.runProcess(compiledTemplate, false, context);
+                }
+                if (addQuotes) compiledTemplate = "`" + compiledTemplate + "`";
+                text = text.replace("" + _this.config.templateTokens.opening + template + _this.config.templateTokens.closing, compiledTemplate);
+            });
+
+            return text;
+        }
+    }]);
+
+    return Splain;
+}();
+
+exports.default = Splain;
 
 /***/ }),
 /* 4 */
@@ -501,7 +508,11 @@ var _class = function () {
         value: function getTemplates(text, context) {
             var templates = [];
             var literals = this.getLiterals(text);
+            var openingTokens = text.split(context.config.templateTokens.opening).length - 1;
+            var closingTokens = text.split(context.config.templateTokens.closing).length - 1;
 
+            if (openingTokens > closingTokens) throw "Error: not enough closing tokens found in " + text;
+            if (openingTokens < closingTokens) throw "Error: not enough opening tokens found in " + text;
             while (text.includes(context.config.templateTokens.opening) && text.includes(context.config.templateTokens.closing)) {
                 var start = text.indexOf(context.config.templateTokens.opening),
                     nested = 0;
@@ -581,12 +592,12 @@ var _class = function () {
 
     _createClass(_class, null, [{
         key: "getTokens",
-        value: function getTokens(template) {
+        value: function getTokens(template, context) {
             var tokens = [];
             var n = 100000;
             while (template) {
                 n--;
-                var nextToken = this.findNextToken(template);
+                var nextToken = this.findNextToken(template, context);
                 tokens.push(nextToken);
                 template = template.slice(nextToken.raw.length);
                 if (n < 0) {
@@ -599,7 +610,7 @@ var _class = function () {
         }
     }, {
         key: "findNextToken",
-        value: function findNextToken(template) {
+        value: function findNextToken(template, context) {
             var n = 1;
             if (template[0] === "?") {
                 while (!isNaN(template[n]) && template[n] !== " " && n < template.length) {
@@ -620,8 +631,19 @@ var _class = function () {
                 return new _splainToken2.default("lit", template.substring(1, n), template.substring(0, n + 1));
             }
             var nextToken = template.search(regToken);
-            if (nextToken < 0) nextToken = template.length;
-            return new _splainToken2.default("splain", template.substring(0, nextToken), template.substring(0, nextToken));
+            if (nextToken < 0) {
+                nextToken = template.length;
+            }
+            if (template.startsWith(context.config.variableResolutionToken)) {
+                var _tokenData = template.substring(0, nextToken);
+                return new _splainToken2.default("variable", _tokenData, _tokenData);
+            }
+            if (template.startsWith(context.config.fixedResolutionToken)) {
+                var _tokenData2 = template.substring(0, nextToken);
+                return new _splainToken2.default("fixed", _tokenData2, _tokenData2);
+            }
+            var tokenData = template.substring(0, nextToken);
+            return new _splainToken2.default("splain", tokenData, tokenData);
         }
     }]);
 
@@ -657,36 +679,50 @@ var Token = function () {
     _createClass(Token, [{
         key: "convert",
         value: function convert(context) {
+            function getResult(token) {
+                var entry = context.getFromCache(token);
+                if (!entry) {
+                    entry = context.dictionary.getEntry(token, false, context);
+                    context.addToCache(token, entry);
+                }
+                if (entry !== null && Array.isArray(entry)) {
+                    var result = entry[Math.floor(Math.random() * entry.length)];
+                    if (result.hasOwnProperty("context")) {
+                        context.addContext(result.context);
+                        return result.value;
+                    }
+                    return result;
+                }
+                return context.config.keepTemplateOnUnmatched ? token : null;
+            }
             switch (this.type) {
                 case "splain":
                     {
-                        var token = this.data;
-                        var isFixedResolution = this.data.startsWith(context.config.fixedResolutionToken);
-                        if (isFixedResolution) {
-                            token = token.substr(context.config.fixedResolutionToken.length);
-                            var fixed = context.getFixedResolution(token);
-                            if (fixed) {
-                                return fixed;
+                        return getResult(this.data);
+                    }
+                case "fixed":
+                    {
+                        var token = this.data.substr(context.config.fixedResolutionToken.length);
+                        var fixed = context.getFixedResolution(token);
+                        if (fixed) {
+                            return fixed;
+                        }
+                        var result = getResult(token);
+                        context.addFixedResolution(token, result);
+                        return result;
+                    }
+                case "variable":
+                    {
+                        var _token = this.data.substr(context.config.variableResolutionToken.length);
+                        if (context.hasOwnProperty("variables") && context.variables.hasOwnProperty(_token)) {
+                            var variable = context.variables[_token];
+                            if (typeof variable === "function") {
+                                return variable();
+                            } else {
+                                return variable;
                             }
                         }
-                        var entry = context.getFromCache(token);
-                        if (!entry) {
-                            entry = context.dictionary.getEntry(token, false, context);
-                            context.addToCache(token, entry);
-                        }
-                        if (entry !== null && Array.isArray(entry)) {
-                            var result = entry[Math.floor(Math.random() * entry.length)];
-                            if (isFixedResolution) {
-                                context.addFixedResolution(token, result);
-                            }
-                            if (result.hasOwnProperty("context")) {
-                                context.addContext(result.context);
-                                return result.value;
-                            }
-                            return result;
-                        }
-                        if (context.config.keepTemplateOnUnmatched) return this.data;
-                        return null;
+                        return context.config.keepTemplateOnUnmatched ? _token : null;
                     }
                 case "blank":
                     {
@@ -836,6 +872,16 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _splainConfig = __webpack_require__(1);
+
+var _splainConfig2 = _interopRequireDefault(_splainConfig);
+
+var _dictionary = __webpack_require__(0);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var SplainContext = function () {
@@ -883,6 +929,11 @@ var SplainContext = function () {
                 this.contexts = [];
             }
             this.contexts.push(context);
+        }
+    }], [{
+        key: "getDefault",
+        value: function getDefault() {
+            return new SplainContext(new _dictionary2.default(), new _splainConfig2.default());
         }
     }]);
 
