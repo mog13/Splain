@@ -235,3 +235,7 @@ Feel free to raise bugs/issues. Issues containing supporting code or tests to pr
 ## Testing
 Testing is done via Jest and Jasmine.
 Tests can be run with `npm test` or simply `jest`
+
+## Credits and thanks
+* <a href="https://github.com/Luke-Rogers" target="_blank">Luke Rogers</a> For all his contributions, ideas and implementing the lions share of V2.
+* The many contributors from <a href="https://hacktoberfest.digitalocean.com/" target="_blank">Hacktoberfest</a> for helping and joining in
