@@ -121,9 +121,7 @@ var Dictionary = function () {
         value: function processContexts(entry, context) {
             if (context && context.contexts) {
                 var contextualEntry = entry.filter(function (value) {
-                    return value.hasOwnProperty("context") && context.contexts.includes(function (context) {
-                        return context === value.context;
-                    });
+                    return value.hasOwnProperty("context") && context.contexts.includes(value.context);
                 });
                 if (contextualEntry.length > 0) {
                     return contextualEntry;
