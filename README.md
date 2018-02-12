@@ -1,5 +1,5 @@
 # Splain
-###### small parser to create more interesting language/sentances
+###### Small parser to create more interesting language/sentances
 
 [![Build Status](https://travis-ci.org/mog13/Splain.svg?branch=master)](https://travis-ci.org/mog13/Splain)
 [![codebeat badge](https://codebeat.co/badges/236d5abc-9188-48b7-8e3e-d2cec07404e8)](https://codebeat.co/projects/github-com-mog13-splain-master)
@@ -26,9 +26,9 @@ To do this you provide splain with a *dictionary* of options and then reference 
 
 Using a blend of different tokens and template allows you to quickly build up dynamic text which can be as simple as random selection or a rich custom response informed by runtime variables.
 
-## features
+## Features
 
-### templates
+### Templates
 At its simplest it can be utilized to reference a pool of words to select from. For example you can imagine a use case for greeting a customer. a hardcoded message may become stale so
 instead we can use splain to provide some variety. We do this by populating a dictionary entry keyed `greeting` and reference it in a template that we then process. When processing Splain
 will simply swap the token for something in the associated entry.
@@ -167,7 +167,7 @@ console.log(Splain.process("look at the time, it's {{##currentTime}}! {{##timePh
 
 ```
 
-## operators
+## Operators
 
 You can use operators to act on other tokens. 
 
@@ -195,6 +195,31 @@ console.log(Splain.process("goodbye!{{`and thanks for all the fish`?42}}"))
 ```
 
 So in the above roughly one in every 42 compiles there will be a hitchhikers guide to the galaxy reference. 
+
+## Configuration
+Splain can be configured with several options via its config object: `Splain.config.configure(property, value);`
+
+The following properties can be changed:
+
+**keepTemplateOnUnmatched** (default: true)
+
+This boolean controls what is returned on the event a token isn't matched. If true it will return the name of the token.
+If false it will return null.
+
+
+**fixedResolutionToken** (default: "::")
+
+This is the token used to identify or  define a fixed resolution token
+
+
+**variableResolutionToken** (default: "##")
+
+This is the token used to identify or define a variable resolution token
+
+**templateTokens** 
+default: `{opening: "{{", closing: "}}"}`
+
+This defines how a template is identifies
 
 ## Developing
 Pull requests welcome (with relevant tests). 
