@@ -97,6 +97,7 @@ console.log(weatherReport(30));
 
 ```
 
+
 **Weighting**
 In some instances you may want to provide weights to an entry. This effectively loads the dictionary with multiple copies of the entry to bias towards it. For example we could re-purpose our
 loading example to show a easter egg message once in a while by weighting our normal messages much higher.
@@ -115,7 +116,9 @@ setInterval(showLoadingMessage,5000);
 ```
 *note adding a weighting is optional per entry, as we can see in the example not all entries require a weight and you are free to mix and match*
 
+
 **Fixed resolution**
+
 Sometimes you may want to fix a tokens output in a given process, i.e if that token is called again use the previous result. you can use the :: operator to make it fixed resolution.
 
 ```JS
@@ -124,6 +127,7 @@ Splain.addEntry({language:["JS","Javascript","ECMAscript"]});
 console.log(Splain.process("{{::language}} is the best language, you can use {{::language}} to do anything!"));
 
 ```
+
 
 **Contexts**
 
@@ -140,6 +144,7 @@ console.log(Splain.process("wow look at those lovely {{colors environments}}"));
 console.log(Splain.process("wow look at those lovely {{colors}} {{environments}}"));
 
 ```
+
 **Variables**
 
 You can make a variable template using the ##token. This will use a variables object that you can pass into the process function to resolve the token.
@@ -162,7 +167,7 @@ console.log(Splain.process("look at the time, it's {{##currentTime}}! {{##timePh
 
 ```
 
-### operators
+## operators
 
 You can use operators to act on other tokens. 
 
