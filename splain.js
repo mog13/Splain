@@ -285,11 +285,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Splain = function () {
-    function Splain() {
+    function Splain(initialDictionary) {
         _classCallCheck(this, Splain);
 
         this.dictionary = new _dictionary2.default();
-        this.dictionary.addEntry(_defaultDictionaries2.default);
+        if (initialDictionary) {
+            this.dictionary.addEntry(initialDictionary);
+        } else {
+            this.dictionary.addEntry(_defaultDictionaries2.default);
+        }
         this.config = new _splainConfig2.default();
     }
 
