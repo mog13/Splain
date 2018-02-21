@@ -99,15 +99,28 @@ var Dictionary = function () {
 
     _createClass(Dictionary, [{
         key: "addEntry",
-        value: function addEntry(JSONEntry, name) {
+        value: function addEntry(JSONEntry, name, dictionaryContext) {
             var _this = this;
 
+            var contextualEntries = this.getContextualEntries(dictionaryContext);
             if (name) {
-                this.entries[name] = JSONEntry;
+                contextualEntries[name] = JSONEntry;
             } else {
                 Object.keys(JSONEntry).forEach(function (key) {
-                    _this.addEntry(JSONEntry[key], key);
+                    _this.addEntry(JSONEntry[key], key, dictionaryContext);
                 });
+            }
+        }
+    }, {
+        key: "getContextualEntries",
+        value: function getContextualEntries(dictionaryContext) {
+            if (dictionaryContext) {
+                if (!this.entries[dictionaryContext]) {
+                    this.entries[dictionaryContext] = {};
+                }
+                return this.entries[dictionaryContext];
+            } else {
+                return this.entries;
             }
         }
     }, {
@@ -121,7 +134,7 @@ var Dictionary = function () {
         value: function processContexts(entry, context) {
             if (context && context.contexts) {
                 var contextualEntry = entry.filter(function (value) {
-                    return value.hasOwnProperty("context") && context.contexts.includes(value.context);
+                    return value.hasOwnProperty("context") && context.hasMatchingContext(value.context);
                 });
                 if (contextualEntry.length > 0) {
                     return contextualEntry;
@@ -150,13 +163,12 @@ var Dictionary = function () {
         key: "getEntry",
         value: function getEntry(name, explicit, context) {
             if ((typeof explicit === "undefined" ? "undefined" : _typeof(explicit)) === ( true ? "undefined" : _typeof(undefined))) explicit = true;
+            var contextualEntries = context.dictionaryContext ? this.entries[context.dictionaryContext] : this.entries;
             if (!name.includes(".")) {
-                return this.processEntry(this.entries[name], context);
+                return this.processEntry(contextualEntries[name], context);
             }
 
-            var path = name.split(".");
-
-            var entry = path.reduce(function (currentStep, nextStep) {
+            var entry = name.split(".").reduce(function (currentStep, nextStep) {
                 if (currentStep === null) return null;
                 var curObj = currentStep[nextStep];
                 if (curObj) {
@@ -166,7 +178,7 @@ var Dictionary = function () {
                 } else {
                     return null;
                 }
-            }, this.entries);
+            }, contextualEntries);
             if (explicit && Array.isArray(entry) === false) {
                 console.warn("entry was not found explicitly or was not array, make sure entry is valid or call with explicit off ");
                 return null;
@@ -299,15 +311,18 @@ var Splain = function () {
 
     _createClass(Splain, [{
         key: "addEntry",
-        value: function addEntry(JSON, name) {
-            this.dictionary.addEntry(JSON, name);
+        value: function addEntry(JSON, name, dictionaryContext) {
+            this.dictionary.addEntry(JSON, name, dictionaryContext);
         }
     }, {
         key: "process",
-        value: function process(text, variables) {
+        value: function process(text, variables, dictionaryContext) {
             var context = new _splainContext2.default(this.dictionary, this.config);
             if (variables) {
                 context["variables"] = variables;
+            }
+            if (dictionaryContext) {
+                context["dictionaryContext"] = dictionaryContext;
             }
             return this.runProcess(text, false, context);
         }
@@ -330,6 +345,7 @@ var Splain = function () {
                 }
                 if (addQuotes) compiledTemplate = "`" + compiledTemplate + "`";
                 text = text.replace("" + _this.config.templateTokens.opening + template + _this.config.templateTokens.closing, compiledTemplate);
+                context.addTemplateResolution(template, compiledTemplate);
             });
 
             return text;
@@ -719,7 +735,7 @@ var Token = function () {
                         if (context.hasOwnProperty("variables") && context.variables.hasOwnProperty(_token)) {
                             var variable = context.variables[_token];
                             if (typeof variable === "function") {
-                                return variable();
+                                return variable(context.templateResolutions);
                             } else {
                                 return variable;
                             }
@@ -930,7 +946,35 @@ var SplainContext = function () {
             if (!this.contexts) {
                 this.contexts = [];
             }
-            this.contexts.push(context);
+            if (Array.isArray(context)) {
+                this.contexts = this.contexts.concat(context);
+            } else {
+                this.contexts.push(context);
+            }
+        }
+    }, {
+        key: "hasMatchingContext",
+        value: function hasMatchingContext(context) {
+            return Array.isArray(context) && this.contexts.some(function (con) {
+                return context.includes(con);
+            }) || this.contexts.includes(context);
+        }
+    }, {
+        key: "addTemplateResolution",
+        value: function addTemplateResolution(template, resolution) {
+            if (!this.templateResolutions) {
+                this.templateResolutions = {};
+            }
+            if (!this.templateResolutions[template]) {
+                this.templateResolutions[template] = resolution;
+            } else if (Array.isArray(this.templateResolutions[template])) {
+                this.templateResolutions[template].push(resolution);
+            } else {
+                var firstResolution = this.templateResolutions[template];
+                this.templateResolutions[template] = [];
+                this.templateResolutions[template].push(firstResolution);
+                this.templateResolutions[template].push(resolution);
+            }
         }
     }], [{
         key: "getDefault",
