@@ -70,11 +70,126 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dictionary = __webpack_require__(1);
+
+var _dictionary2 = _interopRequireDefault(_dictionary);
+
+var _splainConfig = __webpack_require__(2);
+
+var _splainConfig2 = _interopRequireDefault(_splainConfig);
+
+var _defaultDictionaries = __webpack_require__(4);
+
+var _defaultDictionaries2 = _interopRequireDefault(_defaultDictionaries);
+
+var _templateFinder = __webpack_require__(5);
+
+var _templateFinder2 = _interopRequireDefault(_templateFinder);
+
+var _templateProcessor = __webpack_require__(6);
+
+var _templateProcessor2 = _interopRequireDefault(_templateProcessor);
+
+var _templateExecutor = __webpack_require__(8);
+
+var _templateExecutor2 = _interopRequireDefault(_templateExecutor);
+
+var _splainContext = __webpack_require__(9);
+
+var _splainContext2 = _interopRequireDefault(_splainContext);
+
+var _dictionaryVerifier = __webpack_require__(10);
+
+var _dictionaryVerifier2 = _interopRequireDefault(_dictionaryVerifier);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Splain = function () {
+    function Splain(initialDictionary) {
+        _classCallCheck(this, Splain);
+
+        this.dictionary = new _dictionary2.default();
+        if (initialDictionary) {
+            this.dictionary.addEntry(initialDictionary);
+        } else {
+            this.dictionary.addEntry(_defaultDictionaries2.default);
+        }
+        this.config = new _splainConfig2.default();
+    }
+
+    _createClass(Splain, [{
+        key: "addEntry",
+        value: function addEntry(JSON, name, dictionaryContext) {
+            this.dictionary.addEntry(JSON, name, dictionaryContext);
+        }
+    }, {
+        key: "process",
+        value: function process(text, variables, dictionaryContext) {
+            var context = new _splainContext2.default(this.dictionary, this.config);
+            if (variables) {
+                context["variables"] = variables;
+            }
+            if (dictionaryContext) {
+                context["dictionaryContext"] = dictionaryContext;
+            }
+            return this.runProcess(text, false, context);
+        }
+    }, {
+        key: "runProcess",
+        value: function runProcess(text, addQuotes, context) {
+            var _this = this;
+
+            _templateFinder2.default.getTemplates(text, context).map(function (template) {
+                return _templateFinder2.default.stripTemplate(template, context);
+            }).forEach(function (template) {
+                if (_templateFinder2.default.containsTemplate(template, context)) {
+                    var output = "" + _this.runProcess(template, true, context);
+                    text = text.replace(template, output);
+                    template = "" + output;
+                }
+                var compiledTemplate = _templateExecutor2.default.run(_templateProcessor2.default.getTokens(template, context), context);
+                if (_templateFinder2.default.containsTemplate(compiledTemplate, context)) {
+                    compiledTemplate = _this.runProcess(compiledTemplate, false, context);
+                }
+                if (addQuotes) compiledTemplate = "`" + compiledTemplate + "`";
+                text = text.replace("" + _this.config.templateTokens.opening + template + _this.config.templateTokens.closing, compiledTemplate);
+                context.addTemplateResolution(template, compiledTemplate);
+            });
+
+            return text;
+        }
+    }, {
+        key: "verifyDictionary",
+        value: function verifyDictionary(dictionary) {
+            return _dictionaryVerifier2.default.verifyEntries(dictionary);
+        }
+    }]);
+
+    return Splain;
+}();
+
+exports.default = Splain;
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -99,15 +214,28 @@ var Dictionary = function () {
 
     _createClass(Dictionary, [{
         key: "addEntry",
-        value: function addEntry(JSONEntry, name) {
+        value: function addEntry(JSONEntry, name, dictionaryContext) {
             var _this = this;
 
+            var contextualEntries = this.getContextualEntries(dictionaryContext);
             if (name) {
-                this.entries[name] = JSONEntry;
+                contextualEntries[name] = JSONEntry;
             } else {
                 Object.keys(JSONEntry).forEach(function (key) {
-                    _this.addEntry(JSONEntry[key], key);
+                    _this.addEntry(JSONEntry[key], key, dictionaryContext);
                 });
+            }
+        }
+    }, {
+        key: "getContextualEntries",
+        value: function getContextualEntries(dictionaryContext) {
+            if (dictionaryContext) {
+                if (!this.entries[dictionaryContext]) {
+                    this.entries[dictionaryContext] = {};
+                }
+                return this.entries[dictionaryContext];
+            } else {
+                return this.entries;
             }
         }
     }, {
@@ -121,7 +249,7 @@ var Dictionary = function () {
         value: function processContexts(entry, context) {
             if (context && context.contexts) {
                 var contextualEntry = entry.filter(function (value) {
-                    return value.hasOwnProperty("context") && context.contexts.includes(value.context);
+                    return value.hasOwnProperty("context") && context.hasMatchingContext(value.context);
                 });
                 if (contextualEntry.length > 0) {
                     return contextualEntry;
@@ -150,13 +278,9 @@ var Dictionary = function () {
         key: "getEntry",
         value: function getEntry(name, explicit, context) {
             if ((typeof explicit === "undefined" ? "undefined" : _typeof(explicit)) === ( true ? "undefined" : _typeof(undefined))) explicit = true;
-            if (!name.includes(".")) {
-                return this.processEntry(this.entries[name], context);
-            }
+            var contextualEntries = context.dictionaryContext ? this.entries[context.dictionaryContext] : this.entries;
 
-            var path = name.split(".");
-
-            var entry = path.reduce(function (currentStep, nextStep) {
+            var entry = name.split(".").reduce(function (currentStep, nextStep) {
                 if (currentStep === null) return null;
                 var curObj = currentStep[nextStep];
                 if (curObj) {
@@ -166,9 +290,8 @@ var Dictionary = function () {
                 } else {
                     return null;
                 }
-            }, this.entries);
+            }, contextualEntries);
             if (explicit && Array.isArray(entry) === false) {
-                console.warn("entry was not found explicitly or was not array, make sure entry is valid or call with explicit off ");
                 return null;
             }
 
@@ -182,7 +305,7 @@ var Dictionary = function () {
 exports.default = Dictionary;
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -207,6 +330,8 @@ var SplainConfig = function () {
         };
         this.fixedResolutionToken = "::";
         this.variableResolutionToken = "##";
+        this.explicit = false;
+        this.keepTemplateOnUnmatched = true;
     }
 
     _createClass(SplainConfig, [{
@@ -225,121 +350,19 @@ var SplainConfig = function () {
 exports.default = SplainConfig;
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _splain = __webpack_require__(3);
-
-var _splain2 = _interopRequireDefault(_splain);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = new _splain2.default();
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
+var _splain = __webpack_require__(0);
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _dictionary = __webpack_require__(0);
-
-var _dictionary2 = _interopRequireDefault(_dictionary);
-
-var _splainConfig = __webpack_require__(1);
-
-var _splainConfig2 = _interopRequireDefault(_splainConfig);
-
-var _defaultDictionaries = __webpack_require__(4);
-
-var _defaultDictionaries2 = _interopRequireDefault(_defaultDictionaries);
-
-var _templateFinder = __webpack_require__(5);
-
-var _templateFinder2 = _interopRequireDefault(_templateFinder);
-
-var _templateProcessor = __webpack_require__(6);
-
-var _templateProcessor2 = _interopRequireDefault(_templateProcessor);
-
-var _templateExecutor = __webpack_require__(8);
-
-var _templateExecutor2 = _interopRequireDefault(_templateExecutor);
-
-var _splainContext = __webpack_require__(9);
-
-var _splainContext2 = _interopRequireDefault(_splainContext);
+var _splain2 = _interopRequireDefault(_splain);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Splain = function () {
-    function Splain(initialDictionary) {
-        _classCallCheck(this, Splain);
-
-        this.dictionary = new _dictionary2.default();
-        if (initialDictionary) {
-            this.dictionary.addEntry(initialDictionary);
-        } else {
-            this.dictionary.addEntry(_defaultDictionaries2.default);
-        }
-        this.config = new _splainConfig2.default();
-    }
-
-    _createClass(Splain, [{
-        key: "addEntry",
-        value: function addEntry(JSON, name) {
-            this.dictionary.addEntry(JSON, name);
-        }
-    }, {
-        key: "process",
-        value: function process(text, variables) {
-            var context = new _splainContext2.default(this.dictionary, this.config);
-            if (variables) {
-                context["variables"] = variables;
-            }
-            return this.runProcess(text, false, context);
-        }
-    }, {
-        key: "runProcess",
-        value: function runProcess(text, addQuotes, context) {
-            var _this = this;
-
-            _templateFinder2.default.getTemplates(text, context).map(function (template) {
-                return _templateFinder2.default.stripTemplate(template, context);
-            }).forEach(function (template) {
-                if (_templateFinder2.default.containsTemplate(template, context)) {
-                    var output = "" + _this.runProcess(template, true, context);
-                    text = text.replace(template, output);
-                    template = "" + output;
-                }
-                var compiledTemplate = _templateExecutor2.default.run(_templateProcessor2.default.getTokens(template, context), context);
-                if (_templateFinder2.default.containsTemplate(compiledTemplate, context)) {
-                    compiledTemplate = _this.runProcess(compiledTemplate, false, context);
-                }
-                if (addQuotes) compiledTemplate = "`" + compiledTemplate + "`";
-                text = text.replace("" + _this.config.templateTokens.opening + template + _this.config.templateTokens.closing, compiledTemplate);
-            });
-
-            return text;
-        }
-    }]);
-
-    return Splain;
-}();
-
-exports.default = Splain;
+module.exports = new _splain2.default();
 
 /***/ }),
 /* 4 */
@@ -684,7 +707,7 @@ var Token = function () {
             function getResult(token) {
                 var entry = context.getFromCache(token);
                 if (!entry) {
-                    entry = context.dictionary.getEntry(token, false, context);
+                    entry = context.dictionary.getEntry(token, context.config.explicit, context);
                     context.addToCache(token, entry);
                 }
                 if (entry !== null && Array.isArray(entry)) {
@@ -719,7 +742,7 @@ var Token = function () {
                         if (context.hasOwnProperty("variables") && context.variables.hasOwnProperty(_token)) {
                             var variable = context.variables[_token];
                             if (typeof variable === "function") {
-                                return variable();
+                                return variable(context.templateResolutions);
                             } else {
                                 return variable;
                             }
@@ -874,11 +897,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _splainConfig = __webpack_require__(1);
+var _splainConfig = __webpack_require__(2);
 
 var _splainConfig2 = _interopRequireDefault(_splainConfig);
 
-var _dictionary = __webpack_require__(0);
+var _dictionary = __webpack_require__(1);
 
 var _dictionary2 = _interopRequireDefault(_dictionary);
 
@@ -930,7 +953,35 @@ var SplainContext = function () {
             if (!this.contexts) {
                 this.contexts = [];
             }
-            this.contexts.push(context);
+            if (Array.isArray(context)) {
+                this.contexts = this.contexts.concat(context);
+            } else {
+                this.contexts.push(context);
+            }
+        }
+    }, {
+        key: "hasMatchingContext",
+        value: function hasMatchingContext(context) {
+            return Array.isArray(context) && this.contexts.some(function (con) {
+                return context.includes(con);
+            }) || this.contexts.includes(context);
+        }
+    }, {
+        key: "addTemplateResolution",
+        value: function addTemplateResolution(template, resolution) {
+            if (!this.templateResolutions) {
+                this.templateResolutions = {};
+            }
+            if (!this.templateResolutions[template]) {
+                this.templateResolutions[template] = resolution;
+            } else if (Array.isArray(this.templateResolutions[template])) {
+                this.templateResolutions[template].push(resolution);
+            } else {
+                var firstResolution = this.templateResolutions[template];
+                this.templateResolutions[template] = [];
+                this.templateResolutions[template].push(firstResolution);
+                this.templateResolutions[template].push(resolution);
+            }
         }
     }], [{
         key: "getDefault",
@@ -943,6 +994,60 @@ var SplainContext = function () {
 }();
 
 exports.default = SplainContext;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _splain = __webpack_require__(0);
+
+var _splain2 = _interopRequireDefault(_splain);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+
+    /*if called without a splain instance will set one up and pass through to recursive calls
+    this means original call will make splain at the dictionary level
+    but also has the added benefit that you could use it to verify it with a given splain instance*/
+    verifyEntries: function verifyEntries(node, splain, root) {
+        var _this = this;
+
+        if (!splain) {
+            splain = new _splain2.default(node.entries || node); //allows for just sending part of a dictionary
+            splain.config.configure("explicit", true);
+            splain.config.configure("keepTemplateOnUnmatched", false);
+        }
+        if (node.entries) node = node.entries; //only want to scan entries of dictionary
+        var invalidTokens = [];
+
+        var _loop = function _loop(key) {
+            var branch = node[key],
+                fullyQualifiedKey = root ? root + "." + key : key;
+            if (Array.isArray(branch)) {
+                branch.forEach(function (entry) {
+                    var keyedEntry = key + "." + entry,
+                        output = splain.process("" + entry);
+                    if (output.indexOf("null") >= 0 || output === keyedEntry) invalidTokens.push({ token: entry, key: fullyQualifiedKey });
+                });
+            } else {
+                invalidTokens = invalidTokens.concat(_this.verifyEntries(branch, splain, fullyQualifiedKey));
+            }
+        };
+
+        for (var key in node) {
+            _loop(key);
+        }
+        return invalidTokens;
+    }
+};
 
 /***/ })
 /******/ ]);

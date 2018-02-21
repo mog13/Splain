@@ -23,7 +23,7 @@ describe("when I'm using the dictionary verifier", () => {
     });
 
     it("should not return any tokens in a valid multi-level dictionary", () => {
-        dictionary.addEntry({a:["1"],b:{c:{d:["123"],e:["{{a}}","{{a.b.c.d}}"]}}});
+        dictionary.addEntry({a:["1"],b:{c:{d:["123"],e:["{{a}}","{{b.c.d}}"]}}});
         expect(DictionaryVerifier.verifyEntries(dictionary).length).toBe(0);
     });
 

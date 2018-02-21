@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "lint-fix": "eslint --fix ./lib",
-    "test": "eslint ./lib && jest --coverage --collectCoverageFrom=lib/**/*.js --collectCoverageFrom=!lib/**/index.js"
+    "test": "eslint ./lib && jest --coverage --collectCoverageFrom=lib/**/*.js --collectCoverageFrom=!lib/**/index.js --collectCoverageFrom=utility/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,6 @@
     "webpack": "^3.5.5"
   },
   "bin": {
-    "test": "bin/dictionaryValidator.js"
+    "verify-dictionary": "bin/dictionaryValidator.js"
   }
 }
