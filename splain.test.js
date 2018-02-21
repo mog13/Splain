@@ -13,7 +13,7 @@ describe("when i import the splain library", ()=> {
     });
 
     it("should populate default dicitionaries", () => {
-       expect(Splain.dictionary.getEntry("weather",false, SplainContext.getDefault())).not.toBeNull()
+       expect(Splain.dictionary.getEntry("weather", false, SplainContext.getDefault())).not.toBeNull()
     });
 
     describe("and i want to compile text through splain",() =>{
