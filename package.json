@@ -1,12 +1,12 @@
 {
   "name": "@mog13/splain",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Small transformer library to create more dynamic and interesting language/sentances",
   "main": "splain.js",
   "scripts": {
     "build": "webpack",
     "lint-fix": "eslint --fix ./lib",
-    "test": "eslint ./lib && jest --coverage --collectCoverageFrom=lib/**/*.js --collectCoverageFrom=!lib/**/index.js"
+    "test": "eslint ./lib && jest --coverage --collectCoverageFrom=lib/**/*.js --collectCoverageFrom=!lib/**/index.js --collectCoverageFrom=utility/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -31,8 +31,7 @@
     "jest-cli": "^20.0.4",
     "webpack": "^3.5.5"
   },
-  "pre-commit": [
-    "build",
-    "test"
-  ]
+  "bin": {
+    "verify-dictionary": "bin/dictionaryValidator.js"
+  }
 }
