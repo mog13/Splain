@@ -406,8 +406,6 @@ var _class = function () {
                         n++;
                     }
                 }
-                //let closing = template.indexOf(context.config.templateTokens.closing),
-
                 if (n < 0) throw "template {" + template + "} has no closing token";
                 return new _splainToken2.default("template", template.substring(openLength, n - closeLength), template.substring(0, n));
             }
