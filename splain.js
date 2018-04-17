@@ -834,7 +834,7 @@ var _class = function () {
                 var conditionalIndex = this.findFirstTokenOfType("?", tokens);
                 if (conditionalIndex !== null) {
                     if (this.rand(tokens[conditionalIndex].data) !== 1) {
-                        var target = this.getPreceedingTokenOfType(["lit", "splain"], tokens, conditionalIndex);
+                        var target = this.getPrecedingTokenOfType(["lit", "splain"], tokens, conditionalIndex);
                         tokens.splice(target, conditionalIndex - target + 1);
                     } else {
                         tokens.splice(conditionalIndex, 1);
@@ -850,7 +850,7 @@ var _class = function () {
             while (this.findFirstTokenOfType("|", tokens) !== null) {
                 var indexOfOr = this.findFirstTokenOfType("|", tokens);
                 if (indexOfOr !== null) {
-                    var prec = this.getPreceedingTokenOfType(["lit", "splain"], tokens, indexOfOr),
+                    var prec = this.getPrecedingTokenOfType(["lit", "splain"], tokens, indexOfOr),
                         proc = this.getProceedingTokenOfType(["lit", "splain"], tokens, indexOfOr);
 
                     if (prec !== null && proc !== null) {
@@ -877,7 +877,7 @@ var _class = function () {
             return null;
         }
     }, {
-        key: "getPreceedingTokenOfType",
+        key: "getPrecedingTokenOfType",
         value: function getPreceedingTokenOfType(types, tokens, index) {
             if (index === 0) return null;
             for (var i = index - 1; i >= 0; i--) {
