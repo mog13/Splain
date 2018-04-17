@@ -114,36 +114,60 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Main Splain Class and intended interface with library.
+ */
 var Splain = function () {
+    /**
+     * Create a new instance of Splain
+     * @param {Object} [initialDictionary] - Optional JSON object to use as initial dictionary.
+     */
     function Splain(initialDictionary) {
         _classCallCheck(this, Splain);
 
         this.dictionary = new _dictionary2.default();
-        if (initialDictionary) {
-            this.dictionary.addEntry(initialDictionary);
-        } else {
-            this.dictionary.addEntry(_defaultDictionaries2.default);
-        }
+        this.dictionary.addEntry(initialDictionary || _defaultDictionaries2.default);
         this.config = new _splainConfig2.default();
     }
+
+    /**
+     * Add an entry to a splain dictionary
+     * @param {Object} JSON - The entry to add in the form of JSON (can be multiple layers deep and have multiple roots). Also accepts array when used with the name param
+     * @param {string} [name] - The name of the entry if an array was given instead of JSON. this is long hand for simply using JSON {name:[entries]}
+     * @param {string} [dictionaryContext] - the dictionary to add it to i.e EN
+     */
+
 
     _createClass(Splain, [{
         key: "addEntry",
         value: function addEntry(JSON, name, dictionaryContext) {
             this.dictionary.addEntry(JSON, name, dictionaryContext);
         }
+
+        /**
+         * Process a given string compiling all the templates in it.
+         * @param {string} text - the text or string to compile (that contains splain templates
+         * @param {object} [variables] - any variables needed for variable templates to use
+         * @param {string} [dictionaryContext] - the dictionary to use
+         * @returns {string} - the compiled template
+         */
+
     }, {
         key: "process",
         value: function process(text, variables, dictionaryContext) {
             var context = new _splainContext2.default(this.dictionary, this.config);
-            if (variables) {
-                context["variables"] = variables;
-            }
-            if (dictionaryContext) {
-                context["dictionaryContext"] = dictionaryContext;
-            }
-            return _templateProcessor2.default.processTemplate(text, false, context);
+            context["variables"] = variables;
+            context["dictionaryContext"] = dictionaryContext;
+
+            return _templateProcessor2.default.processTemplate(text, context);
         }
+
+        /**
+         * verifies all entries in a dictionary compile to something
+         * @param dictionary
+         * @returns {*}
+         */
+
     }, {
         key: "verifyDictionary",
         value: function verifyDictionary(dictionary) {
@@ -167,8 +191,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -179,6 +201,14 @@ var Dictionary = function () {
 
         this.entries = {};
     }
+
+    /**
+     * Add an entry to a splain dictionary
+     * @param {Object} JSONEntry - The entry to add in the form of JSON (can be multiple layers deep and have multiple roots). Also accepts array when used with the name param
+     * @param {string} [name] - The name of the entry if an array was given instead of JSON. this is long hand for simply using JSON {name:[entries]}
+     * @param {string} [dictionaryContext] - the dictionary to add it to i.e EN
+     */
+
 
     _createClass(Dictionary, [{
         key: "addEntry",
@@ -194,6 +224,13 @@ var Dictionary = function () {
                 });
             }
         }
+
+        /**
+         * returns the entries for a given dictionary
+         * @param dictionaryContext
+         * @returns {array}
+         */
+
     }, {
         key: "getContextualEntries",
         value: function getContextualEntries(dictionaryContext) {
@@ -206,25 +243,49 @@ var Dictionary = function () {
                 return this.entries;
             }
         }
+
+        /**
+         * processes a given entry in accordance with any weighting or context it has
+         * @param {array} entry - the entry to process
+         * @param context - the current context of splain to process it in
+         */
+
     }, {
         key: "processEntry",
         value: function processEntry(entry, context) {
             var contextualEntry = this.processContexts(entry, context);
             return this.processWeights(contextualEntry);
         }
+
+        /**
+         * filter out entries that match the currently active contexts, if none do then return all
+         * @param {array} entry - the entry to process
+         * @param context - the current context of splain to process it in
+         * @returns {*}
+         */
+
     }, {
         key: "processContexts",
         value: function processContexts(entry, context) {
             if (context && context.contexts) {
+                //filter entries that have at least one matching context
                 var contextualEntry = entry.filter(function (value) {
                     return value.hasOwnProperty("context") && context.hasMatchingContext(value.context);
                 });
+                //only return contextual entries if any match
                 if (contextualEntry.length > 0) {
                     return contextualEntry;
                 }
             }
             return entry;
         }
+
+        /**
+         * Temporarily add extra entries to account for a heavier weighting
+         * @param {array} entry - the entry to process
+         * @returns {*}
+         */
+
     }, {
         key: "processWeights",
         value: function processWeights(entry) {
@@ -242,27 +303,34 @@ var Dictionary = function () {
             }
             return entry;
         }
+
+        /**
+         * get a dictionary entry
+         * @param {string} name - the entry name/path
+         * @param context - the current context of splain to process it in
+         * @returns {*}
+         */
+
     }, {
         key: "getEntry",
-        value: function getEntry(name, explicit, context) {
-            if ((typeof explicit === "undefined" ? "undefined" : _typeof(explicit)) === ( true ? "undefined" : _typeof(undefined))) explicit = true;
+        value: function getEntry(name, context) {
+            //get entries from specific dictionary if set. in this cas contextual is contextual to the dictionary (e.g EN)
             var contextualEntries = context.dictionaryContext ? this.entries[context.dictionaryContext] : this.entries;
-
+            //get the entries by walking down the path with a reduce
             var entry = name.split(".").reduce(function (currentStep, nextStep) {
                 if (currentStep === null) return null;
                 var curObj = currentStep[nextStep];
                 if (curObj) {
                     return curObj;
-                } else if (!explicit) {
-                    return currentStep;
                 } else {
                     return null;
                 }
             }, contextualEntries);
+            //if the entry isnt an array then its invalid and we should either return the path or null depending on the setting.
             if (Array.isArray(entry) === false) {
-                return explicit ? null : name;
+                return null;
             }
-
+            //apply weights and context filtering to selection
             return this.processEntry(entry, context);
         }
     }]);
@@ -298,9 +366,16 @@ var SplainConfig = function () {
         };
         this.fixedResolutionToken = "::";
         this.variableResolutionToken = "##";
-        this.explicit = false;
         this.keepTemplateOnUnmatched = true;
     }
+
+    /**
+     * Sets a config parameter
+     * @param {string} key - the parameter to configure
+     * @param value - the value to set the parameter to
+     * @returns {SplainConfig}
+     */
+
 
     _createClass(SplainConfig, [{
         key: "configure",
@@ -355,19 +430,39 @@ var _class = function () {
 
     _createClass(_class, null, [{
         key: "processTemplate",
-        value: function processTemplate(text, addQuotes, context) {
+
+
+        /**
+         * process/compile the given template
+         * @param {string} text - the string to compile
+         * @param context - the current splain context
+         * @returns {*}
+         */
+        value: function processTemplate(text, context) {
             var _this = this;
 
+            //for all the templates in the given test
             _templateFinder2.default.getTemplates(text, context).forEach(function (template) {
+                //strip it, tokenize it and compile it
                 var strippedTemplate = _templateFinder2.default.stripTemplate(template, context),
                     tokens = _this.getTokens(strippedTemplate, context),
                     compiledTemplate = _templateExecutor2.default.run(tokens, context);
-                if (_templateFinder2.default.containsTemplate(compiledTemplate, context)) compiledTemplate = _this.processTemplate(compiledTemplate, false, context);
+                // if the result contains a template recursively re run it
+                if (_templateFinder2.default.containsTemplate(compiledTemplate, context)) compiledTemplate = _this.processTemplate(compiledTemplate, context);
+                //replace the template with its compiled version and store its resolution
                 text = text.replace("" + template, compiledTemplate);
                 context.addTemplateResolution(strippedTemplate, compiledTemplate);
             });
             return text;
         }
+
+        /**
+         * gets the tokens from a given template
+         * @param {string} template - the template to convert to tokens
+         * @param context - the current splain context
+         * @returns {Array} - an array of tokens
+         */
+
     }, {
         key: "getTokens",
         value: function getTokens(template, context) {
@@ -386,6 +481,14 @@ var _class = function () {
 
             return tokens;
         }
+
+        /**
+         * Find the first token in the given template
+         * @param {string} template - the template to find the token in
+         * @param context - the current splain context
+         * @returns {Token} - the first token in the template
+         */
+
     }, {
         key: "findNextToken",
         value: function findNextToken(template, context) {
@@ -472,6 +575,13 @@ var _class = function () {
 
     _createClass(_class, null, [{
         key: "getLiterals",
+
+
+        /**
+         * returns any literals in a given string
+         * @param {string} text - the text to search
+         * @returns {Array}
+         */
         value: function getLiterals(text) {
             var literals = [];
             var last = null;
@@ -487,6 +597,15 @@ var _class = function () {
             }
             return literals;
         }
+
+        /**
+         * returns if the given start and end index's fall within the given array
+         * @param {int} start - the start of the index to check
+         * @param {int} end - the end of the index to check
+         * @param {array} literals - the array of literals (starts and ends) to check against
+         * @returns {boolean}
+         */
+
     }, {
         key: "withinLiterals",
         value: function withinLiterals(start, end, literals) {
@@ -497,6 +616,14 @@ var _class = function () {
             });
             return within;
         }
+
+        /**
+         * Get all the templates within the given text
+         * @param text - the text to search
+         * @param context - the splain contexts
+         * @returns {Array} - the found templates
+         */
+
     }, {
         key: "getTemplates",
         value: function getTemplates(text, context) {
@@ -531,6 +658,14 @@ var _class = function () {
             }
             return templates;
         }
+
+        /**
+         * strips the template deliminators, leaves inner templates remaining
+         * @param {string} template - the template to strip
+         * @param context - the current splain context
+         * @returns {*}
+         */
+
     }, {
         key: "stripTemplate",
         value: function stripTemplate(template, context) {
@@ -540,12 +675,21 @@ var _class = function () {
             if (close > -1) template = template.slice(0, close) + template.slice(close + context.config.templateTokens.opening.length);
             return template;
         }
+
+        /**
+         * returns if the given text contains a template
+         * @param {string} text - the text to check
+         * @param context - the current splain Context.
+         * @returns {*}
+         */
+
     }, {
         key: "containsTemplate",
         value: function containsTemplate(text, context) {
             function escapeTokens(templateTokens) {
                 return "\\" + templateTokens.split("").join("\\");
             }
+
             var regTemplateMatcher = escapeTokens(context.config.templateTokens.opening) + ".*?" + escapeTokens(context.config.templateTokens.closing);
             return text.match(regTemplateMatcher);
         }
@@ -714,6 +858,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Token = function () {
+
+    /**
+     * Create a new splain oken
+     * @param {string} type - the type of token it is (splain/fixed/variable/blank/lit/template)
+     * @param data - the relevant data about the token, different depending on type
+     * @param {string} raw - the raw token as it appeared in the original template
+     */
     function Token(type, data, raw) {
         _classCallCheck(this, Token);
 
@@ -722,13 +873,22 @@ var Token = function () {
         this.raw = raw;
     }
 
+    /**
+     * Converts the given token iintos its compiled equivalent.
+     * @param {object} context - the splain context to use
+     * @returns {*}
+     */
+
+
     _createClass(Token, [{
         key: "convert",
         value: function convert(context) {
             function getResult(token) {
+                // check if weve cached the entries
                 var entry = context.getFromCache(token);
                 if (!entry) {
-                    entry = context.dictionary.getEntry(token, context.config.explicit, context);
+                    //if we havn't find the entry and cache is
+                    entry = context.dictionary.getEntry(token, context);
                     context.addToCache(token, entry);
                 }
                 if (entry !== null && Array.isArray(entry)) {
@@ -779,8 +939,8 @@ var Token = function () {
                     }
                 case "template":
                     {
-                        var output = _templateProcessor2.default.processTemplate(this.raw, false, context);
-                        return _templateFinder2.default.containsTemplate(output, context) ? _templateProcessor2.default.processTemplate(output, false, context) : output;
+                        var output = _templateProcessor2.default.processTemplate(this.raw, context);
+                        return _templateFinder2.default.containsTemplate(output, context) ? _templateProcessor2.default.processTemplate(output, context) : output;
                     }
                 default:
                     {
@@ -817,6 +977,13 @@ var _class = function () {
 
     _createClass(_class, null, [{
         key: "run",
+
+        /**
+         * run the executor over given tokens compiling each
+         * @param {array} tokens - the tokens to compile/execute
+         * @param context - the splain context to use
+         * @returns {string} - the compiled output
+         */
         value: function run(tokens, context) {
             this.executeOrs(tokens);
             this.executeConditionals(tokens);
@@ -827,6 +994,12 @@ var _class = function () {
 
             return retString;
         }
+
+        /**
+         * execute any conditional tokens
+         * @param {array} tokens - the tokens to compile/execute
+         */
+
     }, {
         key: "executeConditionals",
         value: function executeConditionals(tokens) {
@@ -844,6 +1017,11 @@ var _class = function () {
                 }
             }
         }
+        /**
+         * execute any or tokens
+         * @param {array} tokens - the tokens to compile/execute
+         */
+
     }, {
         key: "executeOrs",
         value: function executeOrs(tokens) {
@@ -868,6 +1046,14 @@ var _class = function () {
                 }
             }
         }
+
+        /**
+         * Find the first token of the given type within the provided array of tokens
+         * @param {string} type - the type of token to find
+         * @param {array} tokens - the tokens to use in the search
+         * @returns {*}
+         */
+
     }, {
         key: "findFirstTokenOfType",
         value: function findFirstTokenOfType(type, tokens) {
@@ -876,15 +1062,33 @@ var _class = function () {
             }
             return null;
         }
+
+        /**
+         * find the nearest preceding token of a given set of types from a given point
+         * @param {array} types - the types of token to match on
+         * @param {array} tokens - the tokens to use in the search
+         * @param {int} index - the index to start the search from
+         * @returns {*}
+         */
+
     }, {
         key: "getPrecedingTokenOfType",
-        value: function getPreceedingTokenOfType(types, tokens, index) {
+        value: function getPrecedingTokenOfType(types, tokens, index) {
             if (index === 0) return null;
             for (var i = index - 1; i >= 0; i--) {
                 if (types.indexOf(tokens[i].type) > -1) return i;
             }
             return null;
         }
+
+        /**
+         * find the nearest preceding token of a given set of types from a given point
+         * @param {array} types - the types of token to match on
+         * @param {array} tokens - the tokens to use in the search
+         * @param {int} index - the index to start the search from
+         * @returns {*}
+         */
+
     }, {
         key: "getProceedingTokenOfType",
         value: function getProceedingTokenOfType(types, tokens, index) {
@@ -895,7 +1099,11 @@ var _class = function () {
             return null;
         }
 
-        //random number between 1 and n inclusive
+        /**
+         * Return an random number between 1 and n (inclusive)
+         * @param n - the max number
+         * @returns {number}
+         */
 
     }, {
         key: "rand",
@@ -935,22 +1143,41 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var SplainContext = function () {
+    /**
+     * Create a new splainContext
+     * @param {object} dictionary - the dictionary to use
+     * @param {object} config - the config to use
+     */
     function SplainContext(dictionary, config) {
         _classCallCheck(this, SplainContext);
 
         this.dictionary = dictionary;
         this.config = config;
         this.contexts = [];
+        this.templateResolutions = {};
+        this.fixedResolutions = {};
+        this.dictionaryCache = {};
     }
+
+    /**
+     * Add the found entry to the cache against the token/path so it doesn't need to be looked up if reused.
+     * @param {string} token - the token
+     * @param {array} entry - the entry
+     */
+
 
     _createClass(SplainContext, [{
         key: "addToCache",
         value: function addToCache(token, entry) {
-            if (!this.dictionaryCache) {
-                this.dictionaryCache = {};
-            }
             this.dictionaryCache[token] = entry;
         }
+
+        /**
+         * return the cached toke if it exists
+         * @param {string} token - the token
+         * @returns {array}
+         */
+
     }, {
         key: "getFromCache",
         value: function getFromCache(token) {
@@ -958,14 +1185,25 @@ var SplainContext = function () {
                 return this.dictionaryCache[token];
             }
         }
+
+        /**
+         * Adds result to the fixed resolutions object
+         * @param {string} token - the token to be mapped by
+         * @param {string} result - the compiled output of the token
+         */
+
     }, {
         key: "addFixedResolution",
         value: function addFixedResolution(token, result) {
-            if (!this.fixedResolutions) {
-                this.fixedResolutions = {};
-            }
             this.fixedResolutions[token] = result;
         }
+
+        /**
+         * retrieves sny matching fixed resolutions
+         * @param {string} token - the token to search for
+         * @returns {*}
+         */
+
     }, {
         key: "getFixedResolution",
         value: function getFixedResolution(token) {
@@ -973,6 +1211,12 @@ var SplainContext = function () {
                 return this.fixedResolutions[token];
             }
         }
+
+        /**
+         * Adds an entry context
+         * @param {array} context - the contexts to add
+         */
+
     }, {
         key: "addContext",
         value: function addContext(context) {
@@ -986,6 +1230,13 @@ var SplainContext = function () {
                 return _this.contexts.indexOf(context) === pos;
             });
         }
+
+        /**
+         * returns if the given contexts match any current contexts
+         * @param {array} context - the context to check.
+         * @returns {boolean}
+         */
+
     }, {
         key: "hasMatchingContext",
         value: function hasMatchingContext(context) {
@@ -993,12 +1244,16 @@ var SplainContext = function () {
                 return context.includes(con);
             }) || this.contexts.includes(context);
         }
+
+        /**
+         * Add a compiled resolution to the splain context
+         * @param {string} template - the template that was compiled
+         * @param {string} resolution - the output of the template
+         */
+
     }, {
         key: "addTemplateResolution",
         value: function addTemplateResolution(template, resolution) {
-            if (!this.templateResolutions) {
-                this.templateResolutions = {};
-            }
             if (!this.templateResolutions[template]) {
                 this.templateResolutions[template] = resolution;
             } else if (Array.isArray(this.templateResolutions[template])) {
@@ -1010,6 +1265,12 @@ var SplainContext = function () {
                 this.templateResolutions[template].push(resolution);
             }
         }
+
+        /**
+         * get a default context
+         * @returns {SplainContext}
+         */
+
     }], [{
         key: "getDefault",
         value: function getDefault() {
