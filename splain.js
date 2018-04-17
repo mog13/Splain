@@ -216,7 +216,7 @@ var Dictionary = function () {
         key: "processContexts",
         value: function processContexts(entry, context) {
             if (context && context.contexts) {
-                var contextualEntry = [].concat(entry).filter(function (value) {
+                var contextualEntry = entry.filter(function (value) {
                     return value.hasOwnProperty("context") && context.hasMatchingContext(value.context);
                 });
                 if (contextualEntry.length > 0) {
@@ -259,8 +259,8 @@ var Dictionary = function () {
                     return null;
                 }
             }, contextualEntries);
-            if (explicit && Array.isArray(entry) === false) {
-                return null;
+            if (Array.isArray(entry) === false) {
+                return explicit ? null : name;
             }
 
             return this.processEntry(entry, context);
@@ -940,6 +940,7 @@ var SplainContext = function () {
 
         this.dictionary = dictionary;
         this.config = config;
+        this.contexts = [];
     }
 
     _createClass(SplainContext, [{
@@ -977,14 +978,10 @@ var SplainContext = function () {
         value: function addContext(context) {
             var _this = this;
 
-            if (!this.contexts) {
-                this.contexts = [];
-            }
-            if (Array.isArray(context)) {
+            if (!this.hasMatchingContext(context)) {
                 this.contexts = this.contexts.concat(context);
-            } else {
-                this.contexts.push(context);
             }
+
             this.contexts = this.contexts.filter(function (context, pos) {
                 return _this.contexts.indexOf(context) === pos;
             });
