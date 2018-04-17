@@ -8,16 +8,8 @@ describe("when i import the splain library", ()=> {
         expect(Splain).toBeDefined();
     });
 
-    it("should by default have a dictionary object", () =>{
-        expect(Splain.dictionary).toBeDefined();
-    });
-
-    it("should populate default dicitionaries", () => {
-       expect(Splain.dictionary.getEntry("weather", false, SplainContext.getDefault())).not.toBeNull()
-    });
-
     describe("and i want to compile text through splain",() =>{
-        Splain.dictionary.addEntry({test:["works"]});
+        Splain.addEntry({test:["works"]});
         expect(Splain.process("it {{test}}!")).toBe("it works!");
     })
 });
