@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -94,21 +94,13 @@ var _splainConfig = __webpack_require__(2);
 
 var _splainConfig2 = _interopRequireDefault(_splainConfig);
 
-var _defaultDictionaries = __webpack_require__(4);
+var _defaultDictionaries = __webpack_require__(6);
 
 var _defaultDictionaries2 = _interopRequireDefault(_defaultDictionaries);
 
-var _templateFinder = __webpack_require__(5);
-
-var _templateFinder2 = _interopRequireDefault(_templateFinder);
-
-var _templateProcessor = __webpack_require__(6);
+var _templateProcessor = __webpack_require__(3);
 
 var _templateProcessor2 = _interopRequireDefault(_templateProcessor);
-
-var _templateExecutor = __webpack_require__(8);
-
-var _templateExecutor2 = _interopRequireDefault(_templateExecutor);
 
 var _splainContext = __webpack_require__(9);
 
@@ -150,31 +142,7 @@ var Splain = function () {
             if (dictionaryContext) {
                 context["dictionaryContext"] = dictionaryContext;
             }
-            return this.runProcess(text, false, context);
-        }
-    }, {
-        key: "runProcess",
-        value: function runProcess(text, addQuotes, context) {
-            var _this = this;
-
-            _templateFinder2.default.getTemplates(text, context).map(function (template) {
-                return _templateFinder2.default.stripTemplate(template, context);
-            }).forEach(function (template) {
-                if (_templateFinder2.default.containsTemplate(template, context)) {
-                    var output = "" + _this.runProcess(template, true, context);
-                    text = text.replace(template, output);
-                    template = "" + output;
-                }
-                var compiledTemplate = _templateExecutor2.default.run(_templateProcessor2.default.getTokens(template, context), context);
-                if (_templateFinder2.default.containsTemplate(compiledTemplate, context)) {
-                    compiledTemplate = _this.runProcess(compiledTemplate, false, context);
-                }
-                if (addQuotes) compiledTemplate = "`" + compiledTemplate + "`";
-                text = text.replace("" + _this.config.templateTokens.opening + template + _this.config.templateTokens.closing, compiledTemplate);
-                context.addTemplateResolution(template, compiledTemplate);
-            });
-
-            return text;
+            return _templateProcessor2.default.processTemplate(text, false, context);
         }
     }, {
         key: "verifyDictionary",
@@ -291,8 +259,8 @@ var Dictionary = function () {
                     return null;
                 }
             }, contextualEntries);
-            if (explicit && Array.isArray(entry) === false) {
-                return null;
+            if (Array.isArray(entry) === false) {
+                return explicit ? null : name;
             }
 
             return this.processEntry(entry, context);
@@ -356,6 +324,245 @@ exports.default = SplainConfig;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _splainToken = __webpack_require__(7);
+
+var _splainToken2 = _interopRequireDefault(_splainToken);
+
+var _templateFinder = __webpack_require__(4);
+
+var _templateFinder2 = _interopRequireDefault(_templateFinder);
+
+var _templateExecutor = __webpack_require__(8);
+
+var _templateExecutor2 = _interopRequireDefault(_templateExecutor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var regToken = /[?`|\s]/;
+
+var _class = function () {
+    function _class() {
+        _classCallCheck(this, _class);
+    }
+
+    _createClass(_class, null, [{
+        key: "processTemplate",
+        value: function processTemplate(text, addQuotes, context) {
+            var _this = this;
+
+            _templateFinder2.default.getTemplates(text, context).forEach(function (template) {
+                var strippedTemplate = _templateFinder2.default.stripTemplate(template, context),
+                    tokens = _this.getTokens(strippedTemplate, context),
+                    compiledTemplate = _templateExecutor2.default.run(tokens, context);
+                if (_templateFinder2.default.containsTemplate(compiledTemplate, context)) compiledTemplate = _this.processTemplate(compiledTemplate, false, context);
+                text = text.replace("" + template, compiledTemplate);
+                context.addTemplateResolution(strippedTemplate, compiledTemplate);
+            });
+            return text;
+        }
+    }, {
+        key: "getTokens",
+        value: function getTokens(template, context) {
+            var tokens = [];
+            var n = 100000;
+            while (template) {
+                n--;
+                var nextToken = this.findNextToken(template, context);
+                tokens.push(nextToken);
+                template = template.slice(nextToken.raw.length);
+                if (n < 0) {
+                    console.warn("couldn't finish processing tokens after 100,000 panicking..");
+                    break;
+                }
+            }
+
+            return tokens;
+        }
+    }, {
+        key: "findNextToken",
+        value: function findNextToken(template, context) {
+            var n = 1;
+            if (template.startsWith(context.config.templateTokens.opening)) {
+                var bracketAmount = 1,
+                    openLength = context.config.templateTokens.opening.length,
+                    closeLength = context.config.templateTokens.closing.length;
+                n = openLength;
+                while (n < template.length && bracketAmount > 0) {
+                    if (template.indexOf(context.config.templateTokens.opening, n) === n) {
+                        bracketAmount++;
+                        n += openLength;
+                    } else if (template.indexOf(context.config.templateTokens.closing, n) === n) {
+                        bracketAmount--;
+                        n += closeLength;
+                    } else {
+                        n++;
+                    }
+                }
+                if (n < 0) throw "template {" + template + "} has no closing token";
+                return new _splainToken2.default("template", template.substring(openLength, n - closeLength), template.substring(0, n));
+            }
+            if (template[0] === "?") {
+                while (!isNaN(template[n]) && template[n] !== " " && n < template.length) {
+                    n++;
+                }
+                return new _splainToken2.default("?", template.substring(1, n) || "2", template.substring(0, n));
+            }
+            if (template[0] === "|") {
+                return new _splainToken2.default("|", null, "|");
+            }
+            if (template[0] === " " || template[0] === "\n") {
+                return new _splainToken2.default("blank", null, template[0]);
+            }
+            if (template[0] === "`") {
+                while (template[n] !== "`" && n < template.length) {
+                    n++;
+                }
+                return new _splainToken2.default("lit", template.substring(1, n), template.substring(0, n + 1));
+            }
+            var nextToken = template.search(regToken);
+            var nextTemplate = template.indexOf(context.config.templateTokens.opening);
+            if (nextToken == -1 || nextTemplate > -1 && nextTemplate < nextToken) nextToken = nextTemplate;
+            if (nextToken < 0) {
+                nextToken = template.length;
+            }
+            var tokenData = template.substring(0, nextToken);
+            if (template.startsWith(context.config.variableResolutionToken)) {
+                return new _splainToken2.default("variable", tokenData.substr(context.config.variableResolutionToken.length), tokenData);
+            }
+            if (template.startsWith(context.config.fixedResolutionToken)) {
+                return new _splainToken2.default("fixed", tokenData.substr(context.config.fixedResolutionToken.length), tokenData);
+            }
+
+            return new _splainToken2.default("splain", tokenData, tokenData);
+        }
+    }]);
+
+    return _class;
+}();
+
+exports.default = _class;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function () {
+    function _class() {
+        _classCallCheck(this, _class);
+    }
+
+    _createClass(_class, null, [{
+        key: "getLiterals",
+        value: function getLiterals(text) {
+            var literals = [];
+            var last = null;
+            for (var i = 0; i < text.length; i++) {
+                if (text[i] === "`") {
+                    if (last === null) {
+                        last = i;
+                    } else {
+                        literals.push({ start: last, end: i });
+                        last = null;
+                    }
+                }
+            }
+            return literals;
+        }
+    }, {
+        key: "withinLiterals",
+        value: function withinLiterals(start, end, literals) {
+            var within = false;
+            literals.forEach(function (literal) {
+                //should break
+                if (literal.start < start && literal.end > end) within = true;
+            });
+            return within;
+        }
+    }, {
+        key: "getTemplates",
+        value: function getTemplates(text, context) {
+            var templates = [];
+            var literals = this.getLiterals(text);
+            var openingTokens = text.split(context.config.templateTokens.opening).length - 1;
+            var closingTokens = text.split(context.config.templateTokens.closing).length - 1;
+
+            if (openingTokens > closingTokens) throw "Error: not enough closing tokens found in " + text;
+            if (openingTokens < closingTokens) throw "Error: not enough opening tokens found in " + text;
+            while (text.includes(context.config.templateTokens.opening) && text.includes(context.config.templateTokens.closing)) {
+                var start = text.indexOf(context.config.templateTokens.opening),
+                    nested = 0;
+                //start +2 to skip  initial brackets
+                for (var i = start + 2; i < text.length - 1; i++) {
+                    if (text[i] + text[i + 1] === context.config.templateTokens.opening) {
+                        nested++;
+                    }
+                    if (text[i] + text[i + 1] === context.config.templateTokens.closing) {
+                        if (nested > 0) {
+                            nested--;
+                            i += 1; //skip over the other nested '}'
+                        } else {
+                            if (!this.withinLiterals(start, i + 1, literals)) {
+                                templates.push(text.substring(start, i + 2));
+                            }
+                            text = text.slice(0, start) + text.slice(i + 2);
+                            i = text.length;
+                        }
+                    }
+                }
+            }
+            return templates;
+        }
+    }, {
+        key: "stripTemplate",
+        value: function stripTemplate(template, context) {
+            var open = template.indexOf(context.config.templateTokens.opening),
+                close = template.lastIndexOf(context.config.templateTokens.closing) - context.config.templateTokens.closing.length;
+            if (open > -1) template = template.slice(0, open) + template.slice(open + context.config.templateTokens.opening.length);
+            if (close > -1) template = template.slice(0, close) + template.slice(close + context.config.templateTokens.opening.length);
+            return template;
+        }
+    }, {
+        key: "containsTemplate",
+        value: function containsTemplate(text, context) {
+            function escapeTokens(templateTokens) {
+                return "\\" + templateTokens.split("").join("\\");
+            }
+            var regTemplateMatcher = escapeTokens(context.config.templateTokens.opening) + ".*?" + escapeTokens(context.config.templateTokens.closing);
+            return text.match(regTemplateMatcher);
+        }
+    }]);
+
+    return _class;
+}();
+
+exports.default = _class;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _splain = __webpack_require__(0);
 
 var _splain2 = _interopRequireDefault(_splain);
@@ -365,7 +572,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 module.exports = new _splain2.default();
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -482,202 +689,6 @@ exports.default = {
 };
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var _class = function () {
-    function _class() {
-        _classCallCheck(this, _class);
-    }
-
-    _createClass(_class, null, [{
-        key: "getLiterals",
-        value: function getLiterals(text) {
-            var literals = [];
-            var last = null;
-            for (var i = 0; i < text.length; i++) {
-                if (text[i] === "`") {
-                    if (last === null) {
-                        last = i;
-                    } else {
-                        literals.push({ start: last, end: i });
-                        last = null;
-                    }
-                }
-            }
-            return literals;
-        }
-    }, {
-        key: "withinLiterals",
-        value: function withinLiterals(start, end, literals) {
-            var within = false;
-            literals.forEach(function (literal) {
-                //should break
-                if (literal.start < start && literal.end > end) within = true;
-            });
-            return within;
-        }
-    }, {
-        key: "getTemplates",
-        value: function getTemplates(text, context) {
-            var templates = [];
-            var literals = this.getLiterals(text);
-            var openingTokens = text.split(context.config.templateTokens.opening).length - 1;
-            var closingTokens = text.split(context.config.templateTokens.closing).length - 1;
-
-            if (openingTokens > closingTokens) throw "Error: not enough closing tokens found in " + text;
-            if (openingTokens < closingTokens) throw "Error: not enough opening tokens found in " + text;
-            while (text.includes(context.config.templateTokens.opening) && text.includes(context.config.templateTokens.closing)) {
-                var start = text.indexOf(context.config.templateTokens.opening),
-                    nested = 0;
-                //start +2 to skip  initial brackets
-                for (var i = start + 2; i < text.length - 1; i++) {
-                    if (text[i] + text[i + 1] === context.config.templateTokens.opening) {
-                        nested++;
-                    }
-                    if (text[i] + text[i + 1] === context.config.templateTokens.closing) {
-                        if (nested > 0) {
-                            nested--;
-                            i += 1; //skip over the other nested '}'
-                        } else {
-                            if (!this.withinLiterals(start, i + 1, literals)) {
-                                templates.push(text.substring(start, i + 2));
-                            }
-                            text = text.slice(0, start) + text.slice(i + 2);
-                            i = text.length;
-                        }
-                    }
-                }
-            }
-            return templates;
-        }
-    }, {
-        key: "stripTemplate",
-        value: function stripTemplate(template, context) {
-            var open = template.indexOf(context.config.templateTokens.opening),
-                close = template.lastIndexOf(context.config.templateTokens.closing) - 2;
-            if (open > -1) template = template.slice(0, open) + template.slice(open + 2);
-            if (close > -1) template = template.slice(0, close) + template.slice(close + 2);
-            return template;
-        }
-    }, {
-        key: "containsTemplate",
-        value: function containsTemplate(text, context) {
-            function escapeTokens(templateTokens) {
-                return "\\" + templateTokens.split("").join("\\");
-            }
-            var regTemplateMatcher = escapeTokens(context.config.templateTokens.opening) + ".*?" + escapeTokens(context.config.templateTokens.closing);
-            return text.match(regTemplateMatcher);
-        }
-    }]);
-
-    return _class;
-}();
-
-exports.default = _class;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _splainToken = __webpack_require__(7);
-
-var _splainToken2 = _interopRequireDefault(_splainToken);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var regToken = /[?`|\s]/;
-
-var _class = function () {
-    function _class() {
-        _classCallCheck(this, _class);
-    }
-
-    _createClass(_class, null, [{
-        key: "getTokens",
-        value: function getTokens(template, context) {
-            var tokens = [];
-            var n = 100000;
-            while (template) {
-                n--;
-                var nextToken = this.findNextToken(template, context);
-                tokens.push(nextToken);
-                template = template.slice(nextToken.raw.length);
-                if (n < 0) {
-                    console.warn("couldn't finish processing tokens after 100,000 panicking..");
-                    break;
-                }
-            }
-
-            return tokens;
-        }
-    }, {
-        key: "findNextToken",
-        value: function findNextToken(template, context) {
-            var n = 1;
-            if (template[0] === "?") {
-                while (!isNaN(template[n]) && template[n] !== " " && n < template.length) {
-                    n++;
-                }
-                return new _splainToken2.default("?", template.substring(1, n) || "2", template.substring(0, n));
-            }
-            if (template[0] === "|") {
-                return new _splainToken2.default("|", null, "|");
-            }
-            if (template[0] === " " || template[0] === "\n") {
-                return new _splainToken2.default("blank", null, template[0]);
-            }
-            if (template[0] === "`") {
-                while (template[n] !== "`" && n < template.length) {
-                    n++;
-                }
-                return new _splainToken2.default("lit", template.substring(1, n), template.substring(0, n + 1));
-            }
-            var nextToken = template.search(regToken);
-            if (nextToken < 0) {
-                nextToken = template.length;
-            }
-            if (template.startsWith(context.config.variableResolutionToken)) {
-                var _tokenData = template.substring(0, nextToken);
-                return new _splainToken2.default("variable", _tokenData, _tokenData);
-            }
-            if (template.startsWith(context.config.fixedResolutionToken)) {
-                var _tokenData2 = template.substring(0, nextToken);
-                return new _splainToken2.default("fixed", _tokenData2, _tokenData2);
-            }
-            var tokenData = template.substring(0, nextToken);
-            return new _splainToken2.default("splain", tokenData, tokenData);
-        }
-    }]);
-
-    return _class;
-}();
-
-exports.default = _class;
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -689,6 +700,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _templateProcessor = __webpack_require__(3);
+
+var _templateProcessor2 = _interopRequireDefault(_templateProcessor);
+
+var _templateFinder = __webpack_require__(4);
+
+var _templateFinder2 = _interopRequireDefault(_templateFinder);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -720,6 +741,7 @@ var Token = function () {
                 }
                 return context.config.keepTemplateOnUnmatched ? token : null;
             }
+
             switch (this.type) {
                 case "splain":
                     {
@@ -727,27 +749,25 @@ var Token = function () {
                     }
                 case "fixed":
                     {
-                        var token = this.data.substr(context.config.fixedResolutionToken.length);
-                        var fixed = context.getFixedResolution(token);
+                        var fixed = context.getFixedResolution(this.data);
                         if (fixed) {
                             return fixed;
                         }
-                        var result = getResult(token);
-                        context.addFixedResolution(token, result);
+                        var result = getResult(this.data);
+                        context.addFixedResolution(this.data, result);
                         return result;
                     }
                 case "variable":
                     {
-                        var _token = this.data.substr(context.config.variableResolutionToken.length);
-                        if (context.hasOwnProperty("variables") && context.variables.hasOwnProperty(_token)) {
-                            var variable = context.variables[_token];
+                        if (context.hasOwnProperty("variables") && context.variables.hasOwnProperty(this.data)) {
+                            var variable = context.variables[this.data];
                             if (typeof variable === "function") {
                                 return variable(context.templateResolutions);
                             } else {
                                 return variable;
                             }
                         }
-                        return context.config.keepTemplateOnUnmatched ? _token : null;
+                        return context.config.keepTemplateOnUnmatched ? this.data : null;
                     }
                 case "blank":
                     {
@@ -756,6 +776,11 @@ var Token = function () {
                 case "lit":
                     {
                         return this.data;
+                    }
+                case "template":
+                    {
+                        var output = _templateProcessor2.default.processTemplate(this.raw, false, context);
+                        return _templateFinder2.default.containsTemplate(output, context) ? _templateProcessor2.default.processTemplate(output, false, context) : output;
                     }
                 default:
                     {
@@ -915,6 +940,7 @@ var SplainContext = function () {
 
         this.dictionary = dictionary;
         this.config = config;
+        this.contexts = [];
     }
 
     _createClass(SplainContext, [{
@@ -950,14 +976,15 @@ var SplainContext = function () {
     }, {
         key: "addContext",
         value: function addContext(context) {
-            if (!this.contexts) {
-                this.contexts = [];
-            }
-            if (Array.isArray(context)) {
+            var _this = this;
+
+            if (!this.hasMatchingContext(context)) {
                 this.contexts = this.contexts.concat(context);
-            } else {
-                this.contexts.push(context);
             }
+
+            this.contexts = this.contexts.filter(function (context, pos) {
+                return _this.contexts.indexOf(context) === pos;
+            });
         }
     }, {
         key: "hasMatchingContext",
