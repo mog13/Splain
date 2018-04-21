@@ -1,5 +1,10 @@
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+
 module.exports = {
     entry: './lib/index.js',
+    plugins: [
+        new UglifyJSPlugin()
+    ],
     output: {
         filename: 'splain.js',
         libraryTarget: 'umd',
@@ -20,4 +25,4 @@ module.exports = {
             }
         ]
     }
-}
+};
