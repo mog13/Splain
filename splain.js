@@ -444,7 +444,7 @@ var _class = function () {
             //for all the templates in the given test
             _templateFinder2.default.getTemplates(text, context).forEach(function (template) {
                 //strip it, tokenize it and compile it
-                var strippedTemplate = _templateFinder2.default.stripTemplate(template, context),
+                var strippedTemplate = TemplateStripper.stripTemplate(template, context),
                     tokens = _this.getTokens(strippedTemplate, context),
                     compiledTemplate = _templateExecutor2.default.run(tokens, context);
                 // if the result contains a template recursively re run it
