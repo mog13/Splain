@@ -218,8 +218,7 @@ function runHighlevelSuite(splainInstance) {
             splainInstance.addEntry({
                 a: [{value: "A", context: "letter"}],
                 b: [{value: "B", context: "letter"}],
-                1: [{value: "one", context: "number"}],
-                either: [{value: "D", context: "letter"}, {value: "2", context: "two"}]
+                either: [{value: "D", context: "letter"}, {value: "2", context: "number"}]
             });
             expect(splainInstance.process("{{a {{either}} b}}")).toBe("A D B");
         });
