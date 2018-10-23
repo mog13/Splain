@@ -1,4 +1,4 @@
-import SplainLib from "./lib/splain";
+import SplainLib from "./src/splain";
 
 describe("when im using splain", () => {
 
