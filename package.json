@@ -5,8 +5,8 @@
   "main": "splain.js",
   "scripts": {
     "build": "webpack",
-    "lint-fix": "eslint --fix ./lib",
-    "test": "eslint ./lib && jest --coverage --collectCoverageFrom=lib/**/*.js --collectCoverageFrom=!lib/**/index.js --collectCoverageFrom=utility/**/*.js"
+    "lint-fix": "eslint --fix ./src",
+    "test": "eslint ./lib && jest --coverage --collectCoverageFrom=src/**/*.js --collectCoverageFrom=!src/**/index.js --collectCoverageFrom=utility/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,8 @@
     "jasmine": "^2.5.3",
     "jest": "^20.0.4",
     "jest-cli": "^20.0.4",
-    "webpack": "^3.5.5"
+    "webpack": "^4.23.0",
+    "webpack-cli": "^3.1.2"
   },
   "bin": {
     "verify-dictionary": "bin/dictionaryValidator.js"
