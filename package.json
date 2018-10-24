@@ -26,7 +26,6 @@
     "babel-preset-es2015": "^6.24.0",
     "codecov": "^3.0.0",
     "eslint": "^4.12.1",
-    "jasmine": "^2.5.3",
     "jest": "^23.6.0",
     "jest-cli": "^23.6.0",
     "webpack": "^4.23.0",
