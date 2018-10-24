@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "lint-fix": "eslint --fix ./src",
-    "test": "eslint ./lib && jest --coverage --collectCoverageFrom=src/**/*.js --collectCoverageFrom=!src/**/index.js --collectCoverageFrom=utility/**/*.js"
+    "test": "eslint ./src && jest --coverage --collectCoverageFrom=src/**/*.js --collectCoverageFrom=!src/**/index.js --collectCoverageFrom=utility/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/mog13/Splain#readme",
   "devDependencies": {
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-jest": "^20.0.3",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
