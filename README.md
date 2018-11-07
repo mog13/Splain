@@ -5,7 +5,12 @@
 [![codebeat badge](https://codebeat.co/badges/236d5abc-9188-48b7-8e3e-d2cec07404e8)](https://codebeat.co/projects/github-com-mog13-splain-master)
 [![codecov](https://codecov.io/gh/mog13/Splain/branch/master/graph/badge.svg)](https://codecov.io/gh/mog13/Splain)
 
-see it in action: https://mog13.github.io/Splain/
+See it in action:
+https://mog13.github.io/Splain/
+https://codepen.io/mog13/full/eQJpQv/
+
+See a tutorial at:
+https://mog13.github.io/Splain/loadingTutorial.html 
 
 ## Installation
 you can install:
