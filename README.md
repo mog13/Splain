@@ -6,8 +6,8 @@
 [![codecov](https://codecov.io/gh/mog13/Splain/branch/master/graph/badge.svg)](https://codecov.io/gh/mog13/Splain)
 
 See it in action:
-https://mog13.github.io/Splain/
-https://codepen.io/mog13/full/eQJpQv/
+https://mog13.github.io/Splain/  
+https://codepen.io/mog13/full/eQJpQv/  
 
 See a tutorial at:
 https://mog13.github.io/Splain/loadingTutorial.html 
