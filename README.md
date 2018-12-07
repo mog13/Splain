@@ -7,7 +7,7 @@
 
 See it in action:  
 https://mog13.github.io/Splain/  
-https://codepen.io/mog13/full/eQJpQv/  
+https://codepen.io/collection/DKmzKY/
 
 See a tutorial at:  
 https://mog13.github.io/Splain/loadingTutorial.html 
