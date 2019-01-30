@@ -37,6 +37,12 @@ export default {
             splainTokens.forEach(token => {
                 tokenCounter.push(0);
                 token.entries = dictionary.getProcessedEntry(token.data, processorInstance);
+                let newEntries = [];
+                token.entries.forEach(entry=>{
+                    if(TemplateFinder.containsTemplate(entry,splain.config)) newEntries =  newEntries.concat(this.processToken(dictionary,entry,splain));
+                    else newEntries.push(entry);
+                });
+                token.entries = newEntries;
                 token.convert = (processorInstance, n) => {
                     return token.entries? token.entries[n]:null;
                 };
@@ -68,119 +74,13 @@ export default {
                         }
                     }
                 }
-                // if(tokenCounter[tokenCounter.length] > splainTokens[tokenCounter.length].entries.length) perm = false;
 
                 results.push(newText);
-            }while (perm)
+            }while (perm);
 
 
-            // if the result contains a template recursively re run it
-            // if (TemplateFinder.containsTemplate(compiledTemplate, processorInstance.config)) compiledTemplate = this.processTemplate(compiledTemplate, processorInstance);
-            // //replace the template with its compiled version and store its resolution
-            // text = text.replace(`${template}`, compiledTemplate);
-            // processorInstance.addTemplateResolution(strippedTemplate, compiledTemplate);
         });
         return results;
-        //convert to tokens
-        //count the tokens and permeate around all of them
-        //each combo
-    },
 
-    resolveAll(dictionary, text, splain) {
-        let result = [[1, 2], [0, "hello", "test"]].reduce((a, b) => a.reduce((r, v) => r.concat(b.map(w => [].concat(v, w))), []));
-
-        if (!splain) {
-            splain = new Splain(dictionary); //allows for just sending part of a dictionary
-            splain.config.configure("explicit", true);
-            splain.config.configure("keepTemplateOnUnmatched", false);
-        }
-        //if we havnt been passed a dictionary class then try and create one from the given object
-        //@todo make sure new dictionary returns an instance of itself so we can streamline this
-        if (!(dictionary instanceof Dictionary)) {
-            let newdictionary = new Dictionary();
-            newdictionary.addEntry(dictionary);
-            dictionary = newdictionary;
-        }
-
-        let resolutions = [];
-        let templates = TemplateFinder.getTemplates(text, splain.config).map(template => {
-            let stripped = Stripper.stripTemplate(template, splain.config);
-            let entries = dictionary.getProcessedEntry(stripped, processorInstance);
-            return {
-                template,
-                stripped,
-                entries
-            };
-        });
-
-        //if there are no templates the
-        if (templates.length === 0) return text;
-        //for each template we need to find all the entries
-
-
-        let processorInstance = new Processor(dictionary, splain.config);
-
-        //get the nth entry
-        function resolveEntry(path, n) {
-            let entry = dictionary.getProcessedEntry(path, processorInstance);
-            if (entry !== null && Array.isArray(entry) && n < entry.length) {
-                return entry[n];
-            }
-            return null;
-        }
-
-        for (let i = 0; i < templates.length; i++) {
-
-        }
-
-
-        //
-
-
-        // entry.forEach((ent) => {
-        //         //     if (TemplateFinder.containsTemplate(ent,splain.config)) {
-        //         //         //if it has a template we need to process them all
-        //         //     }
-        //         //     else {
-        //         //         resolutions.push(ent);
-        //         //     }
-        //         // });
-        return resolutions;
     }
-
-    ,
-
-    /*if called without a splain instance will set one up and pass through to recursive calls
-    this means original call will make splain at the dictionary level
-    but also has the added benefit that you could use it to verify it with a given splain instance*/
-    verifyEntries(node, splain, root) {
-        if (!splain) {
-            splain = new Splain(node.entries || node); //allows for just sending part of a dictionary
-            splain.config.configure("explicit", true);
-            splain.config.configure("keepTemplateOnUnmatched", false);
-        }
-        if (node.entries) node = node.entries; //only want to scan entries of dictionary
-        let invalidTokens = [];
-        for (let key in node) {
-            let branch = node[key],
-                fullyQualifiedKey = root ? `${root}.${key}` : key;
-            if (Array.isArray(branch)) {
-                branch.forEach((entry) => {
-                    let keyedEntry = `${key}.${entry}`,
-                        output = splain.process(`${entry}`);
-                    if (output.indexOf("null") >= 0 || output === keyedEntry) invalidTokens.push({
-                        token: entry,
-                        key: fullyQualifiedKey
-                    });
-                });
-            }
-            else {
-                invalidTokens = invalidTokens.concat(this.verifyEntries(branch, splain, fullyQualifiedKey));
-            }
-
-        }
-        return invalidTokens;
-    }
-    ,
-}
-;
+};
