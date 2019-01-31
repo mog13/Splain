@@ -1,5 +1,5 @@
 import Dictionary from "./dictionary";
-import Config from "./config";
+import Config from "./config.ts";
 
 export default class Processor {
     /**

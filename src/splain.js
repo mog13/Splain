@@ -1,5 +1,5 @@
 import Dictionary from "./dictionary";
-import SplainConfig from "./config";
+import SplainConfig from "./config.ts";
 import defaults from "./defaultDictionaries";
 import Processor from "./processor";
 import dictionaryVerifier from "../utility/dictionaryVerifier";

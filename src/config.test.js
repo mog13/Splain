@@ -1,4 +1,4 @@
-import SplainConfig from "./config";
+import SplainConfig from "./config.ts";
 
 describe("when using splain config", ()=> {
     let splainConfig;
