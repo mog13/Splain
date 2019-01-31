@@ -1,5 +1,5 @@
 import TokenFinder from "./tokenFinder";
-import Config from "./config.ts";
+import Config from "./config";
 
 describe("when using the token finder",()=>{
     const defaultTokenConfig = new Config();

@@ -1,11 +1,11 @@
 export default class Config {
-    private keepTemplateOnUnmatched: boolean;
+    keepTemplateOnUnmatched: boolean;
     private templateTokens: { opening: string; closing: string };
     private fixedResolutionToken: string;
     private variableResolutionToken: string;
     private panicThreshold: number;
-    private contextMatchers: { conservative: number; selective: number; additive: number };
-    private contextMatcher: number;
+    contextMatchers: { conservative: number; selective: number; additive: number };
+    contextMatcher: number;
 
     constructor() {
         this.keepTemplateOnUnmatched = true;
@@ -27,7 +27,7 @@ export default class Config {
      * @param value - the value to set the parameter to
      * @returns {Config}
      */
-    configure(key, value) {
+    configure(key:string, value:any) {
         if(this.hasOwnProperty(key)) {
             this[key] = value;
         }

@@ -1,5 +1,5 @@
 import TemplateStripper from "./templateStripper";
-import Config from "./config.ts";
+import Config from "./config";
 
 describe("when using the template stripper", () => {
     const defaultTokenConfig = new Config(),

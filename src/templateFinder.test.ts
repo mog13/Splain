@@ -1,5 +1,5 @@
 import finder from "./templateFinder";
-import SplainConfig from "./config.ts";
+import SplainConfig from "./config";
 
 describe("when using the template finder", () =>{
     const testString = "Splain lets you {{adj.easy}} add some {{adj.fun}} dyamic options to you {{technology?5 | {{`work`|`project`}}}}",

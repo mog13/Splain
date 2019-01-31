@@ -16,7 +16,7 @@ https://mog13.github.io/Splain/loadingTutorial.html
 you can install:
 
 * via npm `npm install @mog13/splain`
-* copy splain.js into your source
+* copy splain.ts into your source
 
 and then import it into your project via:
 

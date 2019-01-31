@@ -1,12 +1,17 @@
 import SplainToken from "./token";
 import Splain from "./splain";
 import finder from "./templateFinder";
+import Processor from "./processor";
+import Config from "./config";
 
 describe("when using a token", () => {
-    let processInstance = {getResult: jasmine.createSpy("getResult")}, token;
+    let processInstance = new Processor(), token;
+    let getResultSpy = jasmine.createSpy("getResult");
+    processInstance.getResult = getResultSpy;
 
     beforeEach(() => {
-        processInstance.getResult.calls.reset();
+        // noinspection TypeScriptUnresolvedVariable
+        getResultSpy.calls.reset();
     });
 
     describe("and its a splain token", () => {
@@ -72,7 +77,7 @@ describe("when using a token", () => {
 
         describe("and the variable provided is a function", () => {
             beforeEach(() => {
-                processInstance.variables= {test: jasmine.createSpy("test")};
+                processInstance.variables = {test: jasmine.createSpy("test")};
                 token.convert(processInstance);
             });
 
@@ -84,7 +89,7 @@ describe("when using a token", () => {
         describe("and the variable isn't a function", () => {
             let result;
             beforeEach(() => {
-                processInstance.variables= {test: "non-function"};
+                processInstance.variables = {test: "non-function"};
                 result = token.convert(processInstance);
             });
 
@@ -97,7 +102,9 @@ describe("when using a token", () => {
             describe("and the config is to keep templates on unmatched", () => {
                 let result;
                 beforeEach(() => {
-                    processInstance.config = {keepTemplateOnUnmatched: true};
+                    let newConfig = new Config();
+                    newConfig.configure("keepTemplateOnUnmatched", true);
+                    processInstance.config = newConfig;
                     processInstance.variables = {};
                     result = token.convert(processInstance);
                 });
@@ -110,7 +117,9 @@ describe("when using a token", () => {
             describe("and the config is to not keep templates on unmatched", () => {
                 let result;
                 beforeEach(() => {
-                    processInstance.config = {keepTemplateOnUnmatched: false};
+                    let newConfig = new Config();
+                    newConfig.configure("keepTemplateOnUnmatched", false);
+                    processInstance.config = newConfig;
                     processInstance.variables = {};
                     result = token.convert(processInstance);
                 });
@@ -151,8 +160,10 @@ describe("when using a token", () => {
         beforeEach(() => {
             token = new SplainToken("template", "", "");
             Splain.processTemplate = jasmine.createSpy("processTemplate");
-            processInstance.config = {templateTokens: {opening:"{{",closing:"}}"}};
-            finder.containsTemplate = ()=>false;
+            let newConfig = new Config();
+            newConfig.configure("templateTokens", {opening: "{{", closing: "}}"})
+            processInstance.config = newConfig;
+            finder.containsTemplate = () => false;
             token.convert(processInstance);
         });
 

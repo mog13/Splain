@@ -1,14 +1,20 @@
 import Dictionary from "./dictionary";
-import Config from "./config.ts";
+import Config from "./config";
 
 export default class Processor {
+    variables:any;
+    private dictionary: Dictionary;
+    config: Config;
+    private contexts: any[];
+    private templateResolutions: {};
+    private fixedResolutions: {};
     /**
      * Create a new splainContext
      * @param {object} [dictionary] - the dictionary to use
      * @param {object} [config] - the config to use
      * @param [options]
      */
-    constructor(dictionary, config, options) {
+    constructor(dictionary?:Dictionary, config?:Config, options?:any) {
         this.dictionary = dictionary || new Dictionary();
         this.config = config || new Config();
         this.contexts = [];

@@ -1,5 +1,5 @@
 import Dictionary from "./dictionary";
-import SplainConfig from "./config.ts";
+import SplainConfig, {default as Config} from "./config";
 import defaults from "./defaultDictionaries";
 import Processor from "./processor";
 import dictionaryVerifier from "../utility/dictionaryVerifier";
@@ -12,11 +12,13 @@ import TokenFinder from "./tokenFinder";
  * Main Splain Class and intended interface with library.
  */
 export default class Splain {
+    config: Config;
+    dictionaries: { default: Dictionary };
     /**
      * Create a new instance of Splain
      * @param {Object} [initialDictionary] - Optional JSON object to use as initial dictionary.
      */
-    constructor(initialDictionary) {
+    constructor(initialDictionary?:object) {
         this.new(initialDictionary);
     }
     /**
@@ -57,7 +59,7 @@ export default class Splain {
      * @param {object} [options] - an array of options e.g dictionaryName or variables
      * @returns {string} - the compiled template
      */
-    process(text, options) {
+    process(text, options?:any) {
         options = options || {};
         //n.b options contains variables, dictionary name, contexts etc
         if(!options.dictionaryName) options.dictionaryName = "default";

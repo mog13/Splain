@@ -2,6 +2,9 @@ import Splain from "./splain";
 import finder from "./templateFinder";
 
 export default class Token {
+     type: string;
+     data: any;
+     raw: string;
 
     /**
      * Create a new splain token
