@@ -5,8 +5,8 @@
   "main": "splain.js",
   "scripts": {
     "build": "webpack",
-    "lint-fix": "eslint --fix ./src",
-    "test": "jest --coverage --collectCoverageFrom=src/**/*.ts --collectCoverageFrom=!src/**/index.ts --collectCoverageFrom=utility/**/*.ts"
+    "lint-fix": "tslint --fix ./src",
+    "test": "tslint ./src/*.ts && jest --coverage --collectCoverageFrom=src/**/*.ts --collectCoverageFrom=!src/**/index.ts --collectCoverageFrom=utility/**/*.ts"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
     "jest-cli": "^23.6.0",
     "ts-jest": "^23.10.5",
     "ts-loader": "^5.3.3",
+    "tslint": "^5.12.1",
     "typescript": "^3.2.4",
     "webpack": "^4.23.0",
     "webpack-cli": "^3.1.2"
