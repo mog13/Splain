@@ -1,18 +1,17 @@
-export default class LiteralFinder{
+export default class LiteralFinder {
     /**
      * Returns an array of the start and end points of any literals in the given text
      * @param text - the text to check
      * @returns {Array}
      */
-    static getLiterals(text) {
-        let literals = [];
+    public static getLiterals(text) {
+        const literals = [];
         let last = null;
         for (let i = 0; i < text.length; i++) {
             if (text[i] === "`") {
                 if (last === null) {
                     last = i;
-                }
-                else {
+                } else {
                     literals.push({start: last, end: i});
                     last = null;
                 }
@@ -28,11 +27,11 @@ export default class LiteralFinder{
      * @param {array} literals - the array of literals (starts and ends) to check against
      * @returns {boolean}
      */
-    static withinLiterals(start, end, literals) {
+    public static withinLiterals(start, end, literals) {
         let within = false;
         literals.forEach((literal) => {
-            //should break
-            if (literal.start < start && literal.end > end) within = true;
+            // should break
+            if (literal.start < start && literal.end > end) { within = true; }
         });
         return within;
     }

@@ -1,5 +1,3 @@
-"use strict";
+import Splain from "./splain";
 
-import splain from "./splain";
-
-module.exports = new splain();
+module.exports = new Splain();

@@ -1,23 +1,23 @@
 export default class Config {
-    keepTemplateOnUnmatched: boolean;
+    public keepTemplateOnUnmatched: boolean;
+    public contextMatchers: { conservative: number; selective: number; additive: number };
+    public contextMatcher: number;
     private templateTokens: { opening: string; closing: string };
     private fixedResolutionToken: string;
     private variableResolutionToken: string;
     private panicThreshold: number;
-    contextMatchers: { conservative: number; selective: number; additive: number };
-    contextMatcher: number;
 
     constructor() {
         this.keepTemplateOnUnmatched = true;
         this.templateTokens = {
             opening: "{{",
-            closing: "}}"
+            closing: "}}",
         };
         this.fixedResolutionToken = "::";
         this.variableResolutionToken = "##";
         this.keepTemplateOnUnmatched = true;
         this.panicThreshold = 100000;
-        this.contextMatchers = {conservative :0, selective :1, additive :2};
+        this.contextMatchers = {conservative: 0, selective: 1, additive: 2};
         this.contextMatcher = this.contextMatchers.selective;
     }
 
@@ -27,8 +27,8 @@ export default class Config {
      * @param value - the value to set the parameter to
      * @returns {Config}
      */
-    configure(key:string, value:any) {
-        if(this.hasOwnProperty(key)) {
+    public configure(key: string, value: any) {
+        if (this.hasOwnProperty(key)) {
             this[key] = value;
         }
         return this;

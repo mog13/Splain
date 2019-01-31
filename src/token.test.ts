@@ -1,12 +1,13 @@
-import SplainToken from "./token";
+import Config from "./config";
+import Processor from "./processor";
 import Splain from "./splain";
 import finder from "./templateFinder";
-import Processor from "./processor";
-import Config from "./config";
+import SplainToken from "./token";
 
 describe("when using a token", () => {
-    let processInstance = new Processor(), token;
-    let getResultSpy = jasmine.createSpy("getResult");
+    const processInstance = new Processor(), getResultSpy = jasmine.createSpy("getResult");
+    let token;
+
     processInstance.getResult = getResultSpy;
 
     beforeEach(() => {
@@ -21,7 +22,7 @@ describe("when using a token", () => {
 
         });
 
-        it("should call the process instance to get an entry", function () {
+        it("should call the process instance to get an entry", () => {
             expect(processInstance.getResult).toHaveBeenCalled();
 
         });
@@ -39,11 +40,11 @@ describe("when using a token", () => {
                 token.convert(processInstance);
             });
 
-            it("should call the process instance to get an entry", function () {
+            it("should call the process instance to get an entry", () => {
                 expect(processInstance.getResult).toHaveBeenCalled();
             });
 
-            it("should call the process instance to add the resolution", function () {
+            it("should call the process instance to add the resolution", () => {
                 expect(processInstance.addFixedResolution).toHaveBeenCalled();
             });
         });
@@ -56,15 +57,15 @@ describe("when using a token", () => {
                 result = token.convert(processInstance);
             });
 
-            it("should return the result of the fixed resolution lookup", function () {
+            it("should return the result of the fixed resolution lookup", () => {
                 expect(result).toBe("test");
             });
 
-            it("should call the process instance to get an entry", function () {
+            it("should call the process instance to get an entry", () => {
                 expect(processInstance.getResult).not.toHaveBeenCalled();
             });
 
-            it("should call the process instance to add the resolution", function () {
+            it("should call the process instance to add the resolution", () => {
                 expect(processInstance.addFixedResolution).not.toHaveBeenCalled();
             });
         });
@@ -81,7 +82,7 @@ describe("when using a token", () => {
                 token.convert(processInstance);
             });
 
-            it("should call the provided function", function () {
+            it("should call the provided function", () => {
                 expect(processInstance.variables.test).toHaveBeenCalled();
             });
         });
@@ -93,7 +94,7 @@ describe("when using a token", () => {
                 result = token.convert(processInstance);
             });
 
-            it("should call the provided function", function () {
+            it("should call the provided function", () => {
                 expect(result).toBe("non-function");
             });
         });
@@ -102,7 +103,7 @@ describe("when using a token", () => {
             describe("and the config is to keep templates on unmatched", () => {
                 let result;
                 beforeEach(() => {
-                    let newConfig = new Config();
+                    const newConfig = new Config();
                     newConfig.configure("keepTemplateOnUnmatched", true);
                     processInstance.config = newConfig;
                     processInstance.variables = {};
@@ -117,7 +118,7 @@ describe("when using a token", () => {
             describe("and the config is to not keep templates on unmatched", () => {
                 let result;
                 beforeEach(() => {
-                    let newConfig = new Config();
+                    const newConfig = new Config();
                     newConfig.configure("keepTemplateOnUnmatched", false);
                     processInstance.config = newConfig;
                     processInstance.variables = {};
@@ -139,7 +140,7 @@ describe("when using a token", () => {
             result = token.convert(processInstance);
         });
 
-        it("should return a space", function () {
+        it("should return a space", () => {
             expect(result).toBe(" ");
         });
     });
@@ -151,7 +152,7 @@ describe("when using a token", () => {
             result = token.convert(processInstance);
         });
 
-        it("should return the token data", function () {
+        it("should return the token data", () => {
             expect(result).toBe("test");
         });
     });
@@ -160,18 +161,17 @@ describe("when using a token", () => {
         beforeEach(() => {
             token = new SplainToken("template", "", "");
             Splain.processTemplate = jasmine.createSpy("processTemplate");
-            let newConfig = new Config();
-            newConfig.configure("templateTokens", {opening: "{{", closing: "}}"})
+            const newConfig = new Config();
+            newConfig.configure("templateTokens", {opening: "{{", closing: "}}"});
             processInstance.config = newConfig;
             finder.containsTemplate = () => false;
             token.convert(processInstance);
         });
 
-        it("should return a space", function () {
+        it("should return a space", () => {
             expect(Splain.processTemplate).toHaveBeenCalled();
         });
     });
-
 
     describe("and its an unknown type token", () => {
         let result;
@@ -180,10 +180,9 @@ describe("when using a token", () => {
             result = token.convert(processInstance);
         });
 
-        it("should return a space", function () {
+        it("should return a space", () => {
             expect(result).toBeUndefined();
         });
     });
-
 
 });

@@ -1,7 +1,7 @@
 import EntryProcessor from "./entryProcessor";
 
 export default class Dictionary {
-    entries: any;
+    public entries: any;
 
     constructor() {
         this.entries = {};
@@ -11,7 +11,7 @@ export default class Dictionary {
      * Adds an entry to the dictionary
      * @param {Object} entry - The entry to add in the form of JSON (can be multiple layers deep and have multiple roots).
      */
-    addEntry(entry:object) {
+    public addEntry(entry: object) {
         Object.keys(entry).forEach((key) => {
             this.entries[key] = entry[key];
         });
@@ -22,20 +22,19 @@ export default class Dictionary {
      * @param {string} name - the entry name/path
      * @returns {array}
      */
-    getEntry(name:string) {
-        //get the entries by walking down the path with a reduce
-        let entry = name.split(".").reduce((currentStep, nextStep) => {
-            if (currentStep === null) return null;
-            let curObj = currentStep[nextStep];
+    public getEntry(name: string) {
+        // get the entries by walking down the path with a reduce
+        const entry = name.split(".").reduce((currentStep, nextStep) => {
+            if (currentStep === null) { return null; }
+            const curObj = currentStep[nextStep];
             if (curObj) {
                 return curObj;
-            }
-            else {
+            } else {
                 return null;
             }
 
         }, this.entries);
-        //if the entry isn't an array then its invalid and return null
+        // if the entry isn't an array then its invalid and return null
         return Array.isArray(entry) ? entry : null;
     }
 
@@ -45,12 +44,11 @@ export default class Dictionary {
      * @param {Processor} processorInstance - the current process instance
      * @returns {array}
      */
-    getProcessedEntry(name:string, processorInstance) {
-        let entry = this.getEntry(name);
-        if(!entry) return null;
-        let contextualEntry = EntryProcessor.processContexts(entry, processorInstance);
+    public getProcessedEntry(name: string, processorInstance) {
+        const entry = this.getEntry(name);
+        if (!entry) { return null; }
+        const contextualEntry = EntryProcessor.processContexts(entry, processorInstance);
         return EntryProcessor.processWeights(contextualEntry);
     }
-
 
 }

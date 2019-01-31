@@ -1,6 +1,6 @@
 import SplainConfig from "./config";
 
-describe("when using splain config", ()=> {
+describe("when using splain config", () => {
     let splainConfig;
 
     beforeEach(() => {
@@ -11,7 +11,7 @@ describe("when using splain config", ()=> {
         expect(splainConfig.keepTemplateOnUnmatched).toBe(true);
     });
 
-    describe("when modifying the config", function () {
+    describe("when modifying the config", () => {
 
         describe("when the property exists", () => {
             beforeEach(() => {
@@ -34,7 +34,6 @@ describe("when using splain config", ()=> {
             });
 
         });
-
 
     });
 

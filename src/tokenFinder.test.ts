@@ -1,7 +1,7 @@
-import TokenFinder from "./tokenFinder";
 import Config from "./config";
+import TokenFinder from "./tokenFinder";
 
-describe("when using the token finder",()=>{
+describe("when using the token finder", () => {
     const defaultTokenConfig = new Config();
 
     describe("and i want to find all tokens", () => {
@@ -25,11 +25,11 @@ describe("when using the token finder",()=>{
             expect(tokens.length).toBe(1);
         });
     });
-    
-    describe("when i look for the next token", ()=>{
+
+    describe("when i look for the next token", () => {
 
         describe("and the token is a template", () => {
-            describe("and the template is formed correctly", ()=>{
+            describe("and the template is formed correctly", () => {
                 it("should identify it as a template", () => {
                     expect(TokenFinder.findNextToken("{{test}} ", defaultTokenConfig).type).toBe("template");
                 });
@@ -43,9 +43,9 @@ describe("when using the token finder",()=>{
                 });
             });
 
-            describe("and the template is malformed", ()=>{
+            describe("and the template is malformed", () => {
                 it("should throw a warning", () => {
-                    expect(()=>TokenFinder.findNextToken("{{test", defaultTokenConfig)).toThrow();
+                    expect(() => TokenFinder.findNextToken("{{test", defaultTokenConfig)).toThrow();
                 });
             });
 
@@ -64,11 +64,11 @@ describe("when using the token finder",()=>{
                 expect(TokenFinder.findNextToken("?2345 ", defaultTokenConfig).raw).toBe("?2345");
             });
 
-            it("should work when its the last token", () =>{
+            it("should work when its the last token", () => {
                 expect(TokenFinder.findNextToken("?3", defaultTokenConfig).raw).toBe("?3");
             });
 
-            it("should default to 2 if no number is given",() => {
+            it("should default to 2 if no number is given", () => {
                 expect(TokenFinder.findNextToken("? `test`", defaultTokenConfig).data).toBe("2");
             });
         });
@@ -158,46 +158,45 @@ describe("when using the token finder",()=>{
 
     });
 
-    describe("and i want to find the first preceding token of any of the given types", ()=> {
+    describe("and i want to find the first preceding token of any of the given types", () => {
         let tokens;
-        beforeEach(()=> {
-            tokens = [{type:"?"},{type:"|"},{type:"splain"}];
+        beforeEach(() => {
+            tokens = [{type: "?"}, {type: "|"}, {type: "splain"}];
         });
 
-        it("should be able to find oen specific type", () =>{
-            expect(TokenFinder.getPrecedingTokenOfType(["?"],tokens,2)).toBe(0);
+        it("should be able to find oen specific type", () => {
+            expect(TokenFinder.getPrecedingTokenOfType(["?"], tokens, 2)).toBe(0);
         });
-        it("should return null if there are no tokens", () =>{
-            expect(TokenFinder.getPrecedingTokenOfType(["made up"],tokens,2)).toBe(null);
+        it("should return null if there are no tokens", () => {
+            expect(TokenFinder.getPrecedingTokenOfType(["made up"], tokens, 2)).toBe(null);
         });
-        it("should not match itself", () =>{
-            expect(TokenFinder.getPrecedingTokenOfType(["splain"],tokens,2)).toBe(null);
+        it("should not match itself", () => {
+            expect(TokenFinder.getPrecedingTokenOfType(["splain"], tokens, 2)).toBe(null);
         });
     });
 
-
-    describe("and i want to find the first proceeding token of any of the given types", ()=> {
+    describe("and i want to find the first proceeding token of any of the given types", () => {
         let tokens;
-        beforeEach(()=> {
-            tokens = [{type:"?"},{type:"|"},{type:"splain"}];
+        beforeEach(() => {
+            tokens = [{type: "?"}, {type: "|"}, {type: "splain"}];
         });
 
-        it("should be able to find oen specific type", () =>{
-            expect(TokenFinder.getProceedingTokenOfType(["splain"],tokens,0)).toBe(2);
+        it("should be able to find oen specific type", () => {
+            expect(TokenFinder.getProceedingTokenOfType(["splain"], tokens, 0)).toBe(2);
         });
-        it("should return null if there are no tokens", () =>{
-            expect(TokenFinder.getProceedingTokenOfType(["made up"],tokens,1)).toBe(null);
+        it("should return null if there are no tokens", () => {
+            expect(TokenFinder.getProceedingTokenOfType(["made up"], tokens, 1)).toBe(null);
         });
-        it("should not match itself", () =>{
-            expect(TokenFinder.getProceedingTokenOfType(["?"],tokens,0)).toBe(null);
+        it("should not match itself", () => {
+            expect(TokenFinder.getProceedingTokenOfType(["?"], tokens, 0)).toBe(null);
         });
     });
 
-    describe("and i want to find the first token of a given tye", ()=> {
+    describe("and i want to find the first token of a given tye", () => {
         let tokens;
 
-        beforeEach(()=> {
-            tokens = [{type:"?"},{type:"|"},{type:"splain"}];
+        beforeEach(() => {
+            tokens = [{type: "?"}, {type: "|"}, {type: "splain"}];
         });
 
         it("should return the index of the first ? token", () => {
@@ -213,10 +212,4 @@ describe("when using the token finder",()=>{
         });
     });
 
-
 });
-
-
-
-
-

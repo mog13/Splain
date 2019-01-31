@@ -1,5 +1,5 @@
-import TemplateStripper from "./templateStripper";
 import Config from "./config";
+import TemplateStripper from "./templateStripper";
 
 describe("when using the template stripper", () => {
     const defaultTokenConfig = new Config(),
@@ -14,6 +14,5 @@ describe("when using the template stripper", () => {
         expect(TemplateStripper.stripTemplate("[[test template]]", alternateTokenConfig)).toBe("test template");
         expect(TemplateStripper.stripTemplate("[[test [[should not effect inner template ]] template]]", alternateTokenConfig)).toBe("test [[should not effect inner template ]] template");
     });
-
 
 });

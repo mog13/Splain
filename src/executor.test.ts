@@ -5,13 +5,13 @@ describe("when using the executor", () => {
     describe("and its executing conditionals (?) ", () => {
 
         it("should remove the conditional token in any scenario", () => {
-            let tokens = [{type: "splain"}, {type: "?", data: "2"}];
+            const tokens = [{type: "splain"}, {type: "?", data: "2"}];
             executor.executeConditionals(tokens);
             expect(tokens.length).not.toBe(2);
         });
 
         it("should remove the token if no compatible tokens exist", () => {
-            let tokens = [{type: "?"}];
+            const tokens = [{type: "?"}];
             executor.executeConditionals(tokens);
             expect(tokens.length).toBe(0);
         });
