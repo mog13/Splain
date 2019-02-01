@@ -1,7 +1,7 @@
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: './src/index.ts',
     mode:"production",
     plugins: [
         new UglifyJSPlugin()
@@ -23,7 +23,15 @@ module.exports = {
                         presets: ['env']
                     }
                 }
+            },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/
             }
         ]
+    },
+    resolve: {
+        extensions: ['.wasm', '.mjs', '.js', '.json', '.ts']
     }
 };
