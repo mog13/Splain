@@ -7,7 +7,7 @@ import TokenFinder from "../src/tokenFinder";
 
 export default {
 
-    processToken(dictionary, text, splain) {
+    processToken(dictionary:any, text:string, splain?:Splain) {
 
         if (!splain) {
             splain = new Splain(dictionary); //allows for just sending part of a dictionary
@@ -31,7 +31,7 @@ export default {
                 tokens = TokenFinder.getTokens(strippedTemplate, splain.config);
 
             //PERMEATE
-            let splainTokens = tokens.filter(t => t.type === "splain");
+            let splainTokens:any = tokens.filter(t => t.type === "splain");
 
             let tokenCounter =[];
             splainTokens.forEach(token => {
@@ -58,6 +58,7 @@ export default {
                 let newText = "";
                 let splainToken = 0;
                 tokens.forEach(token=>{
+                    //@ts-ignore
                     newText+=token.convert(processorInstance,tokenCounter[splainToken]);
                     if(token.type==="splain") splainToken++;
                 });
