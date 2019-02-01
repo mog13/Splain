@@ -160,7 +160,6 @@ describe("when using the token finder", () => {
 
     describe("and i want to find the first preceding token of any of the given types", () => {
         let tokens;
-        let test;
         beforeEach(() => {
             tokens = [{type: "?"}, {type: "|"}, {type: "splain"}];
         });
@@ -176,41 +175,41 @@ describe("when using the token finder", () => {
         });
     });
 
-    // describe("and i want to find the first proceeding token of any of the given types", () => {
-    //     let tokens;
-    //     beforeEach(() => {
-    //         tokens = [{type: "?"}, {type: "|"}, {type: "splain"}];
-    //     });
-    //
-    //     it("should be able to find oen specific type", () => {
-    //         expect(TokenFinder.getProceedingTokenOfType(["splain"], tokens, 0)).toBe(2);
-    //     });
-    //     it("should return null if there are no tokens", () => {
-    //         expect(TokenFinder.getProceedingTokenOfType(["made up"], tokens, 1)).toBe(null);
-    //     });
-    //     it("should not match itself", () => {
-    //         expect(TokenFinder.getProceedingTokenOfType(["?"], tokens, 0)).toBe(null);
-    //     });
-    // });
-    //
-    // describe("and i want to find the first token of a given tye", () => {
-    //     let tokens;
-    //
-    //     beforeEach(() => {
-    //         tokens = [{type: "?"}, {type: "|"}, {type: "splain"}];
-    //     });
-    //
-    //     it("should return the index of the first ? token", () => {
-    //         expect(TokenFinder.findFirstTokenOfType("?", tokens)).toBe(0);
-    //     });
-    //
-    //     it("should return the index of the first splain token", () => {
-    //         expect(TokenFinder.findFirstTokenOfType("splain", tokens)).toBe(2);
-    //     });
-    //
-    //     // it("should return null if there is no token for the given type", () => {
-    //     //     expect(TokenFinder.findFirstTokenOfType("made up", tokens)).toBeNull();
-    //     // });
-    // });
+    describe("and i want to find the first proceeding token of any of the given types", () => {
+        let tokens;
+        beforeEach(() => {
+            tokens = [{type: "?"}, {type: "|"}, {type: "splain"}];
+        });
+
+        it("should be able to find oen specific type", () => {
+            expect(TokenFinder.getProceedingTokenOfType(["splain"], tokens, 0)).toBe(2);
+        });
+        it("should return null if there are no tokens", () => {
+            expect(TokenFinder.getProceedingTokenOfType(["made up"], tokens, 1)).toBe(null);
+        });
+        it("should not match itself", () => {
+            expect(TokenFinder.getProceedingTokenOfType(["?"], tokens, 0)).toBe(null);
+        });
+    });
+
+    describe("and i want to find the first token of a given tye", () => {
+        let tokens;
+
+        beforeEach(() => {
+            tokens = [{type: "?"}, {type: "|"}, {type: "splain"}];
+        });
+
+        it("should return the index of the first ? token", () => {
+            expect(TokenFinder.findFirstTokenOfType("?", tokens)).toBe(0);
+        });
+
+        it("should return the index of the first splain token", () => {
+            expect(TokenFinder.findFirstTokenOfType("splain", tokens)).toBe(2);
+        });
+
+        it("should return null if there is no token for the given type", () => {
+            expect(TokenFinder.findFirstTokenOfType("made up", tokens)).toBeNull();
+        });
+    });
 
 });
