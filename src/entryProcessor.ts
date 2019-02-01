@@ -1,3 +1,5 @@
+import Processor from "./processor";
+
 export default class EntryProcessor {
 
     /**
@@ -6,18 +8,18 @@ export default class EntryProcessor {
      * @param {Processor} processorInstance - the current process instance
      * @returns {array}
      */
-    static processContexts(entry, processorInstance) {
+    public static processContexts(entry: any[], processorInstance: Processor): any[] {
 
-        //filter entries that have at least one matching context
-        let contextualEntry = entry.filter(value => {
-            if (value.hasOwnProperty("context")){
-                if(value.context.hasOwnProperty("match")) {
+        // filter entries that have at least one matching context
+        const contextualEntry = entry.filter((value) => {
+            if (value.hasOwnProperty("context")) {
+                if (value.context.hasOwnProperty("match")) {
                     return processorInstance.hasMatchingContext(value.context.match);
                 }
                 return processorInstance.hasMatchingContext(value.context);
             }
         });
-        //only return contextual entries if any match
+        // only return contextual entries if any match
         if (contextualEntry.length > 0) {
             return contextualEntry;
         }
@@ -30,11 +32,11 @@ export default class EntryProcessor {
      * @param {array} entry - the entry to process
      * @returns {array}
      */
-    static processWeights(entry) {
+    public static processWeights(entry: any): any[] {
         if (entry !== null && Array.isArray(entry)) {
             let index;
-            while ((index = entry.findIndex(value => value.hasOwnProperty("weight"))) !== -1) {
-                let weightedValues = [];
+            while ((index = entry.findIndex((value) => value.hasOwnProperty("weight"))) !== -1) {
+                const weightedValues = [];
                 for (let i = 0; i < entry[index].weight; i++) {
                     weightedValues.push(entry[index].value);
                 }

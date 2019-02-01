@@ -5,24 +5,24 @@ export default {
             xl: ["giant", "huge", "vast", "mammoth"],
             l: ["big", "jumbo", "large"],
             s: ["small", "slight", "petite", "slender", "trim", "diminuitive"],
-            xs: ["tiny", "minuscule", "lilliputian"]
+            xs: ["tiny", "minuscule", "lilliputian"],
         },
         temp: {
             cold: ["cold", "freezing", "icy", "brisk", "bleak", "nippy", "chilly", "cool", "bracing"],
             lukewarm: ["tepid", "room temperature"],
-            warm: ["hot", "boiling", "sweltering", "roasting", "scorching", "melting", "sizzling", "burning", "fiery"]
+            warm: ["hot", "boiling", "sweltering", "roasting", "scorching", "melting", "sizzling", "burning", "fiery"],
         },
         difficulty: {
             impossible: ["insurmountable", "intractable"],
             hard: ["difficult", "hard", "troublesome", "tough", "arduous", "laborious", "strenuous", "back breaking"],
-            easy: ["easy", "simple", "effortless", "straightforward", "trivial"]
+            easy: ["easy", "simple", "effortless", "straightforward", "trivial"],
         },
         boring: ["uninteresting", "bland"],
         interesting: ["interesting", "appealing", "delightful", "engaging", "compelling", "enchanting", "gripping", "fascinating", "riveting", "intriguing"],
         veryInteresting: ["{{adverbs.very adj.interesting}}", "{{adj.size.xxl'ly' adj.interesting}}"],
         speed: {
             fast: ["fast", "upbeat", "quick", "brisk", "hasty"],
-            slow: ["slow", "creep", "laggy", "crawl", "lackadaisical", "lethargic"]
+            slow: ["slow", "creep", "laggy", "crawl", "lackadaisical", "lethargic"],
         },
         color: ["red", "blue", "green", "purple", "pink", "gray", "black", "orange", "brown", "charcoal", "cyan", "magenta", "fuchsia",
             "yellow", "gold", "silver", "white", "teal", "turquoise", "mauve"],
@@ -30,7 +30,7 @@ export default {
     adverbs: {
         speed: {
             fast: ["quickly", "speedily", "hastily", "rapidly", "briskly", "promptly", "swiftly"],
-            slow: ["slowly", "sluggishly", "unhurriedly", "lazily", "casually", "lackadaisically"]
+            slow: ["slowly", "sluggishly", "unhurriedly", "lazily", "casually", "lackadaisically"],
         },
         very: ["very", "exceedingly", "awfully", "greatly", "emininently", "absolutely", "extraordinarily", "extremely", "really", "terribly"],
         frequency: {
@@ -38,8 +38,8 @@ export default {
             frequently: ["usually", "normally", "often", "frequently"],
             sometimes: ["sometimes", "occasionally", "intermittenly"],
             infrequently: ["hardly ever", "rarely", "seldom", "infrequently", "irregularly", "once in a blue moon"],
-            never: ["never"]
-        }
+            never: ["never"],
+        },
     },
     weather: {
         rain: ["drizzling", "showering", "raining", "spitting", "pouring", "deluge"],
@@ -52,7 +52,7 @@ export default {
     genre: {
         music: ["rock", "pop", "punk", "indie", "hip hop", "reggae", "folk", "country", "blues", "classical", "jazz", "alternative", "electronic", "metal", "dubstep", "rap", "ragtime", "disco"],
         film: ["action", "adventure", "comedy", "drama", "fantasy", "horror", "thriller", "romance", "science fiction", "western", "documentary"],
-        book: ["non fiction", "fiction", "sci-fi", "mystery", "cyberpunk", "graphic", "young adult", "children", "classic", "romance", "fantasy", "science fiction", "speculative", "poetry", "suspense"]
+        book: ["non fiction", "fiction", "sci-fi", "mystery", "cyberpunk", "graphic", "young adult", "children", "classic", "romance", "fantasy", "science fiction", "speculative", "poetry", "suspense"],
     },
     nouns: {
         landtypes: ["forest", "desert", "rain forest", "mountains", "plains", "grasslands", "bush", "tundra", "jungle", "bog", "swamp", "veldt", "hills", "wetlands"],
@@ -63,7 +63,7 @@ export default {
             breakfast: ["eggs", "toast", "pancakes", "coffee", "orange juice", "bacon", "sausage", "oatmeal", "waffles", "cereal", "bagel", "muesli", "granola bar"],
             condiments: ["ketchup", "mustard", "mayonaise", "soy sauce", "vinegar", "sauerkraut", "salsa", "relish", "hot sauce", "sriracha"],
             lunch: ["sandwich", "soup", "salad", "pizza", "leftovers", "tacos", "burrito", "sushi"],
-            dinner: ["roast chicken", "meatloaf", "steak", "baked potato", "lasagna", "casserole"]
+            dinner: ["roast chicken", "meatloaf", "steak", "baked potato", "lasagna", "casserole"],
         },
         clothes: {
             shirts: ["t-shirt", "button-down", "dress", "hawaiian", "tank-top", "tie-dye", "flannel"],
@@ -77,7 +77,7 @@ export default {
             gloves: ["mittens", "fingerless", "wool", "army", "riding", "driving", "lace", "leather"],
             hats: ["top", "baseball cap", "bowler", "cowboy", "tricorne", "crown", "bonnet"],
             accessories: ["tie", "kerchief"],
-            swimsuits: ["speedo", "bikini", "trunks", "monokini", "one-piece", "wetsuit", "diving suit"]
+            swimsuits: ["speedo", "bikini", "trunks", "monokini", "one-piece", "wetsuit", "diving suit"],
         },
         daytime: ["morning", "afternoon", "evening", "night", "sunset", "sunrise", "dusk", "dawn", "midnight", "twilight"],
         trees: ["ash", "beech", "birch", "conifer", "fir", "larch", "maple", "oak", "pine", "spruce", "sycamore", "willow", "yew", "rowan", "hickory"],
@@ -91,7 +91,7 @@ export default {
             molluscs: ["clam"],
             insects: ["ant", "butterfly"],
             gastropods: ["snail"],
-            amphibians: ["frog", "salamander"]
+            amphibians: ["frog", "salamander"],
         },
 
         country: ["Afghanistan", "Albania", "Algeria", "America", "Andorra", "Angola", "Antigua", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas",
@@ -107,7 +107,7 @@ export default {
             "Solomon", "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka", "St Kitts", "St Lucia", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan",
             "Tanzania",  "Thailand", "Tobago", "Togo", "Tonga", "Trinidad", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Kingdom", "United States", "Uruguay", "USA", "Uzbekistan",
             "Vanuatu", "Vatican", "Venezuela", "Vietnam", "Wales", "Welsh", "Yemen", "Zambia", "Zimbabwe", "Antigua and Barbuda", "Bosnia and Herzegovina", "Burkina Faso", "Cabo Verde", "Central African Republic", "Democratic Republic of the Congo", "Republic of the Congo", "Cote d'Ivoire",
-            "South Korea", "Timor-Leste", "Trinidad and Tobago", "United Arab Emirates", "United Kingdom", "United States of America", "Vatican City"
+            "South Korea", "Timor-Leste", "Trinidad and Tobago", "United Arab Emirates", "United Kingdom", "United States of America", "Vatican City",
         ],
 
         vehicle: ["ambulance", "bicycle", "boat", "bulldozer", "bus", "car", "jeep", "minibus", "mini cooper", "motorcycle", "scooter", "sidecar", "snowplow", "tank", "taxi", "tractor", "truck"],
@@ -116,6 +116,6 @@ export default {
         states: ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
         body: ["ankle", "arm", "back", "blood", "liver", "lung", "kidney", "bone", "brain", "cheek", "chest", "chin", "ear", "elbow", "eye", "finger", "foot", "hand", "heart", "knee", "leg", "lip", "mouth", "muscle", "neck", "nose", "shoulder", "stomach", "teeth", "toe", "tongue", "wrist"],
         season: ["fall", "autumn", "winter", "summer", "spring", "monsoon"],
-        computer: ["mouse", "keyboard", "processor", "hard drive", "software", "RAM", "monitor", "speakers", "usb", "GPU", "VRAM", "motherboard", "SSD", "power supply", "CPU", "sound card", "KVM switch"]
+        computer: ["mouse", "keyboard", "processor", "hard drive", "software", "RAM", "monitor", "speakers", "usb", "GPU", "VRAM", "motherboard", "SSD", "power supply", "CPU", "sound card", "KVM switch"],
     },
 };

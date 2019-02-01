@@ -1,7 +1,11 @@
+import Processor from "./processor";
 import Splain from "./splain";
 import finder from "./templateFinder";
 
 export default class Token {
+     public type: string;
+     public data: any;
+     public raw: string;
 
     /**
      * Create a new splain token
@@ -9,35 +13,34 @@ export default class Token {
      * @param {*} data - the relevant data about the token, different depending on type
      * @param {string} raw - the raw token as it appeared in the original template
      */
-    constructor(type, data, raw) {
+    constructor(type: string, data: any, raw: string) {
         this.type = type;
         this.data = data;
         this.raw = raw;
     }
-
 
     /**
      * Converts the given token into its compiled equivalent.
      * @param {Processor} processorInstance - the current process instance
      * @returns {*}
      */
-    convert(processorInstance) {
+    public convert(processorInstance: Processor): string {
         switch (this.type) {
         case "splain": {
             return processorInstance.getResult(this.data);
         }
         case "fixed": {
-            let fixed = processorInstance.getFixedResolution(this.data);
+            const fixed = processorInstance.getFixedResolution(this.data);
             if (fixed) {
                 return fixed;
             }
-            let result = processorInstance.getResult(this.data);
+            const result = processorInstance.getResult(this.data);
             processorInstance.addFixedResolution(this.data, result);
             return result;
         }
         case "variable": {
             if (processorInstance.variables && processorInstance.variables.hasOwnProperty(this.data)) {
-                let variable = processorInstance.variables[this.data];
+                const variable = processorInstance.variables[this.data];
                 if (typeof variable === "function") {
                     return variable(processorInstance);
                 } else {
@@ -53,8 +56,8 @@ export default class Token {
             return this.data;
         }
         case "template": {
-            let output = Splain.processTemplate(this.raw, processorInstance);
-            return finder.containsTemplate(output,processorInstance.config) ? Splain.processTemplate(output, processorInstance) : output;
+            const output = Splain.processTemplate(this.raw, processorInstance);
+            return finder.containsTemplate(output, processorInstance.config) ? Splain.processTemplate(output, processorInstance) : output;
         }
         default: {
             return undefined;

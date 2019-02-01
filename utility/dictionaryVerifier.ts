@@ -5,7 +5,7 @@ export default {
     /*if called without a splain instance will set one up and pass through to recursive calls
     this means original call will make splain at the dictionary level
     but also has the added benefit that you could use it to verify it with a given splain instance*/
-    verifyEntries(node, splain, root) {
+    verifyEntries(node, splain?:Splain, root?:any) {
         if(!splain){
             splain = new Splain(node.entries || node); //allows for just sending part of a dictionary
             splain.config.configure("explicit", true);

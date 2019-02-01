@@ -1,20 +1,21 @@
+import Config from "./config";
 import Token from "./token";
 
 const regToken = /[?`|\s]/;
 
-export default class TokenFinder{
+export default class TokenFinder {
     /**
      * Gets the tokens from a given template
      * @param {string} template - the template to convert to tokens
      * @param {Config} config - the splain config
      * @returns {Array} - an array of tokens
      */
-    static getTokens(template, config) {
-        let tokens = [];
+    public static getTokens(template: string, config: Config): Token[] {
+        const tokens = [];
         let n = config.panicThreshold;
         while (template) {
             n--;
-            let nextToken = this.findNextToken(template, config);
+            const nextToken = this.findNextToken(template, config);
             tokens.push(nextToken);
             template = template.slice(nextToken.raw.length);
             if (n <= 0) {
@@ -32,27 +33,27 @@ export default class TokenFinder{
      * @param {Config} config - the splain config
      * @returns {Token} - the first token in the template
      */
-    static findNextToken(template, config) {
+    public static findNextToken(template: any, config: Config): Token {
         let n = 1;
         if (template.startsWith(config.templateTokens.opening)) {
-            let bracketAmount = 1,
-                openLength = config.templateTokens.opening.length,
+            let bracketAmount = 1;
+            const openLength = config.templateTokens.opening.length,
                 closeLength = config.templateTokens.closing.length;
             n = openLength;
             while (n < template.length && bracketAmount > 0) {
                 if (template.indexOf(config.templateTokens.opening, n) === n) {
                     bracketAmount++;
                     n += openLength;
-                }
-                else if (template.indexOf(config.templateTokens.closing, n) === n) {
+                } else if (template.indexOf(config.templateTokens.closing, n) === n) {
                     bracketAmount--;
                     n += closeLength;
-                }
-                else {
+                } else {
                     n++;
                 }
             }
-            if (bracketAmount > 0) throw `template {${template}} has no closing token`;
+            if (bracketAmount > 0) {
+                throw new Error(`template {${template}} has no closing token`);
+            }
             return new Token("template", template.substring(openLength, n - closeLength), template.substring(0, n));
         }
         if (template[0] === "?") {
@@ -74,12 +75,14 @@ export default class TokenFinder{
             return new Token("lit", template.substring(1, n), template.substring(0, n + 1));
         }
         let nextToken = template.search(regToken);
-        let nextTemplate = template.indexOf(config.templateTokens.opening);
-        if (nextToken === -1 || (nextTemplate > -1 && nextTemplate < nextToken)) nextToken = nextTemplate;
+        const nextTemplate = template.indexOf(config.templateTokens.opening);
+        if (nextToken === -1 || (nextTemplate > -1 && nextTemplate < nextToken)) {
+            nextToken = nextTemplate;
+        }
         if (nextToken < 0) {
             nextToken = template.length;
         }
-        let tokenData = template.substring(0, nextToken);
+        const tokenData = template.substring(0, nextToken);
         if (template.startsWith(config.variableResolutionToken)) {
             return new Token("variable", tokenData.substr(config.variableResolutionToken.length), tokenData);
         }
@@ -97,9 +100,11 @@ export default class TokenFinder{
      * @param {array} tokens - the tokens to use in the search
      * @returns {*}
      */
-    static findFirstTokenOfType(type,tokens) {
-        for(let i =0; i <tokens.length; i++) {
-            if(tokens[i].type === type) return i;
+    public static findFirstTokenOfType(type: string, tokens: Token[]): number {
+        for (let i = 0; i < tokens.length; i++) {
+            if (tokens[i].type === type) {
+                return i;
+            }
         }
         return null;
     }
@@ -111,10 +116,14 @@ export default class TokenFinder{
      * @param {int} index - the index to start the search from
      * @returns {*}
      */
-    static getPrecedingTokenOfType(types, tokens, index) {
-        if(index ===0) return null;
-        for(let i =index-1; i >=0; i--) {
-            if(types.indexOf(tokens[i].type) >-1) return i;
+    public static getPrecedingTokenOfType(types: string[], tokens: Token[], index: number): number {
+        if (index === 0) {
+            return null;
+        }
+        for (let i = index - 1; i >= 0; i--) {
+            if (types.indexOf(tokens[i].type) > -1) {
+                return i;
+            }
         }
         return null;
     }
@@ -126,10 +135,14 @@ export default class TokenFinder{
      * @param {int} index - the index to start the search from
      * @returns {*}
      */
-    static getProceedingTokenOfType(types,tokens, index) {
-        if (index === tokens.length-1) return null;
-        for(let i =index+1; i <tokens.length; i++) {
-            if(types.indexOf(tokens[i].type) >-1) return i;
+    public static getProceedingTokenOfType(types: string[], tokens: Token[], index: number): number {
+        if (index === tokens.length - 1) {
+            return null;
+        }
+        for (let i = index + 1; i < tokens.length; i++) {
+            if (types.indexOf(tokens[i].type) > -1) {
+                return i;
+            }
         }
         return null;
     }
