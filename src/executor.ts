@@ -9,7 +9,7 @@ export default class Executor {
      * @param {Processor} processorInstance - the current process instance
      * @returns {string} - the compiled output
      */
-    public static run(tokens: Token[], processorInstance: Processor) {
+    public static run(tokens: Token[], processorInstance: Processor): string {
         this.executeOrs(tokens);
         this.executeConditionals(tokens);
         let retString = "";
@@ -24,7 +24,7 @@ export default class Executor {
      * execute any conditional tokens
      * @param {array} tokens - the tokens to compile/execute
      */
-    public static executeConditionals(tokens: Token[]) {
+    public static executeConditionals(tokens: Token[]): void {
         while (TokenFinder.findFirstTokenOfType("?", tokens) !== null) {
             const conditionalIndex = TokenFinder.findFirstTokenOfType("?", tokens);
             if (conditionalIndex !== null) {
@@ -44,7 +44,7 @@ export default class Executor {
      * Execute any or tokens
      * @param {array} tokens - the tokens to compile/execute
      */
-    public static executeOrs(tokens: Token[]) {
+    public static executeOrs(tokens: Token[]): void {
         while (TokenFinder.findFirstTokenOfType("|", tokens) !== null) {
             const indexOfOr = TokenFinder.findFirstTokenOfType("|", tokens);
             if (indexOfOr !== null) {
@@ -75,7 +75,7 @@ export default class Executor {
      * @param n - the max number
      * @returns {number}
      */
-    public static rand(n: number) {
+    public static rand(n: number): number {
         return Math.floor(Math.random() * n) + 1;
     }
 

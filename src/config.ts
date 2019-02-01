@@ -27,7 +27,7 @@ export default class Config {
      * @param value - the value to set the parameter to
      * @returns {Config}
      */
-    public configure(key: string, value: any) {
+    public configure(key: string, value: any): Config {
         if (this.hasOwnProperty(key)) {
             this[key] = value;
         }

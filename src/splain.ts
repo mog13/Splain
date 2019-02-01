@@ -19,7 +19,7 @@ export default class Splain {
      * @param {Processor} processorInstance - the current process instance
      * @returns {*}
      */
-    public static processTemplate(text: string, processorInstance: Processor) {
+    public static processTemplate(text: string, processorInstance: Processor): string {
         if (!processorInstance) {
             processorInstance = new Processor();
         }
@@ -55,7 +55,7 @@ export default class Splain {
      * Create a new instance of Splain
      * @param {Object} [initialDictionary] - Optional JSON object to use as initial dictionary.
      */
-    public new(initialDictionary?: object) {
+    public new(initialDictionary?: object): void {
         this.dictionaries = {default: new Dictionary()};
         this.dictionaries.default.addEntry(initialDictionary || defaults);
         this.config = new SplainConfig();
@@ -67,8 +67,8 @@ export default class Splain {
      * @param value - the value to set the parameter to
      * @returns {Config}
      */
-    public configure(key: string, value: any) {
-        this.config.configure(key, value);
+    public configure(key: string, value: any): Config {
+       return this.config.configure(key, value);
     }
 
     /**
@@ -76,7 +76,7 @@ export default class Splain {
      * @param {Object} entry - The entry to add in the form of JSON (can be multiple layers deep and have multiple roots). Also accepts array when used with the name param
      * @param {string} [dictionaryName] - The name of the entry if an array was given instead of JSON. this is long hand for simply using JSON {name:[entries]}
      */
-    public addEntry(entry: any, dictionaryName: string) {
+    public addEntry(entry: any, dictionaryName: string): void {
         if (!dictionaryName) {
             dictionaryName = "default";
         }
@@ -92,7 +92,7 @@ export default class Splain {
      * @param {object} [options] - an array of options e.g dictionaryName or variables
      * @returns {string} - the compiled template
      */
-    public process(text: string, options?: any) {
+    public process(text: string, options?: any): string {
         options = options || {};
         // n.b options contains variables, dictionary name, contexts etc
         if (!options.dictionaryName) {
@@ -106,7 +106,7 @@ export default class Splain {
      * @param dictionary (or json)
      * @returns {*}
      */
-    public verifyDictionary(dictionary: any) {
+    public verifyDictionary(dictionary: any): any {
         return dictionaryVerifier.verifyEntries(dictionary);
     }
 

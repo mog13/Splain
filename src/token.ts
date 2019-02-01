@@ -24,7 +24,7 @@ export default class Token {
      * @param {Processor} processorInstance - the current process instance
      * @returns {*}
      */
-    public convert(processorInstance: Processor) {
+    public convert(processorInstance: Processor): string {
         switch (this.type) {
         case "splain": {
             return processorInstance.getResult(this.data);

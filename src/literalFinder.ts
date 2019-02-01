@@ -4,7 +4,7 @@ export default class LiteralFinder {
      * @param text - the text to check
      * @returns {Array}
      */
-    public static getLiterals(text: string) {
+    public static getLiterals(text: string): any[] {
         const literals = [];
         let last = null;
         for (let i = 0; i < text.length; i++) {
@@ -27,7 +27,7 @@ export default class LiteralFinder {
      * @param {array} literals - the array of literals (starts and ends) to check against
      * @returns {boolean}
      */
-    public static withinLiterals(start: number, end: number, literals: any[]) {
+    public static withinLiterals(start: number, end: number, literals: any[]): boolean {
         let within = false;
         literals.forEach((literal) => {
             // should break

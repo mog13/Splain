@@ -9,7 +9,7 @@ export default class TemplateFinder {
      * @param {Config} config - the splain config
      * @returns {Array} - the found templates
      */
-    public static getTemplates(text: string, config: Config) {
+    public static getTemplates(text: string, config: Config): string[] {
         const templates = [];
         const literals = LiteralFinder.getLiterals(text);
         const openingTokens = text.split(config.templateTokens.opening).length - 1;
@@ -52,7 +52,7 @@ export default class TemplateFinder {
      * @param {Config} config - the splain config
      * @returns {*}
      */
-    public static containsTemplate(text: string, config: Config) {
+    public static containsTemplate(text: string, config: Config): any {
         function escapeTokens(templateTokens) {
             return "\\" + templateTokens.split("").join("\\");
         }

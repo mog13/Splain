@@ -10,7 +10,7 @@ export default class TokenFinder {
      * @param {Config} config - the splain config
      * @returns {Array} - an array of tokens
      */
-    public static getTokens(template: string, config: Config) {
+    public static getTokens(template: string, config: Config): Token[] {
         const tokens = [];
         let n = config.panicThreshold;
         while (template) {
@@ -33,7 +33,7 @@ export default class TokenFinder {
      * @param {Config} config - the splain config
      * @returns {Token} - the first token in the template
      */
-    public static findNextToken(template: any, config: Config) {
+    public static findNextToken(template: any, config: Config): Token {
         let n = 1;
         if (template.startsWith(config.templateTokens.opening)) {
             let bracketAmount = 1;
@@ -100,7 +100,7 @@ export default class TokenFinder {
      * @param {array} tokens - the tokens to use in the search
      * @returns {*}
      */
-    public static findFirstTokenOfType(type: string, tokens: Token[]) {
+    public static findFirstTokenOfType(type: string, tokens: Token[]): number {
         for (let i = 0; i < tokens.length; i++) {
             if (tokens[i].type === type) {
                 return i;
@@ -116,7 +116,7 @@ export default class TokenFinder {
      * @param {int} index - the index to start the search from
      * @returns {*}
      */
-    public static getPrecedingTokenOfType(types: string[], tokens: Token[], index: number) {
+    public static getPrecedingTokenOfType(types: string[], tokens: Token[], index: number): number {
         if (index === 0) {
             return null;
         }
@@ -135,7 +135,7 @@ export default class TokenFinder {
      * @param {int} index - the index to start the search from
      * @returns {*}
      */
-    public static getProceedingTokenOfType(types: string[], tokens: Token[], index: number) {
+    public static getProceedingTokenOfType(types: string[], tokens: Token[], index: number): number {
         if (index === tokens.length - 1) {
             return null;
         }

@@ -12,7 +12,7 @@ export default class Dictionary {
      * Adds an entry to the dictionary
      * @param {Object} entry - The entry to add in the form of JSON (can be multiple layers deep and have multiple roots).
      */
-    public addEntry(entry: object) {
+    public addEntry(entry: object): void {
         Object.keys(entry).forEach((key) => {
             this.entries[key] = entry[key];
         });
@@ -23,7 +23,7 @@ export default class Dictionary {
      * @param {string} name - the entry name/path
      * @returns {array}
      */
-    public getEntry(name: string) {
+    public getEntry(name: string): any[] {
         // get the entries by walking down the path with a reduce
         const entry = name.split(".").reduce((currentStep, nextStep) => {
             if (currentStep === null) {
@@ -47,7 +47,7 @@ export default class Dictionary {
      * @param {Processor} processorInstance - the current process instance
      * @returns {array}
      */
-    public getProcessedEntry(name: string, processorInstance: Processor) {
+    public getProcessedEntry(name: string, processorInstance: Processor): any[] {
         const entry = this.getEntry(name);
         if (!entry) {
             return null;

@@ -30,7 +30,7 @@ export default class Processor {
      * @param path - the path to the required entries
      * @returns {*}
      */
-    public getResult(path: string) {
+    public getResult(path: string): any {
         const entry = this.dictionary.getProcessedEntry(path, this);
         if (entry !== null && Array.isArray(entry)) {
             const result = entry[Math.floor(Math.random() * entry.length)];
@@ -53,7 +53,7 @@ export default class Processor {
      * @param {string} tokenContent - the token to be mapped by
      * @param {string} result - the compiled output of the token
      */
-    public addFixedResolution(tokenContent: string, result: string) {
+    public addFixedResolution(tokenContent: string, result: string): void {
         this.fixedResolutions[tokenContent] = result;
     }
 
@@ -62,7 +62,7 @@ export default class Processor {
      * @param {string} tokenContent - the token to search for
      * @returns {*}
      */
-    public getFixedResolution(tokenContent: string) {
+    public getFixedResolution(tokenContent: string): any {
         return this.fixedResolutions[tokenContent];
 
     }
@@ -71,7 +71,7 @@ export default class Processor {
      * Adds an entry context with respect to the current context matching policy
      * @param {array} context - the contexts to add
      */
-    public addContextWithPolicy(context: any[]) {
+    public addContextWithPolicy(context: any[]): void {
         context = [].concat(context);
         if (this.config.contextMatcher !== this.config.contextMatchers.conservative && !this.hasMatchingContext(context)) {
             // if it doesn't already have one of the contexts
