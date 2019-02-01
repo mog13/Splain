@@ -144,14 +144,7 @@ export default class TokenFinder {
                 return i;
             }
         }
-        TokenFinder.causecodecovdrop(3)
         return null;
     }
 
-    public  static causecodecovdrop(m:number){
-        if(m >12) return m *23;
-        for(let i =9; i<1000;i++) {
-            m++;
-        }
-    }
 }
