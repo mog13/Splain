@@ -1,3 +1,5 @@
+import Config from "./config";
+
 export default class TemplateStripper {
     /**
      * strips the template deliminators, leaves inner templates remaining
@@ -5,7 +7,7 @@ export default class TemplateStripper {
      * @param {Config} config - the splain config
      * @returns {*}
      */
-    public static stripTemplate(template, config) {
+    public static stripTemplate(template: string, config: Config) {
         const open = template.indexOf(config.templateTokens.opening),
             close = template.lastIndexOf(config.templateTokens.closing) - config.templateTokens.closing.length;
         if (open > -1) { template = template.slice(0, open) + template.slice(open + config.templateTokens.opening.length); }

@@ -164,7 +164,7 @@ describe("when using a token", () => {
             const newConfig = new Config();
             newConfig.configure("templateTokens", {opening: "{{", closing: "}}"});
             processInstance.config = newConfig;
-            finder.containsTemplate = () => false;
+            finder.containsTemplate = jasmine.createSpy("containsTemplate").and.returnValue(false);
             token.convert(processInstance);
         });
 

@@ -1,3 +1,4 @@
+import Processor from "./processor";
 import Splain from "./splain";
 import finder from "./templateFinder";
 
@@ -12,7 +13,7 @@ export default class Token {
      * @param {*} data - the relevant data about the token, different depending on type
      * @param {string} raw - the raw token as it appeared in the original template
      */
-    constructor(type, data, raw) {
+    constructor(type: string, data: any, raw: string) {
         this.type = type;
         this.data = data;
         this.raw = raw;
@@ -23,7 +24,7 @@ export default class Token {
      * @param {Processor} processorInstance - the current process instance
      * @returns {*}
      */
-    public convert(processorInstance) {
+    public convert(processorInstance: Processor) {
         switch (this.type) {
         case "splain": {
             return processorInstance.getResult(this.data);

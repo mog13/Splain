@@ -1,4 +1,5 @@
 import EntryProcessor from "./entryProcessor";
+import Processor from "./processor";
 
 export default class Dictionary {
     public entries: any;
@@ -25,7 +26,9 @@ export default class Dictionary {
     public getEntry(name: string) {
         // get the entries by walking down the path with a reduce
         const entry = name.split(".").reduce((currentStep, nextStep) => {
-            if (currentStep === null) { return null; }
+            if (currentStep === null) {
+                return null;
+            }
             const curObj = currentStep[nextStep];
             if (curObj) {
                 return curObj;
@@ -44,9 +47,11 @@ export default class Dictionary {
      * @param {Processor} processorInstance - the current process instance
      * @returns {array}
      */
-    public getProcessedEntry(name: string, processorInstance) {
+    public getProcessedEntry(name: string, processorInstance: Processor) {
         const entry = this.getEntry(name);
-        if (!entry) { return null; }
+        if (!entry) {
+            return null;
+        }
         const contextualEntry = EntryProcessor.processContexts(entry, processorInstance);
         return EntryProcessor.processWeights(contextualEntry);
     }

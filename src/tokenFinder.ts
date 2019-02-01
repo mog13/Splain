@@ -1,3 +1,4 @@
+import Config from "./config";
 import Token from "./token";
 
 const regToken = /[?`|\s]/;
@@ -9,7 +10,7 @@ export default class TokenFinder {
      * @param {Config} config - the splain config
      * @returns {Array} - an array of tokens
      */
-    public static getTokens(template, config) {
+    public static getTokens(template: string, config: Config) {
         const tokens = [];
         let n = config.panicThreshold;
         while (template) {
@@ -32,7 +33,7 @@ export default class TokenFinder {
      * @param {Config} config - the splain config
      * @returns {Token} - the first token in the template
      */
-    public static findNextToken(template, config) {
+    public static findNextToken(template: any, config: Config) {
         let n = 1;
         if (template.startsWith(config.templateTokens.opening)) {
             let bracketAmount = 1;
@@ -99,7 +100,7 @@ export default class TokenFinder {
      * @param {array} tokens - the tokens to use in the search
      * @returns {*}
      */
-    public static findFirstTokenOfType(type, tokens) {
+    public static findFirstTokenOfType(type: string, tokens: Token[]) {
         for (let i = 0; i < tokens.length; i++) {
             if (tokens[i].type === type) {
                 return i;
@@ -115,7 +116,7 @@ export default class TokenFinder {
      * @param {int} index - the index to start the search from
      * @returns {*}
      */
-    public static getPrecedingTokenOfType(types, tokens, index) {
+    public static getPrecedingTokenOfType(types: string[], tokens: Token[], index: number) {
         if (index === 0) {
             return null;
         }
@@ -134,7 +135,7 @@ export default class TokenFinder {
      * @param {int} index - the index to start the search from
      * @returns {*}
      */
-    public static getProceedingTokenOfType(types, tokens, index) {
+    public static getProceedingTokenOfType(types: string[], tokens: Token[], index: number) {
         if (index === tokens.length - 1) {
             return null;
         }

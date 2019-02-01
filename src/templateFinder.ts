@@ -1,3 +1,4 @@
+import Config from "./config";
 import LiteralFinder from "./literalFinder";
 
 export default class TemplateFinder {
@@ -8,7 +9,7 @@ export default class TemplateFinder {
      * @param {Config} config - the splain config
      * @returns {Array} - the found templates
      */
-    public static getTemplates(text, config) {
+    public static getTemplates(text: string, config: Config) {
         const templates = [];
         const literals = LiteralFinder.getLiterals(text);
         const openingTokens = text.split(config.templateTokens.opening).length - 1;
@@ -51,7 +52,7 @@ export default class TemplateFinder {
      * @param {Config} config - the splain config
      * @returns {*}
      */
-    public static containsTemplate(text, config) {
+    public static containsTemplate(text: string, config: Config) {
         function escapeTokens(templateTokens) {
             return "\\" + templateTokens.split("").join("\\");
         }

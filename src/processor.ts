@@ -1,13 +1,14 @@
 import Config from "./config";
 import Dictionary from "./dictionary";
+import Token from "./token";
 
 export default class Processor {
     public variables: any;
     public config: Config;
     private dictionary: Dictionary;
     private contexts: any[];
-    private templateResolutions: {};
-    private fixedResolutions: {};
+    private readonly templateResolutions: {};
+    private readonly fixedResolutions: {};
     /**
      * Create a new splainContext
      * @param {object} [dictionary] - the dictionary to use
@@ -29,7 +30,7 @@ export default class Processor {
      * @param path - the path to the required entries
      * @returns {*}
      */
-    public getResult(path) {
+    public getResult(path: string) {
         const entry = this.dictionary.getProcessedEntry(path, this);
         if (entry !== null && Array.isArray(entry)) {
             const result = entry[Math.floor(Math.random() * entry.length)];
@@ -49,20 +50,20 @@ export default class Processor {
 
     /**
      * Adds result to the fixed resolutions object
-     * @param {string} token - the token to be mapped by
+     * @param {string} tokenContent - the token to be mapped by
      * @param {string} result - the compiled output of the token
      */
-    public addFixedResolution(token, result) {
-        this.fixedResolutions[token] = result;
+    public addFixedResolution(tokenContent: string, result: string) {
+        this.fixedResolutions[tokenContent] = result;
     }
 
     /**
      * retrieves sny matching fixed resolutions
-     * @param {string} token - the token to search for
+     * @param {string} tokenContent - the token to search for
      * @returns {*}
      */
-    public getFixedResolution(token) {
-        return this.fixedResolutions[token];
+    public getFixedResolution(tokenContent: string) {
+        return this.fixedResolutions[tokenContent];
 
     }
 
@@ -70,7 +71,7 @@ export default class Processor {
      * Adds an entry context with respect to the current context matching policy
      * @param {array} context - the contexts to add
      */
-    public addContextWithPolicy(context) {
+    public addContextWithPolicy(context: any[]) {
         context = [].concat(context);
         if (this.config.contextMatcher !== this.config.contextMatchers.conservative && !this.hasMatchingContext(context)) {
             // if it doesn't already have one of the contexts
@@ -84,9 +85,9 @@ export default class Processor {
 
     /**
      * add all contexts given irregardless of policy
-     * @param context
+     * @param ctx
      */
-    public addContext(ctx) {
+    public addContext(ctx: any[]) {
         this.contexts = this.contexts.concat(ctx);
 
         this.contexts = this.contexts.filter((context, pos) => this.contexts.indexOf(context) === pos);
@@ -97,7 +98,7 @@ export default class Processor {
      * @param {array} context - the context to check.
      * @returns {boolean}
      */
-    public hasMatchingContext(context) {
+    public hasMatchingContext(context: any[]) {
         return (Array.isArray(context) && this.contexts.some((con) => context.includes(con)) || this.contexts.includes(context));
     }
 
@@ -106,7 +107,7 @@ export default class Processor {
      * @param {string} template - the template that was compiled
      * @param {string} resolution - the output of the template
      */
-    public addTemplateResolution(template, resolution) {
+    public addTemplateResolution(template: string, resolution: string) {
         if (!this.templateResolutions[template]) { this.templateResolutions[template] = [resolution]; } else { this.templateResolutions[template] = this.templateResolutions[template].concat(resolution); }
     }
 

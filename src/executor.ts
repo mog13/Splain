@@ -1,3 +1,5 @@
+import Processor from "./processor";
+import Token from "./token";
 import TokenFinder from "./tokenFinder";
 
 export default class Executor {
@@ -7,7 +9,7 @@ export default class Executor {
      * @param {Processor} processorInstance - the current process instance
      * @returns {string} - the compiled output
      */
-    public static run(tokens, processorInstance) {
+    public static run(tokens: Token[], processorInstance: Processor) {
         this.executeOrs(tokens);
         this.executeConditionals(tokens);
         let retString = "";
@@ -22,7 +24,7 @@ export default class Executor {
      * execute any conditional tokens
      * @param {array} tokens - the tokens to compile/execute
      */
-    public static executeConditionals(tokens) {
+    public static executeConditionals(tokens: Token[]) {
         while (TokenFinder.findFirstTokenOfType("?", tokens) !== null) {
             const conditionalIndex = TokenFinder.findFirstTokenOfType("?", tokens);
             if (conditionalIndex !== null) {
@@ -42,7 +44,7 @@ export default class Executor {
      * Execute any or tokens
      * @param {array} tokens - the tokens to compile/execute
      */
-    public static executeOrs(tokens) {
+    public static executeOrs(tokens: Token[]) {
         while (TokenFinder.findFirstTokenOfType("|", tokens) !== null) {
             const indexOfOr = TokenFinder.findFirstTokenOfType("|", tokens);
             if (indexOfOr !== null) {
@@ -73,7 +75,7 @@ export default class Executor {
      * @param n - the max number
      * @returns {number}
      */
-    public static rand(n) {
+    public static rand(n: number) {
         return Math.floor(Math.random() * n) + 1;
     }
 

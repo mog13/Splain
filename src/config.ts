@@ -2,10 +2,10 @@ export default class Config {
     public keepTemplateOnUnmatched: boolean;
     public contextMatchers: { conservative: number; selective: number; additive: number };
     public contextMatcher: number;
-    private templateTokens: { opening: string; closing: string };
-    private fixedResolutionToken: string;
-    private variableResolutionToken: string;
-    private panicThreshold: number;
+    public templateTokens: { opening: string; closing: string };
+    public fixedResolutionToken: string;
+    public variableResolutionToken: string;
+    public panicThreshold: number;
 
     constructor() {
         this.keepTemplateOnUnmatched = true;

@@ -1,10 +1,12 @@
 import EntryProcessor from "./entryProcessor";
+import Processor from "./processor";
 
 describe("when I'm using the entry processor", () => {
 
     describe("and im processing contexts", () => {
         // We mock the processor has matching context function as that will be tested by processor.text
-        let processor = {}, entries = [];
+        const processor = new Processor();
+        let entries = [];
 
         const blackEntry = {value: "black", context: ["night"]};
         const darkEntry = {value: "dark", context: ["night"]};
@@ -16,9 +18,10 @@ describe("when I'm using the entry processor", () => {
 
         describe("and i have matching contexts", () => {
             beforeEach(() => {
-                processor = {
-                    hasMatchingContext: (context) => (context.includes("night") || context.includes("dusk")),
-                };
+                processor.hasMatchingContext = (context) => (context.includes("night") || context.includes("dusk"));
+                // processor = {
+                //     hasMatchingContext: (context) => (context.includes("night") || context.includes("dusk")),
+                // };
                 entries = [blackEntry, darkEntry, sunEntry, shadowEntry, sundownEntry];
             });
 
@@ -35,9 +38,7 @@ describe("when I'm using the entry processor", () => {
 
         describe("and the contexts don't match anything", () => {
             beforeEach(() => {
-                processor = {
-                    hasMatchingContext: () => false,
-                };
+                processor.hasMatchingContext = () => false;
                 entries = [blackEntry, darkEntry, shadowEntry, sundownEntry];
             });
 
@@ -54,9 +55,7 @@ describe("when I'm using the entry processor", () => {
 
         describe("and i have complex contexts", () => {
             beforeEach(() => {
-                processor = {
-                    hasMatchingContext: (context) => (context.includes("night")),
-                };
+                processor.hasMatchingContext = (context) => (context.includes("night"));
                 entries = [complexSunEntry, complexBlackEntry];
             });
 
@@ -69,9 +68,7 @@ describe("when I'm using the entry processor", () => {
 
         describe("and i have a mix of contexts", () => {
             beforeEach(() => {
-                processor = {
-                    hasMatchingContext: (context) => (context.includes("night")),
-                };
+                processor.hasMatchingContext = (context) => (context.includes("night"));
                 entries = [complexSunEntry, complexBlackEntry, sunEntry, blackEntry];
             });
 

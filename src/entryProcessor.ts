@@ -1,3 +1,5 @@
+import Processor from "./processor";
+
 export default class EntryProcessor {
 
     /**
@@ -6,7 +8,7 @@ export default class EntryProcessor {
      * @param {Processor} processorInstance - the current process instance
      * @returns {array}
      */
-    public static processContexts(entry, processorInstance) {
+    public static processContexts(entry: any[], processorInstance: Processor) {
 
         // filter entries that have at least one matching context
         const contextualEntry = entry.filter((value) => {
@@ -30,7 +32,7 @@ export default class EntryProcessor {
      * @param {array} entry - the entry to process
      * @returns {array}
      */
-    public static processWeights(entry) {
+    public static processWeights(entry: any) {
         if (entry !== null && Array.isArray(entry)) {
             let index;
             while ((index = entry.findIndex((value) => value.hasOwnProperty("weight"))) !== -1) {
