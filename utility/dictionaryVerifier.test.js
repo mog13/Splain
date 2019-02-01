@@ -1,4 +1,4 @@
-import Dictionary from "../lib/dictionary";
+import Dictionary from "../src/dictionary";
 import DictionaryVerifier from "./dictionaryVerifier";
 
 describe("when I'm using the dictionary verifier", () => {

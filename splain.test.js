@@ -1,4 +1,4 @@
-import SplainLib from "./lib/splain";
+import SplainLib from "./src/splain";
 
 describe("when im using splain", () => {
 
@@ -6,7 +6,7 @@ describe("when im using splain", () => {
         runHighlevelSuite(new SplainLib());
     });
     describe("when im using the compiled version", () => {
-        let SplainComp = require("./splain");
+        let SplainComp = require("./dist/splain");
         runHighlevelSuite(SplainComp);
     });
 });

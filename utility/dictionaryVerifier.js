@@ -1,4 +1,4 @@
-import Splain from "../lib/splain";
+import Splain from "../src/splain";
 
 export default {
 
