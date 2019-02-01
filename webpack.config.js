@@ -30,5 +30,8 @@ module.exports = {
                 exclude: /node_modules/
             }
         ]
+    },
+    resolve: {
+        extensions: ['.wasm', '.mjs', '.js', '.json', '.ts']
     }
 };

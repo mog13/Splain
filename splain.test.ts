@@ -5,10 +5,10 @@ describe("when im using splain", () => {
     describe("when im using the library", () => {
         runHighlevelSuite(new SplainLib());
     });
-    // describe("when im using the compiled version", () => {
-    //     let SplainComp = require("./dist/splain");
-    //     runHighlevelSuite(SplainComp);
-    // });
+    describe("when im using the compiled version", () => {
+        let SplainComp = require("./dist/splain");
+        runHighlevelSuite(SplainComp);
+    });
 });
 
 
