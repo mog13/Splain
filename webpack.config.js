@@ -1,10 +1,15 @@
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     entry: './src/index.ts',
     mode:"production",
     plugins: [
-        new UglifyJSPlugin()
+        new TerserPlugin({
+            parallel: true,
+            terserOptions: {
+                ecma: 6,
+            },
+        }),
     ],
     output: {
         filename: 'splain.js',
