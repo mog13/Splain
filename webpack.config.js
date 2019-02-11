@@ -15,7 +15,8 @@ module.exports = {
         filename: 'splain.js',
         libraryTarget: 'umd',
         umdNamedDefine: true,
-        library: "Splain"
+        library: "Splain",
+        globalObject: "(typeof window !== 'undefined' ? window : this)"
     },
     module: {
         rules: [
