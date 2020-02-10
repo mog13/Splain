@@ -49,19 +49,74 @@ describe('using the Dictionary class', ()=>{
             expect(dictionary.getEntries('colours')).toHaveLength(5);
         });
 
-        it('should rebuild the dictionary when an string is added', ()=>{
-            const dictionary:Dictionary = new Dictionary();
-            dictionary.AddEntry({hello:['world']});
-            const entry =  dictionary.getEntries('hello')[0];
-            expect(entry).toBeInstanceOf(Entry);
-        });
+        describe('when an entry is added it should rebuild the dictionary', ()=>{
+            it('should convert non Entries into Entry', ()=>{
+                const dictionary:Dictionary = new Dictionary();
+                dictionary.AddEntry({hello:['world']});
+                const entry =  dictionary.getEntries('hello')[0];
+                expect(entry).toBeInstanceOf(Entry);
+            });
 
-        it('should rebuild the dictionary when an entry is added', ()=>{
-            const dictionary:Dictionary = new Dictionary();
-            dictionary.AddEntry({hello:[new Entry('world',{},5)]});
-            const entry =  dictionary.getEntries('hello')[0];
-            expect(entry.value).toBe("world");
-            expect(entry.weight).toBe(5);
-        });
+            it('should rebuild the dictionary when an entry is added', ()=>{
+                const dictionary:Dictionary = new Dictionary();
+                dictionary.AddEntry({hello:[new Entry('world',{},5)]});
+                const entry =  dictionary.getEntries('hello')[0];
+                expect(entry.value).toBe("world");
+                expect(entry.weight).toBe(5);
+            });
+
+            it('should give non token entries a computed weight of 1',()=>{
+                const dictionary:Dictionary = new Dictionary();
+                dictionary.AddEntry({hello:['world']});
+                const entry =  dictionary.getEntries('hello')[0];
+                expect(entry.computedWeight).toBe(1);
+            });
+
+            it('should give pure token entries a weight associated with the token', ()=> {
+                const dictionary:Dictionary = new Dictionary();
+                dictionary.AddEntry({hello:['{{planet}}'],planet:['earth','world']});
+                const entry =  dictionary.getEntries('hello')[0];
+                expect(entry.computedWeight).toBe(2);
+            });
+
+            it('should give pure token entries a weight associated with the token and do so daisy chained/recursively', ()=> {
+                const dictionary:Dictionary = new Dictionary();
+                dictionary.AddEntry({hello:['{{planet}}'],planet:['{{solarSystem}}','world'],solarSystem:['earth','mars']});
+                const entry =  dictionary.getEntries('hello')[0];
+                expect(entry.computedWeight).toBe(3);
+            });
+
+            it('should give pure token entries a weight associated with the token and do so daisy chained/recursively (multiple uses)', ()=> {
+                const dictionary:Dictionary = new Dictionary();
+                dictionary.AddEntry({hello:['{{planet}}'],planet:['{{solarSystem}}','{{places}}'],solarSystem:['earth','mars'],places:['world','people','internet']});
+                const entry =  dictionary.getEntries('hello')[0];
+                expect(entry.computedWeight).toBe(5);
+                expect( dictionary.getEntries('planet')[0].computedWeight).toBe(2);
+                expect( dictionary.getEntries('planet')[1].computedWeight).toBe(3);
+
+            });
+
+            it('shouldnt get trapped weighing cyclic references',()=>{
+                const dictionary:Dictionary = new Dictionary();
+                dictionary.AddEntry({hello:['{{planet}}'],planet:['{{solarSystem}}'],solarSystem:['{{planet}}','earth','mars']});
+                const entry =  dictionary.getEntries('hello')[0];
+                expect(entry.computedWeight).toBe(3);
+            });
+
+            it( 'should be able to deal with malformed tokens', ()=>{
+                const dictionary:Dictionary = new Dictionary();
+                dictionary.AddEntry({hello:['{{planet}}'],planet:['{{solarSystem}}'],solarSystem:['{{planf32et}}','earth','mars']});
+                const entry =  dictionary.getEntries('hello')[0];
+                expect(entry.computedWeight).toBe(3);
+            });
+
+            it( 'should be able to handle multiple tokens', ()=>{
+                const dictionary:Dictionary = new Dictionary();
+                dictionary.AddEntry({test:['{{getColour}}'],getColour:['{{descriptor}} {{colour}}'],descriptor:['vibrant','dull'],colour:['red','green']});
+                const entry =  dictionary.getEntries('getColour')[0];
+                expect(entry.computedWeight).toBe(4);
+            });
+
+        })
     })
 });

@@ -1,7 +1,8 @@
 import {Config} from "../Config";
+import {Token} from "../Token";
 
 
-function findNextToken(input:string, config:Config): string {
+function findNextToken(input:string, config:Config): Token {
     const openIndex = input.indexOf(config.token.open);
 
     let nextOpenIndex = input.indexOf(config.token.open, openIndex + config.token.open.length);
@@ -14,18 +15,18 @@ function findNextToken(input:string, config:Config): string {
         if(nextOpenIndex>=0) closeIndex = input.indexOf(config.token.close, nextOpenIndex + config.token.open.length);
     }
 
-   return closeIndex === -1 ? null : input.substring(openIndex,closeIndex + config.token.close.length);
+   return closeIndex === -1 ? null : new Token(input.substring(openIndex,closeIndex + config.token.close.length),config);
 }
 
-export function findTokens(input:string, config:Config): string[] {
-    const foundTokens: string[] = [];
+export function findTokens(input:string, config:Config): Token[] {
+    const foundTokens: Token[] = [];
 
     while(input) {
         const nextToken = findNextToken(input,config);
         if(!nextToken) input = '';
         else {
             foundTokens.push(nextToken);
-            input = input.replace(nextToken, "");
+            input = input.replace(nextToken.raw, "");
         }
     }
 

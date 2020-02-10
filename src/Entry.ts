@@ -1,7 +1,10 @@
+import {Token} from "./Token";
+
 export class Entry {
     value: string;
     contexts: object;
     weight: number;
+    computedWeight: number = 0;
 
     constructor(value: string, contexts: object = {}, weight: number = 1) {
         this.value = value;
