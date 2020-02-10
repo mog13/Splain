@@ -18,27 +18,31 @@ class Processor {
             this.info = {contexts: {}, breakdown: []};
         }
         if (processInfo) this.info = deepmerge(this.info, processInfo);
-        const tokens = findTokens(input, config);
-        findTokens(input, config).forEach(token => {
-            if (!token.pure) {
-                // use a new processor for the multiple tokens
-                const tempProc = new Processor(this.dictionary);
-                const processedEntry = tempProc.process(token.value, config, false, {
-                    contexts: this.info.contexts,
-                    breakdown: []
-                });
-                this.info.breakdown.push({"inpureTokenResolution": processedEntry});
-                input = input.replace(token.raw, processedEntry.value);
-            } else {
-                const selectedEntry: Entry = executeToken(token, this.dictionary, this.info);
-                this.info.breakdown.push({
-                    token,
-                    contexts: this.info.contexts,
-                    selectedEntry
-                });
-                input = input.replace(token.raw, selectedEntry ? selectedEntry.value : token.raw);
-            }
-        });
+        let previousInput = '';
+        while (input !== previousInput) {
+            previousInput = input;
+            findTokens(input, config).forEach(token => {
+                if (!token.pure) {
+                    // use a new processor for the multiple tokens
+                    const tempProc = new Processor(this.dictionary);
+                    const processedEntry = tempProc.process(token.value, config, false, {
+                        contexts: this.info.contexts,
+                        breakdown: []
+                    });
+                    this.info.breakdown.push({"inpureTokenResolution": processedEntry});
+                    input = input.replace(token.raw, processedEntry.value);
+                } else {
+                    const selectedEntry: Entry = executeToken(token, this.dictionary, this.info);
+                    this.info.breakdown.push({
+                        token,
+                        contexts: this.info.contexts,
+                        selectedEntry
+                    });
+                    input = input.replace(token.raw, selectedEntry ? selectedEntry.value : token.raw);
+                }
+            });
+
+        }
         this.info.value = input;
         return this.info;
 

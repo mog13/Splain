@@ -19,6 +19,11 @@ describe('using the processor class', ()=>{
             expect(processor.process('{{test {{hello}}}}',DefaultConfig).value).toBe('test world');
         });
 
+        it('should be able to handle mixed tokens', ()=>{
+            dictionary.addEntry({hello:['world']});
+            expect(processor.process('test {{hello}}',DefaultConfig).value).toBe('test world');
+        });
+
         it('should be able to process a string with no tokens',()=>{
             expect(processor.process('test',DefaultConfig).value).toBe('test');
         })
