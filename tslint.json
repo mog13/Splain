@@ -14,7 +14,7 @@
       "always"
     ],
     "no-console": [
-      true,
+      false,
       "log"
     ],
     "max-line-length": [ false ],

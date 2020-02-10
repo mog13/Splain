@@ -1,7 +1,7 @@
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.ts',
+    entry: './src/Splain.ts',
     mode:"production",
     plugins: [
         new TerserPlugin({
