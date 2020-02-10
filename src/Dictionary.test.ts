@@ -79,6 +79,21 @@ describe('using the Dictionary class', ()=>{
                 expect(entry.computedWeight).toBe(2);
             });
 
+
+            it('should give non pure token entries a weight associated with the token', ()=> {
+                const dictionary:Dictionary = new Dictionary();
+                dictionary.addEntry({hello:['{{greeting {{planet}}}}'],planet:['earth','world']});
+                const entry =  dictionary.getEntries('hello')[0];
+                expect(entry.computedWeight).toBe(2);
+            });
+
+            it('should give non pure token with multiple inner tokens a representative weighting', ()=> {
+                const dictionary:Dictionary = new Dictionary();
+                dictionary.addEntry({hello:['{{{{greeting}} {{planet}}}}'],planet:['earth','world'],greeting:['hi',"hello","howdy"]});
+                const entry =  dictionary.getEntries('hello')[0];
+                expect(entry.computedWeight).toBe(5);
+            });
+
             it('should give pure token entries a weight associated with the token and do so daisy chained/recursively', ()=> {
                 const dictionary:Dictionary = new Dictionary();
                 dictionary.addEntry({hello:['{{planet}}'],planet:['{{solarSystem}}','world'],solarSystem:['earth','mars']});

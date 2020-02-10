@@ -57,6 +57,8 @@ export class Dictionary {
         // avoid problems with this
         const getEntries = this.getEntries.bind(this);
 
+        const weighTime = new Date().getTime();
+
         function weighEntries(entries: Entry[], evaluatedTokens: Token[] = []): number {
             return entries.reduce((accumulator, entry) => {
                 return accumulator + weighEntry(entry, evaluatedTokens);
@@ -64,29 +66,36 @@ export class Dictionary {
         }
 
         function weighEntry(entry: Entry, evaluatedTokens: Token[] = []): number {
-            // @todo add a hash check here
+            if(entry.lastWeighed === weighTime) return entry.lastWeighed;
+
             const weight = findTokens(entry.value, config).reduce((accumulator, token) => {
                 if (evaluatedTokens.filter(evalToken => token.raw === evalToken.raw).length < 1) {
                     evaluatedTokens.push(token);
                     if (token.pure) {
                         return accumulator + (weighEntries(getEntries(token.value) || [], evaluatedTokens) || 0);
                     }
+                    else {
+                        return findTokens(token.value,config).reduce((acc,innerToken) => {
+                            return acc + (weighEntries(getEntries(innerToken.value) || [], evaluatedTokens)||0);
+                        },0);
+                    }
                 }
                 return accumulator;
             }, 0) || 1;
 
             entry.computedWeight = weight;
+            entry.lastWeighed = weighTime;
             return weight;
 
         }
 
-        for (const [key, value] of Object.entries(entryPoint)) {
+        Object.values(entryPoint).forEach(value => {
             Array.isArray(value) ?
                 value.forEach((entry) => {
                     weighEntry(entry)
                 }) :
                 this.reweighDictionary(value, config)
-        }
+        });
     }
 
 

@@ -5,6 +5,7 @@ export class Entry {
     contexts: object;
     weight: number;
     computedWeight: number = 0;
+    lastWeighed: number = -1;
 
     constructor(value: string, contexts: object = {}, weight: number = 1) {
         this.value = value;
