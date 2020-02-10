@@ -11,8 +11,9 @@ function findNextToken(input:string, config:Config): Token {
     if(closeIndex <0 || openIndex< 0) return null;
 
     while(closeIndex >=0 && nextOpenIndex >=0 && nextOpenIndex < closeIndex) {
-        nextOpenIndex = input.indexOf(config.token.open, closeIndex + config.token.close.length);
-        if(nextOpenIndex>=0) closeIndex = input.indexOf(config.token.close, nextOpenIndex + config.token.open.length);
+        nextOpenIndex = input.indexOf(config.token.open, closeIndex + config.token.open.length);
+        const nextCloseIndex = input.indexOf(config.token.close, closeIndex+ config.token.close.length);
+        closeIndex = nextCloseIndex>=0? nextCloseIndex:closeIndex;
     }
 
    return closeIndex === -1 ? null : new Token(input.substring(openIndex,closeIndex + config.token.close.length),config);

@@ -3,16 +3,18 @@ import {DefaultConfig} from "../Config";
 
 
 describe('using the token finder', () => {
+
     describe('should work withe the default config', () => {
         RunTestsWithGivenConfig(DefaultConfig);
     });
 
-    describe('should work with custom tokens where   RunTestsWithGivenConfig({\n' +
-        '            token: {\n' +
-        '                open: "^^^",\n' +
-        '                close: "]"\n' +
-        '            }\n' +
-        '        });open and close are different lengths', () => {
+    describe('should work with custom tokens where open and close are different lengths', () => {
+        RunTestsWithGivenConfig({
+            token: {
+                open: "^^^",
+                close: "]"
+            }
+        });
 
         RunTestsWithGivenConfig({
             token: {
@@ -21,6 +23,7 @@ describe('using the token finder', () => {
             }
         });
     });
+
 });
 
 function RunTestsWithGivenConfig(config) {
@@ -46,12 +49,14 @@ function RunTestsWithGivenConfig(config) {
     it('should return the whole token, even if it contains multiple tokens', () => {
         const tokens = findTokens(`${config.token.open}this ${config.token.open}is${config.token.close} ${config.token.open}a${config.token.close} test${config.token.close}`, config);
         expect(tokens.length).toBe(1);
+        expect(tokens[0].pure).toBe(false);
     });
 
     // {{this {{is {{a {{test}}}}}}}}
     it('should return the whole token even if it contains nested tokens', () => {
         const tokens = findTokens(`${config.token.open}this ${config.token.open}is ${config.token.open}a ${config.token.open}test${config.token.close}${config.token.close}${config.token.close}${config.token.close}`, config);
         expect(tokens.length).toBe(1);
+        expect(tokens[0].pure).toBe(false);
     });
 }
 
