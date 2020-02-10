@@ -7,7 +7,7 @@ import {Token} from "./Token";
 export class Dictionary {
     public entries: any = {};
 
-    AddEntry(entry: object, config: Config = DefaultConfig, rebuildDictionary: boolean = true): void {
+    addEntry(entry: object, config: Config = DefaultConfig, rebuildDictionary: boolean = true): void {
         this.entries = deepmerge(this.entries, entry);
         if (rebuildDictionary) {
             this.rebuildDictionary(this.entries, config);

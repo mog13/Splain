@@ -13,7 +13,7 @@ class Processor {
         this.dictionary = dictionary;
     }
 
-    Process(input: string, config: Config = DefaultConfig, forceRefresh: boolean = true, processInfo: ProcessInfo = null): ProcessInfo {
+    process(input: string, config: Config = DefaultConfig, forceRefresh: boolean = true, processInfo: ProcessInfo = null): ProcessInfo {
         if (forceRefresh) {
             this.info = {contexts: {}, breakdown: []};
         }
@@ -23,7 +23,7 @@ class Processor {
             if (!token.pure) {
                 // use a new processor for the multiple tokens
                 const tempProc = new Processor(this.dictionary);
-                const processedEntry = tempProc.Process(token.value, config, false, {
+                const processedEntry = tempProc.process(token.value, config, false, {
                     contexts: this.info.contexts,
                     breakdown: []
                 });
