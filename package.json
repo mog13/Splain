@@ -24,6 +24,7 @@
     "@types/node": "13.7.0",
     "babel-loader": "8.0.6",
     "codecov": "3.6.5",
+    "deepmerge": "^4.2.2",
     "jest": "25.1.0",
     "jest-cli": "25.1.0",
     "terser-webpack-plugin": "2.3.4",
