@@ -17,10 +17,12 @@
       false,
       "log"
     ],
+    "no-trailing-whitespace": false,
     "max-line-length": [ false ],
     "object-literal-sort-keys": false,
     "one-variable-per-declaration": false,
-    "no-conditional-assignment": false
+    "no-conditional-assignment": false,
+    "space-infix-ops": true
 
   },
   "rulesDirectory": []
