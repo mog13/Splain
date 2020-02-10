@@ -1,7 +1,7 @@
 import {Config} from "../Config";
 
 
-function FindNextToken(input:string, config:Config): string {
+function findNextToken(input:string, config:Config): string {
     const openIndex = input.indexOf(config.token.open);
 
     let nextOpenIndex = input.indexOf(config.token.open, openIndex + config.token.open.length);
@@ -17,11 +17,11 @@ function FindNextToken(input:string, config:Config): string {
    return closeIndex === -1 ? null : input.substring(openIndex,closeIndex + config.token.close.length);
 }
 
-export function FindTokens(input:string, config:Config): string[] {
+export function findTokens(input:string, config:Config): string[] {
     const foundTokens: string[] = [];
 
     while(input) {
-        const nextToken = FindNextToken(input,config);
+        const nextToken = findNextToken(input,config);
         if(!nextToken) input = '';
         else {
             foundTokens.push(nextToken);
