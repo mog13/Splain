@@ -4,7 +4,7 @@ export class Entry {
     value: string;
     contexts: object;
     weight: number;
-    computedWeight: number = 0;
+    computedWeight: number = 1;
     lastWeighed: number = -1;
 
     constructor(value: string, contexts: object = {}, weight: number = 1) {
