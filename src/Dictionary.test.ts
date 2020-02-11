@@ -107,7 +107,7 @@ describe('using the Dictionary class', ()=>{
                 const entry =  dictionary.getEntries('hello')[0];
                 expect(entry.computedWeight).toBe(5);
                 expect( dictionary.getEntries('planet')[0].computedWeight).toBe(1);
-                expect( dictionary.getEntries('planet')[1].computedWeight).toBe(1.5);
+                expect( dictionary.getEntries('planet')[1].computedWeight).toBe(2);
 
             });
 
