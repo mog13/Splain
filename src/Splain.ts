@@ -7,7 +7,7 @@ class Splain {
     dictionary:Dictionary = new Dictionary();
     processor: Processor = new Processor(this.dictionary);
 
-    process(input: string, contexts:object={}, forceRefresh:boolean = false): ProcessInfo {
+    process(input: string, contexts:object={}, forceRefresh:boolean = true): ProcessInfo {
         return this.processor.process(input,this.config, forceRefresh,{contexts});
     }
 
