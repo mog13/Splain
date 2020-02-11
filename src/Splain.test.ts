@@ -7,4 +7,10 @@ describe('test', () => {
       expect(Splain.process('{{greeting}}').value).toBe('hello world');
       expect(Splain.execute('{{greeting}}')).toBe('hello world');
   })
+    it('should be able to specify to make a new dictionary', ()=>{
+       Splain.addEntry({test:['hello']});
+       Splain.newDictionary({test2:['world']});
+        expect(Splain.execute('{{test2}}')).toBe('world');
+        expect(Splain.execute('{{test}}')).toBe('{{test}}');
+    });
 });
