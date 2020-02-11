@@ -19,6 +19,12 @@ class Splain {
         this.dictionary.addEntry(entry,this.config);
     }
 
+    newDictionary(entries) {
+        this.dictionary = new Dictionary();
+        this.processor  = new Processor(this.dictionary);
+        this.addEntry(entries)
+    }
+
 };
 
 
