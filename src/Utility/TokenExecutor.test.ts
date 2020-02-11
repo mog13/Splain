@@ -13,7 +13,7 @@ describe('using the token excecutor', () => {
         const dictionary: Dictionary = new Dictionary();
         const info: ProcessInfo = {contexts:{}};
         dictionary.addEntry({test:['hello']});
-        expect(executeToken(token, dictionary, info).value).toBe('hello');
+        expect(executeToken(token, dictionary,DefaultConfig, info).value).toBe('hello');
     });
 
     it('should return null if no entry is found', () => {
@@ -21,7 +21,7 @@ describe('using the token excecutor', () => {
         const dictionary: Dictionary = new Dictionary();
         const info: ProcessInfo = {contexts:{}};
         dictionary.addEntry({test2:['hello']});
-        expect(executeToken(token, dictionary, info)).toBe(null);
+        expect(executeToken(token, dictionary,DefaultConfig, info)).toBe(null);
     });
 
     it('should respect the contexts held in process info', () => {
@@ -29,7 +29,7 @@ describe('using the token excecutor', () => {
         const dictionary: Dictionary = new Dictionary();
         const info: ProcessInfo = {contexts:{test:['match']}};
         dictionary.addEntry({greet:[new Entry('hello',{test:['match']}),new Entry('world',{test:['dontmatch']})]});
-        expect(executeToken(token, dictionary, info).value).toBe('hello');
+        expect(executeToken(token, dictionary,DefaultConfig, info).value).toBe('hello');
     });
 
 });

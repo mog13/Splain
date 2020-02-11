@@ -12,6 +12,7 @@ export class Dictionary {
         if (rebuildDictionary) {
             this.rebuildDictionary(this.entries, config);
             this.reweighDictionary(this.entries, config);
+            this.balanceWeights(this.entries,config);
         }
     }
 
@@ -50,6 +51,20 @@ export class Dictionary {
                 entryPoint[key] = this.convertEntriesToEntry(value) :
                 this.rebuildDictionary(value, config)
         }
+    }
+
+    balanceWeights(entryPoint: object = this.entries, config: Config){
+        Object.values(entryPoint).forEach(value => {
+            if( Array.isArray(value)) {
+                const lowestWeight = Math.min(...value.map(entry=>entry.computedWeight));
+                value.forEach((entry)=> {
+                    entry.computedWeight= Math.min(Math.ceil(entry.computedWeight/lowestWeight), config.maxWeight);
+                })
+            }
+            else {
+                this.balanceWeights(value, config)
+            }
+        });
     }
 
 

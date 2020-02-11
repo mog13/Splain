@@ -32,7 +32,7 @@ class Processor {
                     this.info.breakdown.push({"inpureTokenResolution": processedEntry});
                     input = input.replace(token.raw, processedEntry.value);
                 } else {
-                    const selectedEntry: Entry = executeToken(token, this.dictionary, this.info);
+                    const selectedEntry: Entry = executeToken(token, this.dictionary,config, this.info);
                     this.info.breakdown.push({
                         token,
                         contexts: this.info.contexts,
