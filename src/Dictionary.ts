@@ -7,13 +7,19 @@ import {Token} from "./Token";
 export class Dictionary {
     public entries: any = {};
 
-    addEntry(entry: object, config: Config = DefaultConfig, rebuildDictionary: boolean = true): void {
+
+
+    addEntry(entry: object, config: Config = DefaultConfig, reProcessDictionary: boolean = true): void {
         this.entries = deepmerge(this.entries, entry);
-        if (rebuildDictionary) {
-            this.rebuildDictionary(this.entries, config);
-            this.reweighDictionary(this.entries, config);
-            this.balanceWeights(this.entries,config);
+        if (reProcessDictionary) {
+            this.processDictionary(config)
         }
+    }
+
+    processDictionary(config:Config = DefaultConfig):void {
+        this.rebuildDictionary(this.entries, config);
+        this.reweighDictionary(this.entries, config);
+        this.balanceWeights(this.entries,config);
     }
 
     getEntries(path: string): any[] {
