@@ -64,7 +64,7 @@ export class Dictionary {
             if( Array.isArray(value)) {
                 const lowestWeight = Math.min(...value.map(entry=>entry.computedWeight));
                 value.forEach((entry)=> {
-                    entry.computedWeight= Math.min(Math.ceil(entry.computedWeight/lowestWeight), config.maxWeight);
+                    entry.computedWeight= Math.min(Math.ceil(entry.computedWeight/lowestWeight), config.weights.maxWeight);
                 })
             }
             else {
@@ -93,11 +93,11 @@ export class Dictionary {
                 if (evaluatedTokens.filter(evalToken => token.raw === evalToken.raw).length < 1) {
                     evaluatedTokens.push(token);
                     if (token.pure) {
-                        return accumulator + (weighEntries(getEntries(token.value) || [], evaluatedTokens) || 0);
+                        return accumulator + (weighEntries(getEntries(token.value) || [], evaluatedTokens) || 0) * config.weights.tokenContribution;
                     }
                     else {
                         return findTokens(token.value,config).reduce((acc,innerToken) => {
-                            return acc + (weighEntries(getEntries(innerToken.value) || [], evaluatedTokens)||0);
+                            return acc + (weighEntries(getEntries(innerToken.value) || [], evaluatedTokens)||0) * config.weights.tokenContribution;
                         },0);
                     }
                 }
