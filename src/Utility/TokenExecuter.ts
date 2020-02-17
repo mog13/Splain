@@ -16,7 +16,7 @@ export function executeToken(token:Token, dictionary:Dictionary,config:Config, p
 
     const weightedChoices: Entry[] = [];
     contextualChoices.forEach((choice:Entry)=>{
-       for(let n =0;n <Math.min(choice.computedWeight *choice.weight, config.maxWeight); n++) {
+       for(let n =0;n <Math.min(choice.computedWeight *choice.weight, config.weights.maxWeight); n++) {
            weightedChoices.push(choice)
        }
     });
