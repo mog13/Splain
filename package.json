@@ -1,10 +1,15 @@
 {
   "name": "@mog13/splain",
   "version": "4.0.0",
-  "description": "Small transformer library to create more dynamic and interesting language/sentances",
+  "description": "Small transformer library to create more dynamic and interesting language/sentences",
   "main": "dist/splain.js",
+  "types": "dist/splain.d.ts",
   "scripts": {
-},
+    "build": "webpack",
+    "test": "jest --coverage --collectCoverageFrom=src/**/*.ts",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mog13/Splain.git"
@@ -16,7 +21,28 @@
   },
   "homepage": "https://github.com/mog13/Splain#readme",
   "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
+    "@babel/preset-typescript": "^7.13.0",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "eslint": "^7.22.0",
+    "jest": "^26.6.3",
+    "terser-webpack-plugin": "^5.1.1",
+    "ts-loader": "^8.0.18",
+    "typescript": "^4.2.3",
+    "typescript-declaration-webpack-plugin": "^0.2.2",
+    "webpack": "^5.24.4",
+    "webpack-cli": "^4.5.0"
   },
   "jest": {
-}
+    "testMatch": [
+      "**/?(*.)+(spec|test).[jt]s?(x)"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  },
+  "dependencies": {}
 }
